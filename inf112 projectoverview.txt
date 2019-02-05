@@ -10,6 +10,7 @@ Tord – Førsteåret på IME, fokus på håndtering av spilldesign og funksjon.
 Wim – 2 året på datavitenskap, tar seg hovedsakelig av koderelaterte problemer.
 André – 2 året på datateknologi, tar seg hovedsakelig av koderelaterte problemer.
 Erlend nærbø – Tredje året i datasikkerhet.
+Christian - Bachelor i fysikk, jobber mot en bachelor i IT eller noe lignende, kan mangen programmerings språk.
 
 Organisering: Gruppen har valgt å bruke prosjektmetodikken Scrum, der vi jobber individuelt, eller sammen, med en del av oppgaven, og deretter møtes en gang i uken for å få oversikt over framdrift og videre arbeid. Tenker å møtes en til to ganger i uken.
 
@@ -19,12 +20,12 @@ Krav til systemet: Ha ett spillebrett, vis brikker, runde og tidshåndtering, de
 
 Førsteiterasjonskrav: Vis ett brett, vis en brikke på brettet, eventuelt la brikken bevege seg en rute om gangen.
 
-Prosess: 
- 
-
-
-
-
+Prosess:
+    Møter: Vi har møt 2 ganger i uken og hadde økter av 2 timer.
+    Komunikasjon: Alle har satt opp en slack bruker som er da gruppens komunikasjons medium.
+    Arbeidsfordeling: Wim og Erlend tar for seg grafikk delen av programeringen og Andre og Christian tar for seg mekanikken av programmet. Tord har lest seg inn i reglene av spillet (customer representative) og er hoved ansvarlig for klassediagramet.
+    Oppfølging av arbeid: I og med at programmeringen skjer i par vil paret være ansvarlig for å følge hverandre opp også deretter blir arbeidet følget opp igjen med resten av gruppen når vi møtes.
+    File sharing: Git og google drive blir brukt for å lagre og sende filer og dokumenter.
 
 
 
