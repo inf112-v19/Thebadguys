@@ -21,3 +21,4 @@ fikse dette.
 Idag fullførte vi første kladd på klassediagrammet og ryddet opp i gitHub for å gjøre klar til endelig innlevering. Vi skrev 
 retrospektiv oppsummering og gjore ferdig kodingen av brettet og brikke. Igjen hadde vi noen tekniske problemer 
 med git, men alt ordnet seg til slutt.
+
