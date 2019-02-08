@@ -1,15 +1,14 @@
-## Deloppgave 1. Organisering av teamet 
+﻿## Deloppgave 1. Organisering av teamet 
 -	Navn: TheBadGuys
--	Teamleader: Johann
+-	Teamleader: Erlend
 -	Kundekontakt: Tord
 -	Tekniske verktøy: Github for kode, slack for kommunikasjon, github project board for oppgaver
 
 Gruppemedlemmer:
-Johann – Tredjeåret i datasikkerhet, fokus på backend og arbeidsfordelinger, har jobbet som junior utvikler på s banken. (Team lead)
+Erlend – Tredje året i datasikkerhet, fokus på front-end. (Team Lead)
 Tord – Førsteåret på IME, fokus på håndtering av spilldesign og funksjon. (Customer contact)
 Wim – 2 året på datavitenskap, tar seg hovedsakelig av koderelaterte problemer.
 André – 2 året på datateknologi, tar seg hovedsakelig av koderelaterte problemer.
-Erlend nærbø – Tredje året i datasikkerhet.
 Christian - Bachelor i fysikk, jobber mot en bachelor i IT eller noe lignende, kan flere programmeringsspråk.
 
 Organisering: Gruppen har valgt å bruke prosjektmetodikken Scrum, der vi jobber individuelt, eller sammen, med en del av oppgaven,
