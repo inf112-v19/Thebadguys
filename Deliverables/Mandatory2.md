@@ -6,11 +6,11 @@ Mandatory 2: RoboRally
 -	Tekniske verktøy: Github for kode, slack for kommunikasjon, github project board for oppgaver
 
 Gruppemedlemmer:
-Erlend – Tredje året i datasikkerhet, fokus på front-end. (Team Lead)
-Tord – Førsteåret på IME, fokus på håndtering av spilldesign og funksjon. (Customer contact)
-Wim – 2 året på datavitenskap, tar seg hovedsakelig av koderelaterte problemer.
-André – 2 året på datateknologi, tar seg hovedsakelig av koderelaterte problemer.
-Christian - Bachelor i fysikk, jobber mot en bachelor i IT eller noe lignende, kan flere programmeringsspråk.
+Erlend – Tredje året i datasikkerhet, fokus på front-end. (Team Lead)  
+Tord – Førsteåret på IME, fokus på håndtering av spilldesign og funksjon. (Customer contact)  
+Wim – 2 året på datavitenskap, tar seg hovedsakelig av koderelaterte problemer.  
+André – 2 året på datateknologi, tar seg hovedsakelig av koderelaterte problemer.  
+Christian - Bachelor i fysikk, jobber mot en bachelor i IT eller noe lignende, kan flere programmeringsspråk.  
 
 Organisering: Gruppen har valgt å bruke prosjektmetodikken Scrum, der vi jobber individuelt, eller sammen, med en del av oppgaven,
 og deretter møtes en gang i uken for å få oversikt over framdrift og videre arbeid. Tenker å møtes en til to ganger i uken 
