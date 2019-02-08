@@ -34,8 +34,12 @@ Prosess:
     Oppfølging av arbeid: I og med at programmeringen skjer i par, så vil paret være ansvarlig for å følge hverandre opp, 
     og deretter blir arbeidet delt og gått over igjen med resten av gruppen.
     File sharing: Git og google drive blir brukt for å lagre og sende filer og dokumenter.
-
-
-
-
+    
+    
+Retrospektiv oppsummering: Det gruppen synes har fungert bra er arbeidsfordelingen mellom medlemmene, at alle vet hva vi skal gjøre, og at vi jobber med vår tildelte oppgave. 
+Alle i gruppen har også klart å møtes til de avtalte møtene hver uke, og vi har som en gruppe hatt gode diskusjoner og klart å komme til enighet om hvordan vi skal løse oppgaven. 
+Det som har vært utfordrende er at vi mistet vår team-leader tidlig i prosjektet, og derfor måtte vi prøve å finne en erstatning. 
+Det var også litt vanskelig å koordinere når flere personer skulle redigere samme filer på github, det tenker vi å gjøre litt enklere med å f.eks sette opp flere branches, bedre kommunikasjon.
+Før oblig 3 så tenker gruppen å sette seg mer inn i LibGdx, og generell spillprogrammering. 
+Så langt har gruppesamarbeidet fungert bra, fordi alle i gruppen jobber engasjert med sin tildelte oppgave, og vi hjelper hverandre når vi trenger hjelp.
 
