@@ -1,4 +1,4 @@
-Deloppgave 1. Organisering av teamet 
+## Deloppgave 1. Organisering av teamet 
 -	Navn: TheBadGuys
 -	Teamleader: Johann
 -	Kundekontakt: Tord
