@@ -1,4 +1,5 @@
-﻿## Deloppgave 1. Organisering av teamet 
+Mandatory 2: RoboRally
+
 -	Navn: TheBadGuys
 -	Teamleader: Erlend
 -	Kundekontakt: Tord
