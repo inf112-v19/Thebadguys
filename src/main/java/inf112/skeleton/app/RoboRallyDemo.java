@@ -36,10 +36,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         camera.setToOrtho(false, w * 4  ,h * 4);
         camera.update();
 
-        tiledMap = new TmxMapLoader().load("roborallymap.tmx");
+        tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
-        texture = new Texture(Gdx.files.internal("tank.png"));
+        texture = new Texture(Gdx.files.internal("Models/tank.png"));
         sprite = new Sprite(texture);
         posX = -4;
         posY = 6;
