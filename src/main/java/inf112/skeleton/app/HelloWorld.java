@@ -21,11 +21,14 @@ import java.awt.*;
 public class HelloWorld implements ApplicationListener, InputProcessor {
     private SpriteBatch batch;
     private BitmapFont font;
+    private int i;
 
+    /*
     //tiled map stuff
     TiledMap tiledMap;
     OrthographicCamera camera;
     TiledMapRenderer tiledMapRenderer;
+    */
 
     @Override
     public void create() {
@@ -34,6 +37,8 @@ public class HelloWorld implements ApplicationListener, InputProcessor {
         font.setColor(Color.RED);
 
 
+
+        /*
         //tiled map loading begins here:
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -44,16 +49,18 @@ public class HelloWorld implements ApplicationListener, InputProcessor {
         tiledMap = new TmxMapLoader().load("DummyMapv2.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         Gdx.input.setInputProcessor(this);
+        */
 
 
     }
-
+    /*
     public void updatePos(){
         //movment atempt
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
 
         }
     }
+    */
 
     @Override
     public void dispose() {
@@ -63,6 +70,7 @@ public class HelloWorld implements ApplicationListener, InputProcessor {
     @Override
     public void render() {
         Gdx.gl.glClearColor(1, 1, 1, 1);
+        /*
         //tiled map:
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -70,11 +78,12 @@ public class HelloWorld implements ApplicationListener, InputProcessor {
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
-
-        /*
+        */
+        i = 0;
         batch.begin();
         font.draw(batch, "Hello World " + (i++), 200, 200);
-        batch.end();*/
+        batch.end();
+
 
 
 
@@ -101,6 +110,7 @@ public class HelloWorld implements ApplicationListener, InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
 
+        /*
         MapLayer layer = tiledMap.getLayers().get("Tile Layer 2");
         MapObjects objects = layer.getObjects();
         System.out.println(objects.getCount());
@@ -117,6 +127,7 @@ public class HelloWorld implements ApplicationListener, InputProcessor {
             tiledMap.getLayers().get(0).setVisible(!tiledMap.getLayers().get(0).isVisible());
         if(keycode == Input.Keys.NUM_2)
             tiledMap.getLayers().get(1).setVisible(!tiledMap.getLayers().get(1).isVisible());
+        */
         return false;
     }
 

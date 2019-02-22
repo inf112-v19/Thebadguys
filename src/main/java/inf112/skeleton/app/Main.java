@@ -12,6 +12,6 @@ public class Main {
         cfg.height = 1800;
 
 
-        new LwjglApplication(new InputDemo2(), cfg);
+        new LwjglApplication(new RoboRallyDemo(), cfg);
     }
 }
