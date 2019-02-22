@@ -7,7 +7,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -22,10 +21,8 @@ import java.awt.*;
 public class HelloWorld implements ApplicationListener, InputProcessor {
     private SpriteBatch batch;
     private BitmapFont font;
-    private int i;
 
     //tiled map stuff
-    Texture img;
     TiledMap tiledMap;
     OrthographicCamera camera;
     TiledMapRenderer tiledMapRenderer;
@@ -35,7 +32,7 @@ public class HelloWorld implements ApplicationListener, InputProcessor {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.RED);
-        i = 0;
+
 
         //tiled map loading begins here:
         float w = Gdx.graphics.getWidth();
@@ -107,8 +104,7 @@ public class HelloWorld implements ApplicationListener, InputProcessor {
         MapLayer layer = tiledMap.getLayers().get("Tile Layer 2");
         MapObjects objects = layer.getObjects();
         System.out.println(objects.getCount());
-        //movement stuff som eg fant
-        /*
+
         if(keycode == Input.Keys.LEFT)
             camera.translate(-32,0);
         if(keycode == Input.Keys.RIGHT)
@@ -121,7 +117,6 @@ public class HelloWorld implements ApplicationListener, InputProcessor {
             tiledMap.getLayers().get(0).setVisible(!tiledMap.getLayers().get(0).isVisible());
         if(keycode == Input.Keys.NUM_2)
             tiledMap.getLayers().get(1).setVisible(!tiledMap.getLayers().get(1).isVisible());
-        */
         return false;
     }
 
