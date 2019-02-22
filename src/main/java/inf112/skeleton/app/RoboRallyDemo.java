@@ -33,16 +33,16 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         batch = new SpriteBatch();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w*2  ,h*2);
+        camera.setToOrtho(false, w * 4  ,h * 4);
         camera.update();
 
         tiledMap = new TmxMapLoader().load("roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
-        texture = new Texture(Gdx.files.internal("greenbox.png"));
+        texture = new Texture(Gdx.files.internal("tank.png"));
         sprite = new Sprite(texture);
-        posX = 0;
-        posY = 0;
+        posX = -4;
+        posY = 6;
         sprite.setPosition(posX,posY);
 
         Gdx.input.setInputProcessor(this);
@@ -83,9 +83,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        float moveAmount = 300.0f;
+        float moveAmount = 75.0f;
         if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
-            moveAmount = 600.0f;
+            moveAmount = 150.0f;
 
         if(keycode == Keys.LEFT)
             posX-=moveAmount;
