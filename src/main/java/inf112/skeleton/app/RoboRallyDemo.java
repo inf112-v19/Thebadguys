@@ -19,7 +19,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
     OrthographicCamera camera;
-
+    CardGUI cardGUI;
+    CardGUI cardSlotGUI;
 
     private SpriteBatch batch;
     private Texture texture;
@@ -45,6 +46,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         posY = 6;
         sprite.setPosition(posX,posY);
 
+        cardGUI = new CardGUI(batch);
+        cardGUI.create(posX+300, posY+100);
+
+        cardSlotGUI = new CardGUI(batch);
+        cardSlotGUI.create(posX, posY);
+
         Gdx.input.setInputProcessor(this);
     }
 
@@ -56,6 +63,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     @Override
     public void render() {
+
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -63,9 +71,15 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
 
-        sprite.setPosition(posX,posY);
+        //sprite.setPosition(posX,posY);
+        cardGUI.getCardSprite().setPosition(posX, posY);
+        cardGUI.getCardSlotSprite().setPosition(posX,posY+100);
         batch.begin();
         sprite.draw(batch);
+        cardSlotGUI.getCardSlotSprite().draw(batch);
+        cardGUI.getCardSlotSprite().setPosition(posX,posY+200);
+        cardSlotGUI.getCardSlotSprite().draw(batch);
+        cardGUI.getCardSprite().draw(batch);
         batch.end();
     }
 
@@ -110,6 +124,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        /*
         if(button == Buttons.LEFT){
             posX = screenX - sprite.getWidth()/2;
             posY = Gdx.graphics.getHeight() - screenY - sprite.getHeight()/2;
@@ -118,6 +133,19 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             posX = Gdx.graphics.getWidth()/2 - sprite.getWidth()/2;
             posY = Gdx.graphics.getHeight()/2 - sprite.getHeight()/2;
         }
+        */
+
+        if(button == Buttons.LEFT){
+            posX = screenX - cardGUI.getCardSprite().getWidth()/2;
+            posY = Gdx.graphics.getHeight() - screenY - cardGUI.getCardSprite().getHeight()/2;
+            //cardGUI.render(posX, posY);
+        }
+        if(button == Buttons.RIGHT){
+            posX = Gdx.graphics.getWidth()/2 - cardGUI.getCardSprite().getWidth()/2;
+            posY = Gdx.graphics.getHeight()/2 - cardGUI.getCardSprite().getHeight()/2;
+            //cardGUI.render(posX, posY);
+        }
+
         return false;
     }
 
@@ -128,6 +156,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        posX = screenX - cardGUI.getCardSprite().getWidth()/2;
+        posY = Gdx.graphics.getHeight() - screenY - cardGUI.getCardSprite().getHeight()/2;
+
         return false;
     }
 
