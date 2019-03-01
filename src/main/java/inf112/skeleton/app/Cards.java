@@ -15,14 +15,17 @@ public class Cards implements ICard{
         this.priority=priority;
     }
 
+    //returns the sprite
     public Sprite getSprite(){return sprite;}
 
     //public Texture getTexture(){return texture;}
 
+    //returns the name
     public String getName(){
         return name;
     }
 
+    //returns the priority
     public int getPriority(){
         return priority;
     }
