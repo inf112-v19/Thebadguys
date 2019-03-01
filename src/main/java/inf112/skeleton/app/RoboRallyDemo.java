@@ -19,13 +19,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
     OrthographicCamera camera;
+    int i = 0;
+
     CardGUI cardGUI;
 
-    CardGUI cardSlot0;
-    CardGUI cardSlot1;
-    CardGUI cardSlot2;
-    CardGUI cardSlot3;
-    CardGUI cardSlot4;
+    boolean insideSlot = false;
+
+    private CardGUI cardSlot0;
+    private CardGUI cardSlot1;
+    private CardGUI cardSlot2;
+    private CardGUI cardSlot3;
+    private CardGUI cardSlot4;
 
 
     private SpriteBatch batch;
@@ -53,7 +57,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         posX = -4;
         posY = 6;
-        sprite.setPosition(posX,posY);
+        sprite.setPosition(posX+300,posY+300);
 
         cardGUI = new CardGUI(batch);
         cardGUI.createCard(posX, posY);
@@ -82,7 +86,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     @Override
     public void render() {
-
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -99,6 +102,18 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         sprite.draw(batch);
 
 
+        //rotation of sprite, rotate 90 degrees every 100th gametick
+        if(i%100==0){
+
+            //clockwise rotation
+            sprite.rotate(90);
+
+            //counter-clockwise
+            //sprite.rotate90(false);
+
+            System.out.println(i);
+        }
+
         cardSlot0.getCardSlotSprite().draw(batch);
         cardSlot1.getCardSlotSprite().draw(batch);
         cardSlot2.getCardSlotSprite().draw(batch);
@@ -106,6 +121,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         cardSlot4.getCardSlotSprite().draw(batch);
 
         cardGUI.getCardSprite().draw(batch);
+        i++;
         batch.end();
     }
 
@@ -121,6 +137,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public void resume() {
     }
 
+    //method for general movment. Keyboard at the moment, but will be cards in the future
     @Override
     public boolean keyDown(int keycode) {
         float moveAmount = 75.0f;
@@ -148,6 +165,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return false;
     }
 
+    //this method is used to click and move a card around on the screen
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         /*
@@ -166,17 +184,25 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             posY = Gdx.graphics.getHeight() - screenY - cardGUI.getCardSprite().getHeight()/2;
             //cardGUI.render(posX, posY);
         }
+
+        /*
+        // rigth click moves the card to the middle of the screenc
         if(button == Buttons.RIGHT){
             posX = Gdx.graphics.getWidth()/2 - cardGUI.getCardSprite().getWidth()/2;
             posY = Gdx.graphics.getHeight()/2 - cardGUI.getCardSprite().getHeight()/2;
             //cardGUI.render(posX, posY);
-        }
+        }*/
 
         return false;
     }
 
+    //bruk denne til å lage snappe feature
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+
+        posX = 15;
+        posY = 6;
         return false;
     }
 
