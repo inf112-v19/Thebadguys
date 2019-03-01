@@ -8,12 +8,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class CardGUI {
 
-    private Texture card;
-    private Texture cardSlot;
+    private Texture cardTexture;
+    private Texture cardSlotTexture;
     private Sprite cardSprite;
     private Sprite cardSlotSprite;
-    private float posX, posY;
+    //private float posX, posY;
     private Batch batch;
+
+    //cards and deck
+    private Cards card;
+    private Deck deck;
+
 
 
     public CardGUI(Batch batch){
@@ -22,10 +27,20 @@ public class CardGUI {
     }
 
     public void create(float posX, float posY){
-        card = new Texture(Gdx.files.internal("Models/cardTest.png"));
-        cardSlot = new Texture(Gdx.files.internal("Models/cardSlotTest.png"));
-        cardSprite = new Sprite(card);
-        cardSlotSprite = new Sprite(cardSlot);
+        //textures
+        cardTexture = new Texture(Gdx.files.internal("Models/cardTest.png"));
+        cardSlotTexture = new Texture(Gdx.files.internal("Models/cardSlotTest.png"));
+
+        //sprites
+        cardSprite = new Sprite(cardTexture);
+        cardSlotSprite = new Sprite(cardSlotTexture);
+
+        //Object creation
+        card = new Cards(cardSprite, "DummyNavn", 1);
+        deck = new Deck();
+        deck.addCard(card);
+
+        //setting the positions for the card and cardslot
         cardSprite.setPosition(posX, posY);
         cardSlotSprite.setPosition(posX, posY);
     }
@@ -34,14 +49,9 @@ public class CardGUI {
         return cardSprite;
     }
 
-    public Sprite getCardSlotSprite(){ return cardSlotSprite;}
+    public void createCard(){
 
-    public void render(float posX, float posY){
-        //cardSprite.setPosition(posX, posY);
-        //batch.begin();
-        //cardSprite.draw(batch);
-        //System.out.println(cardGUI.getCardSprite());
-        //cardGUI.getCardSprite().draw(batch);
-        //batch.end();
     }
+
+    public Sprite getCardSlotSprite(){ return cardSlotSprite;}
 }

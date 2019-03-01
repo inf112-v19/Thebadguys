@@ -27,6 +27,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Sprite sprite;
     private float posX, posY;
 
+
     @Override
     public void create() {
         float w = Gdx.graphics.getWidth();
@@ -42,6 +43,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         texture = new Texture(Gdx.files.internal("Models/tank.png"));
         sprite = new Sprite(texture);
+
+
         posX = -4;
         posY = 6;
         sprite.setPosition(posX,posY);
