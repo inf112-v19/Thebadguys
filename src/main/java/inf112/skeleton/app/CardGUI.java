@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class CardGUI {
+public class CardGUI implements  ICardGUI{
 
     private Texture cardTexture;
     private Texture cardSlotTexture;
@@ -41,16 +41,12 @@ public class CardGUI {
         deck.addCard(card);
 
         //setting the positions for the card and cardslot
-        cardSprite.setPosition(posX, posY);
+        card.getSprite().setPosition(posX, posY);
         cardSlotSprite.setPosition(posX, posY);
     }
 
     public Sprite getCardSprite(){
         return cardSprite;
-    }
-
-    public void createCard(){
-
     }
 
     public Sprite getCardSlotSprite(){ return cardSlotSprite;}
