@@ -20,7 +20,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     TiledMapRenderer tiledMapRenderer;
     OrthographicCamera camera;
     CardGUI cardGUI;
-    CardGUI cardSlotGUI;
+
+    CardGUI cardSlot0;
+    CardGUI cardSlot1;
+    CardGUI cardSlot2;
+    CardGUI cardSlot3;
+    CardGUI cardSlot4;
+
 
     private SpriteBatch batch;
     private Texture texture;
@@ -50,10 +56,20 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         sprite.setPosition(posX,posY);
 
         cardGUI = new CardGUI(batch);
-        cardGUI.create(posX+300, posY+100);
+        cardGUI.createCard(posX, posY);
 
-        cardSlotGUI = new CardGUI(batch);
-        cardSlotGUI.create(posX, posY);
+        cardSlot0 = new CardGUI(batch);
+        cardSlot1 = new CardGUI(batch);
+        cardSlot2 = new CardGUI(batch);
+        cardSlot3 = new CardGUI(batch);
+        cardSlot4 = new CardGUI(batch);
+
+        cardSlot0.createCardSlots(posX, posY);
+        cardSlot1.createCardSlots(posX+185, posY);
+        cardSlot2.createCardSlots(posX+370, posY);
+        cardSlot3.createCardSlots(posX+555, posY);
+        cardSlot4.createCardSlots(posX+740, posY);
+
 
         Gdx.input.setInputProcessor(this);
     }
@@ -75,13 +91,20 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         tiledMapRenderer.render();
 
         //sprite.setPosition(posX,posY);
+
+        //denne kontrolerer movment
         cardGUI.getCardSprite().setPosition(posX, posY);
-        cardGUI.getCardSlotSprite().setPosition(posX,posY+100);
+        //cardGUI.getCardSlotSprite().setPosition(posX,posY+100);
         batch.begin();
         sprite.draw(batch);
-        cardSlotGUI.getCardSlotSprite().draw(batch);
-        cardGUI.getCardSlotSprite().setPosition(posX,posY+200);
-        cardSlotGUI.getCardSlotSprite().draw(batch);
+
+
+        cardSlot0.getCardSlotSprite().draw(batch);
+        cardSlot1.getCardSlotSprite().draw(batch);
+        cardSlot2.getCardSlotSprite().draw(batch);
+        cardSlot3.getCardSlotSprite().draw(batch);
+        cardSlot4.getCardSlotSprite().draw(batch);
+
         cardGUI.getCardSprite().draw(batch);
         batch.end();
     }

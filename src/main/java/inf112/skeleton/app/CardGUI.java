@@ -11,12 +11,18 @@ public class CardGUI implements  ICardGUI{
     private Texture cardTexture;
     private Texture cardSlotTexture;
     private Sprite cardSprite;
-    private Sprite cardSlotSprite;
+    private Sprite cardSlotSprite1;
+    private Sprite cardSlotSprite2;
     //private float posX, posY;
     private Batch batch;
 
     //cards and deck
-    private Cards card;
+    private Cards Dummycard0;
+    private Cards Dummycard1;
+    private Cards Dummycard2;
+    private Cards Dummycard3;
+    private Cards Dummycard5;
+
     private Deck deck;
 
 
@@ -26,28 +32,34 @@ public class CardGUI implements  ICardGUI{
 
     }
 
-    public void create(float posX, float posY){
+    public void createCard(float posX, float posY){
         //textures
         cardTexture = new Texture(Gdx.files.internal("Models/cardTest.png"));
-        cardSlotTexture = new Texture(Gdx.files.internal("Models/cardSlotTest.png"));
 
         //sprites
         cardSprite = new Sprite(cardTexture);
-        cardSlotSprite = new Sprite(cardSlotTexture);
+
 
         //Object creation
-        card = new Cards(cardSprite, "DummyNavn", 1);
         deck = new Deck();
-        deck.addCard(card);
+
+        Dummycard0 = new Cards(cardSprite, "DummyNavn", 1);
+        deck.addCard(Dummycard0);
 
         //setting the positions for the card and cardslot
-        card.getSprite().setPosition(posX, posY);
-        cardSlotSprite.setPosition(posX, posY);
+        Dummycard0.getSprite().setPosition(posX, posY+200);
+
+    }
+
+    public void createCardSlots(float posX, float posY){
+        cardSlotTexture = new Texture(Gdx.files.internal("Models/cardSlotTest.png"));
+        cardSlotSprite1= new Sprite(cardSlotTexture);
+        cardSlotSprite1.setPosition(posX, posY);
     }
 
     public Sprite getCardSprite(){
         return cardSprite;
     }
 
-    public Sprite getCardSlotSprite(){ return cardSlotSprite;}
+    public Sprite getCardSlotSprite(){ return cardSlotSprite1;}
 }
