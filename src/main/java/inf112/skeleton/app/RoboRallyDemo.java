@@ -37,6 +37,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private float posX, posY;
 
 
+    private float cardX=400;
+    private float cardY=400;
+
+
+
     //create the initial state of the game
     @Override
     public void create() {
@@ -58,11 +63,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         sprite = new Sprite(texture);
         posX = -4;
         posY = 6;
+
         sprite.setPosition(posX+300,posY+300);
 
         //creation of the card
         cardGUI = new CardGUI(batch);
-        cardGUI.createCard(posX, posY);
+        cardGUI.createCard(cardX, cardY);
 
         //creation of the 5 cardSlots
         cardSlot0 = new CardGUI(batch);
@@ -77,9 +83,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         cardSlot2.createCardSlots(posX+370, posY);
         cardSlot3.createCardSlots(posX+555, posY);
         cardSlot4.createCardSlots(posX+740, posY);
-
-        System.out.println(cardSlot0.getCardSlotSprite().getX()+ " " +cardSlot0.getCardSlotSprite().getY());
-        System.out.println(cardSlot0.getCardSlotSprite().getWidth() + " " + cardSlot0.getCardSlotSprite().getHeight());
 
         Gdx.input.setInputProcessor(this);
     }
@@ -104,7 +107,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //sprite.setPosition(posX,posY);
 
         //denne kontrolerer movment
-        cardGUI.getCardSprite().setPosition(posX, posY);
+
+        cardGUI.getCardSprite().setPosition(cardX, cardY);
+
+
         //cardGUI.getCardSlotSprite().setPosition(posX,posY+100);
         batch.begin();
         sprite.draw(batch);
@@ -118,8 +124,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             System.out.println(insideSlot1);
             //counter-clockwise
             //sprite.rotate90(false);
-
+            System.out.println(cardGUI.getCardSprite().getX() + " " + cardGUI.getCardSprite().getY());
             System.out.println(i);
+            System.out.println("\n");
+
+            System.out.println(cardGUI.getCardSprite().getWidth());
+            System.out.println(getCenterX(cardGUI));
+
         }
 
         //draw the cardslots
@@ -132,12 +143,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //draw the card
         cardGUI.getCardSprite().draw(batch);
         //System.out.println(cardGUI.getCardSprite().getX());
-        if(i>300){
-            if((cardGUI.getCardSprite().getX()> -4 && cardGUI.getCardSprite().getX()<152) && (cardGUI.getCardSprite().getY()> -6 && cardGUI.getCardSprite().getY()<231)) {
-                insideSlot1=true;
-            }
-        }
 
+
+        //if the center of the card is inside the cardslot then it is inside the slot and its new default cordinates will be in the middle of the cardslot
+        if((cardGUI.getCardSprite().getX()+getCenterX(cardGUI)> cardSlot0.getCardSlotSprite().getX() && cardGUI.getCardSprite().getX()+getCenterX(cardGUI)<cardSlot0.getCardSlotSprite().getWidth()) && (cardGUI.getCardSprite().getY()+getCenterY(cardGUI)> cardSlot0.getCardSlotSprite().getY() && cardGUI.getCardSprite().getY()+getCenterY(cardGUI)<cardSlot0.getCardSlotSprite().getHeight())) {
+                insideSlot1=true;
+        }
         i++;
 
         batch.end();
@@ -210,20 +221,20 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         //viss inni slot 1 ny card position
         if(insideSlot1){
-            posX = 15;
-            posY = 6;
+            cardY = 15;
+            cardX= 6;
         }
         if(!insideSlot1){
-            posX = 400;
-            posY = 400;
+            cardY= 400;
+            cardX = 400;
         }
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        posX = screenX - cardGUI.getCardSprite().getWidth()/2;
-        posY = Gdx.graphics.getHeight() - screenY - cardGUI.getCardSprite().getHeight()/2;
+        cardX= screenX - cardGUI.getCardSprite().getWidth()/2;
+        cardY= Gdx.graphics.getHeight() - screenY - cardGUI.getCardSprite().getHeight()/2;
 
         return false;
     }
@@ -236,5 +247,16 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    //the x cordinate at the centre of a card
+    public Float getCenterX(CardGUI card){
+        return card.getCardSprite().getWidth()/2;
+    }
+
+
+    //the y cordinate at the centre of a card
+    public Float getCenterY(CardGUI card){
+        return card.getCardSprite().getHeight()/2;
     }
 }

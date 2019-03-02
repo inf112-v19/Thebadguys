@@ -13,7 +13,7 @@ public class CardGUI implements  ICardGUI{
     private Sprite cardSprite;
     private Sprite cardSlotSprite1;
     private Sprite cardSlotSprite2;
-    //private float posX, posY;
+    private float posX, posY;
     private Batch batch;
 
     //cards and deck
@@ -29,7 +29,10 @@ public class CardGUI implements  ICardGUI{
 
     public CardGUI(Batch batch){
         this.batch=batch;
-
+        /*
+        this.posX=posX;
+        this.posY=posY;
+        */
     }
 
     //create a card
@@ -47,8 +50,8 @@ public class CardGUI implements  ICardGUI{
         Dummycard0 = new Cards(cardSprite, "DummyNavn", 1);
         deck.addCard(Dummycard0);
 
-        //setting the positions for the card and cardslot
-        Dummycard0.getSprite().setPosition(posX, posY+200);
+        //setting the positions for the card
+        //Dummycard0.getSprite().setPosition(posX, posY+200);
 
     }
 
@@ -66,4 +69,14 @@ public class CardGUI implements  ICardGUI{
 
     //return cardSlotSprite
     public Sprite getCardSlotSprite(){ return cardSlotSprite1;}
+
+    /*
+    public Float getPosX(){
+        return posX;
+    }*/
+
+    /*
+    public Float getPosY(){
+        return posY;
+    }*/
 }
