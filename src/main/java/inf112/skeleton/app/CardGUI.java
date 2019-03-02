@@ -32,6 +32,7 @@ public class CardGUI implements  ICardGUI{
 
     }
 
+    //create a card
     public void createCard(float posX, float posY){
         //textures
         cardTexture = new Texture(Gdx.files.internal("Models/cardTest.png"));
@@ -51,15 +52,18 @@ public class CardGUI implements  ICardGUI{
 
     }
 
+    //create a cardslot
     public void createCardSlots(float posX, float posY){
         cardSlotTexture = new Texture(Gdx.files.internal("Models/cardSlotTest.png"));
         cardSlotSprite1= new Sprite(cardSlotTexture);
         cardSlotSprite1.setPosition(posX, posY);
     }
 
+    //return cardSprite
     public Sprite getCardSprite(){
         return cardSprite;
     }
 
+    //return cardSlotSprite
     public Sprite getCardSlotSprite(){ return cardSlotSprite1;}
 }

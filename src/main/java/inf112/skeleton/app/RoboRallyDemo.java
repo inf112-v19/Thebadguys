@@ -23,7 +23,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     CardGUI cardGUI;
 
-    boolean insideSlot = false;
+    boolean insideSlot1 = false;
 
     private CardGUI cardSlot0;
     private CardGUI cardSlot1;
@@ -31,49 +31,55 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private CardGUI cardSlot3;
     private CardGUI cardSlot4;
 
-
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
     private float posX, posY;
 
 
+    //create the initial state of the game
     @Override
     public void create() {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
 
+        //camera that is for scaling viewpoint
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w * 4  ,h * 4);
         camera.update();
 
+        //creation of the map
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
+        //creation of the robot
         texture = new Texture(Gdx.files.internal("Models/tank.png"));
         sprite = new Sprite(texture);
-
-
         posX = -4;
         posY = 6;
         sprite.setPosition(posX+300,posY+300);
 
+        //creation of the card
         cardGUI = new CardGUI(batch);
         cardGUI.createCard(posX, posY);
 
+        //creation of the 5 cardSlots
         cardSlot0 = new CardGUI(batch);
         cardSlot1 = new CardGUI(batch);
         cardSlot2 = new CardGUI(batch);
         cardSlot3 = new CardGUI(batch);
         cardSlot4 = new CardGUI(batch);
 
+        //the positions for the cardslots
         cardSlot0.createCardSlots(posX, posY);
         cardSlot1.createCardSlots(posX+185, posY);
         cardSlot2.createCardSlots(posX+370, posY);
         cardSlot3.createCardSlots(posX+555, posY);
         cardSlot4.createCardSlots(posX+740, posY);
 
+        System.out.println(cardSlot0.getCardSlotSprite().getX()+ " " +cardSlot0.getCardSlotSprite().getY());
+        System.out.println(cardSlot0.getCardSlotSprite().getWidth() + " " + cardSlot0.getCardSlotSprite().getHeight());
 
         Gdx.input.setInputProcessor(this);
     }
@@ -84,8 +90,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         texture.dispose();
     }
 
+    //rendering of the map and all the sprites
     @Override
     public void render() {
+
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -107,21 +115,31 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             //clockwise rotation
             sprite.rotate(90);
-
+            System.out.println(insideSlot1);
             //counter-clockwise
             //sprite.rotate90(false);
 
             System.out.println(i);
         }
 
+        //draw the cardslots
         cardSlot0.getCardSlotSprite().draw(batch);
         cardSlot1.getCardSlotSprite().draw(batch);
         cardSlot2.getCardSlotSprite().draw(batch);
         cardSlot3.getCardSlotSprite().draw(batch);
         cardSlot4.getCardSlotSprite().draw(batch);
 
+        //draw the card
         cardGUI.getCardSprite().draw(batch);
+        //System.out.println(cardGUI.getCardSprite().getX());
+        if(i>300){
+            if((cardGUI.getCardSprite().getX()> -4 && cardGUI.getCardSprite().getX()<152) && (cardGUI.getCardSprite().getY()> -6 && cardGUI.getCardSprite().getY()<231)) {
+                insideSlot1=true;
+            }
+        }
+
         i++;
+
         batch.end();
     }
 
@@ -168,16 +186,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //this method is used to click and move a card around on the screen
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        /*
-        if(button == Buttons.LEFT){
-            posX = screenX - sprite.getWidth()/2;
-            posY = Gdx.graphics.getHeight() - screenY - sprite.getHeight()/2;
-        }
-        if(button == Buttons.RIGHT){
-            posX = Gdx.graphics.getWidth()/2 - sprite.getWidth()/2;
-            posY = Gdx.graphics.getHeight()/2 - sprite.getHeight()/2;
-        }
-        */
+
 
         if(button == Buttons.LEFT){
             posX = screenX - cardGUI.getCardSprite().getWidth()/2;
@@ -192,7 +201,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             posY = Gdx.graphics.getHeight()/2 - cardGUI.getCardSprite().getHeight()/2;
             //cardGUI.render(posX, posY);
         }*/
-
         return false;
     }
 
@@ -200,9 +208,15 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-
-        posX = 15;
-        posY = 6;
+        //viss inni slot 1 ny card position
+        if(insideSlot1){
+            posX = 15;
+            posY = 6;
+        }
+        if(!insideSlot1){
+            posX = 400;
+            posY = 400;
+        }
         return false;
     }
 
