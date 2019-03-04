@@ -12,19 +12,29 @@ public class CardSlots {
     private Sprite cardSlotSprite2;
     private float posX, posY;
     private Batch batch;
+    private boolean insideCardslot;
 
 
 
-    public CardSlots(Batch batch, float posX, float posY){
+    public CardSlots(Batch batch, float posX, float posY, boolean insideCardSlot){
         this.batch=batch;
         this.posX=posX;
         this.posY=posY;
+        this.insideCardslot=insideCardSlot;
         cardSlotTexture = new Texture(Gdx.files.internal("Models/cardSlotTest.png"));
         cardSlotSprite1= new Sprite(cardSlotTexture);
         cardSlotSprite1.setPosition(posX, posY);
     }
 
     public Sprite getCardSlotSprite(){ return cardSlotSprite1;}
+
+    public boolean getIsInsideSlot(){
+        return insideCardslot;
+    }
+
+    public void setInsideCardslot(boolean inside){
+        insideCardslot=inside;
+    }
 
     public Float getPosX(){
         return posX;
