@@ -18,17 +18,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import javax.smartcardio.Card;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
-    TiledMap tiledMap;
-    TiledMapRenderer tiledMapRenderer;
-    OrthographicCamera camera;
-    int i = 0;
-
-    private boolean insideSlot0 = false;
-    private boolean insideSlot1 = false;
-    private boolean insideSlot2 = false;
-    private boolean insideSlot3 = false;
-    private boolean insideSlot4 = false;
-
+    private TiledMap tiledMap;
+    private TiledMapRenderer tiledMapRenderer;
+    private OrthographicCamera camera;
+    private int i = 0;
     private CardSlots cardSlot0;
     private CardSlots cardSlot1;
     private CardSlots cardSlot2;
@@ -85,10 +78,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         card5 = new CardGUI(batch, 525, 250);
         card6 = new CardGUI(batch, 630, 250);
         card7 = new CardGUI(batch, 735, 250);
-        card8 = new CardGUI(batch, 740, 250);
+        card8 = new CardGUI(batch, 840, 250);
 
         clickedCard=new CardGUI(batch, 0,0);
-
 
         card0.getCardSprite().setPosition(0, 250);
         card1.getCardSprite().setPosition(105,250);
@@ -99,8 +91,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         card6.getCardSprite().setPosition(630,250);
         card7.getCardSprite().setPosition(735,250);
         card8.getCardSprite().setPosition(840,250);
-
-
 
         //creation of the 5 cardSlots
         cardSlot0 = new CardSlots(batch, posX, posY, false);
@@ -253,8 +243,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //this method is used to click and move a card around on the screen
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-        System.out.println(insideCard(screenX, screenY, card0) +" lmao");
         if(insideCard(screenX, screenY, card0) && button == Buttons.LEFT){
             clickedCard=card0;
         }
@@ -263,6 +251,24 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
         if(insideCard(screenX, screenY, card2) && button == Buttons.LEFT){
             clickedCard=card2;
+        }
+        if(insideCard(screenX, screenY, card3) && button == Buttons.LEFT){
+            clickedCard=card3;
+        }
+        if(insideCard(screenX, screenY, card4) && button == Buttons.LEFT){
+            clickedCard=card4;
+        }
+        if(insideCard(screenX, screenY, card5) && button == Buttons.LEFT){
+            clickedCard=card5;
+        }
+        if(insideCard(screenX, screenY, card6) && button == Buttons.LEFT){
+            clickedCard=card6;
+        }
+        if(insideCard(screenX, screenY, card7) && button == Buttons.LEFT){
+            clickedCard=card7;
+        }
+        if(insideCard(screenX, screenY, card8) && button == Buttons.LEFT){
+            clickedCard=card8;
         }
 
         /*
