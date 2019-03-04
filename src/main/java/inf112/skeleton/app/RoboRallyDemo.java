@@ -15,37 +15,44 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
+import javax.smartcardio.Card;
+
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
     OrthographicCamera camera;
     int i = 0;
 
-    CardGUI cardGUI;
+    private boolean insideSlot0 = false;
+    private boolean insideSlot1 = false;
+    private boolean insideSlot2 = false;
+    private boolean insideSlot3 = false;
+    private boolean insideSlot4 = false;
 
-    boolean insideSlot0 = false;
-    boolean insideSlot1 = false;
-    boolean insideSlot2 = false;
-    boolean insideSlot3 = false;
-    boolean insideSlot4 = false;
+    private CardSlots cardSlot0;
+    private CardSlots cardSlot1;
+    private CardSlots cardSlot2;
+    private CardSlots cardSlot3;
+    private CardSlots cardSlot4;
 
+    private CardGUI card0;
+    private CardGUI card1;
+    private CardGUI card2;
+    private CardGUI card3;
+    private CardGUI card4;
+    private CardGUI card5;
+    private CardGUI card6;
+    private CardGUI card7;
+    private CardGUI card8;
 
-    private CardGUI cardSlot0;
-    private CardGUI cardSlot1;
-    private CardGUI cardSlot2;
-    private CardGUI cardSlot3;
-    private CardGUI cardSlot4;
+    private boolean touchedDownCard0 = false;
+    private boolean touchedDownCard1 = false;
+    private boolean touchedDownCard2 = false;
 
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
     private float posX, posY;
-
-
-    private float cardX=400;
-    private float cardY=400;
-
-
 
     //create the initial state of the game
     @Override
@@ -72,22 +79,35 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         sprite.setPosition(posX+300,posY+300);
 
         //creation of the card
-        cardGUI = new CardGUI(batch);
-        cardGUI.createCard(cardX, cardY);
+        card0 = new CardGUI(batch, 0, 250);
+        card1 = new CardGUI(batch, 105, 250);
+        card2 = new CardGUI(batch, 210, 250);
+        card3 = new CardGUI(batch, 315, 250);
+        card4 = new CardGUI(batch, 420, 250);
+        card5 = new CardGUI(batch, 525, 250);
+        card6 = new CardGUI(batch, 630, 250);
+        card7 = new CardGUI(batch, 735, 250);
+        card8 = new CardGUI(batch, 740, 250);
+
+
+        card0.getCardSprite().setPosition(0, 250);
+        card1.getCardSprite().setPosition(105,250);
+        card2.getCardSprite().setPosition(210,250);
+        card3.getCardSprite().setPosition(315,250);
+        card4.getCardSprite().setPosition(420,250);
+        card5.getCardSprite().setPosition(525,250);
+        card6.getCardSprite().setPosition(630,250);
+        card7.getCardSprite().setPosition(735,250);
+        card8.getCardSprite().setPosition(840,250);
+
+
 
         //creation of the 5 cardSlots
-        cardSlot0 = new CardGUI(batch);
-        cardSlot1 = new CardGUI(batch);
-        cardSlot2 = new CardGUI(batch);
-        cardSlot3 = new CardGUI(batch);
-        cardSlot4 = new CardGUI(batch);
-
-        //the positions for the cardslots
-        cardSlot0.createCardSlots(posX, posY);
-        cardSlot1.createCardSlots(posX+185, posY);
-        cardSlot2.createCardSlots(posX+370, posY);
-        cardSlot3.createCardSlots(posX+555, posY);
-        cardSlot4.createCardSlots(posX+740, posY);
+        cardSlot0 = new CardSlots(batch, posX, posY);
+        cardSlot1 = new CardSlots(batch, posX+185, posY);
+        cardSlot2 = new CardSlots(batch, posX+370, posY);
+        cardSlot3 = new CardSlots(batch, posX+555, posY);
+        cardSlot4 = new CardSlots(batch, posX+740, posY);
 
         Gdx.input.setInputProcessor(this);
     }
@@ -113,8 +133,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         //denne kontrolerer movment
 
-        cardGUI.getCardSprite().setPosition(cardX, cardY);
-
 
         //cardGUI.getCardSlotSprite().setPosition(posX,posY+100);
         batch.begin();
@@ -128,21 +146,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             //counter-clockwise
             //sprite.rotate90(false);
 
-            System.out.println("insideSlot0 "+insideSlot0);
-            System.out.println("insideSlot1 "+insideSlot1);
-            System.out.println("insideSlot2 "+insideSlot2);
-            System.out.println("insideSlot3 "+insideSlot3);
-            System.out.println("insideSlot4 "+insideSlot4+ "\n");
-
-            /*
-            System.out.println("Cardslot0 Position: "+cardSlot0.getCardSlotSprite().getX()+ " " + cardSlot0.getCardSlotSprite().getY()+ " " + (cardSlot0.getCardSlotSprite().getX()+cardSlot0.getCardSlotSprite().getWidth()) + " " + (cardSlot0.getCardSlotSprite().getY()+cardSlot0.getCardSlotSprite().getHeight()));
-            System.out.println("Cardslot1 Position: "+cardSlot1.getCardSlotSprite().getX()+ " " + cardSlot1.getCardSlotSprite().getY()+ " " + (cardSlot1.getCardSlotSprite().getX()+cardSlot1.getCardSlotSprite().getWidth()) + " " + (cardSlot1.getCardSlotSprite().getY()+cardSlot1.getCardSlotSprite().getHeight()));
-            System.out.println("Cardslot2 Position: "+cardSlot2.getCardSlotSprite().getX()+ " " + cardSlot2.getCardSlotSprite().getY());
-            System.out.println("Cardslot3 Position: "+cardSlot3.getCardSlotSprite().getX()+ " " + cardSlot3.getCardSlotSprite().getY());
-            System.out.println("Cardslot4 Position: "+cardSlot4.getCardSlotSprite().getX()+ " " + cardSlot4.getCardSlotSprite().getY());
-            */
-            System.out.println("Card Positon "+cardGUI.getCardSprite().getX() + " " + cardGUI.getCardSprite().getY());
-            System.out.println("Tick "+i+"\n");
+          //  System.out.println("insideSlot0 "+insideSlot0);
+          //  System.out.println("insideSlot1 "+insideSlot1);
+           // System.out.println("insideSlot2 "+insideSlot2);
+           // System.out.println("insideSlot3 "+insideSlot3);
+          //  System.out.println("insideSlot4 "+insideSlot4+ "\n");
+          //  System.out.println("Card Positon "+card0.getCardSprite().getX() + " " + card0.getCardSprite().getY());
+         //   System.out.println("Tick "+i+"\n");
         }
 
         //draw the cardslots
@@ -152,8 +162,18 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         cardSlot3.getCardSlotSprite().draw(batch);
         cardSlot4.getCardSlotSprite().draw(batch);
 
+
         //draw the card
-        cardGUI.getCardSprite().draw(batch);
+        card0.getCardSprite().draw(batch);
+        card1.getCardSprite().draw(batch);
+        card2.getCardSprite().draw(batch);
+        card3.getCardSprite().draw(batch);
+        card4.getCardSprite().draw(batch);
+        card5.getCardSprite().draw(batch);
+        card6.getCardSprite().draw(batch);
+        card7.getCardSprite().draw(batch);
+        card8.getCardSprite().draw(batch);
+
         //System.out.println(cardGUI.getCardSprite().getX());
 
         //denne bruker eg til å sjekke om midten av kortet er inne i kort-sloten
@@ -163,41 +183,46 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //(cardSlot2.getCardSlotSprite().getX()+cardSlot2.getCardSlotSprite().getWidth())
 
         //if the center of the card is inside the cardslot then it is inside the slot and its new default cordinates will be in the middle of the cardslot
-        if((cardGUI.getCardSprite().getX()+getCardCenterX(cardGUI)> cardSlot0.getCardSlotSprite().getX() && cardGUI.getCardSprite().getX()+getCardCenterX(cardGUI)<(cardSlot0.getCardSlotSprite().getX()+cardSlot0.getCardSlotSprite().getWidth())) && (cardGUI.getCardSprite().getY()+getCardCenterY(cardGUI)> cardSlot0.getCardSlotSprite().getY() && cardGUI.getCardSprite().getY()+getCardCenterY(cardGUI)<cardSlot0.getCardSlotSprite().getHeight())) {
+        if(insideCardSlot(card0, cardSlot0)){
             insideSlot0=true;
             insideSlot1=false;
             insideSlot2=false;
             insideSlot3=false;
             insideSlot4=false;
-
         }
-        else if((cardGUI.getCardSprite().getX()+getCardCenterX(cardGUI)> cardSlot1.getCardSlotSprite().getX() && cardGUI.getCardSprite().getX()+getCardCenterX(cardGUI)<(cardSlot1.getCardSlotSprite().getX()+cardSlot1.getCardSlotSprite().getWidth())) && (cardGUI.getCardSprite().getY()+getCardCenterY(cardGUI)> cardSlot1.getCardSlotSprite().getY() && cardGUI.getCardSprite().getY()+getCardCenterY(cardGUI)<(cardSlot1.getCardSlotSprite().getY()+cardSlot1.getCardSlotSprite().getHeight()))) {
+        else if(insideCardSlot(card0, cardSlot1)){
             insideSlot0=false;
             insideSlot1=true;
             insideSlot2=false;
             insideSlot3=false;
             insideSlot4=false;
         }
-        else if((cardGUI.getCardSprite().getX()+getCardCenterX(cardGUI)> cardSlot2.getCardSlotSprite().getX() && cardGUI.getCardSprite().getX()+getCardCenterX(cardGUI)<(cardSlot2.getCardSlotSprite().getX()+cardSlot2.getCardSlotSprite().getWidth())) && (cardGUI.getCardSprite().getY()+getCardCenterY(cardGUI)> cardSlot2.getCardSlotSprite().getY() && cardGUI.getCardSprite().getY()+getCardCenterY(cardGUI)<(cardSlot2.getCardSlotSprite().getY()+cardSlot2.getCardSlotSprite().getHeight()))) {
-            insideSlot0=false;
+        else if(insideCardSlot(card0, cardSlot2)){
+          insideSlot0=false;
             insideSlot1=false;
             insideSlot2=true;
             insideSlot3=false;
             insideSlot4=false;
         }
-        else if((cardGUI.getCardSprite().getX()+getCardCenterX(cardGUI)> cardSlot3.getCardSlotSprite().getX() && cardGUI.getCardSprite().getX()+getCardCenterX(cardGUI)<(cardSlot3.getCardSlotSprite().getX()+cardSlot3.getCardSlotSprite().getWidth())) && (cardGUI.getCardSprite().getY()+getCardCenterY(cardGUI)> cardSlot3.getCardSlotSprite().getY() && cardGUI.getCardSprite().getY()+getCardCenterY(cardGUI)<(cardSlot3.getCardSlotSprite().getY()+cardSlot3.getCardSlotSprite().getHeight()))) {
+        else if(insideCardSlot(card0, cardSlot3)){
             insideSlot0=false;
             insideSlot1=false;
             insideSlot2=false;
             insideSlot3=true;
             insideSlot4=false;
         }
-        else if((cardGUI.getCardSprite().getX()+getCardCenterX(cardGUI)> cardSlot4.getCardSlotSprite().getX() && cardGUI.getCardSprite().getX()+getCardCenterX(cardGUI)<(cardSlot4.getCardSlotSprite().getX()+cardSlot4.getCardSlotSprite().getWidth())) && (cardGUI.getCardSprite().getY()+getCardCenterY(cardGUI)> cardSlot4.getCardSlotSprite().getY() && cardGUI.getCardSprite().getY()+getCardCenterY(cardGUI)<(cardSlot4.getCardSlotSprite().getY()+cardSlot4.getCardSlotSprite().getHeight()))){
+        else if(insideCardSlot(card0, cardSlot4)){
             insideSlot0=false;
             insideSlot1=false;
             insideSlot2=false;
             insideSlot3=false;
             insideSlot4=true;
+        }else{
+            insideSlot0=false;
+            insideSlot1=false;
+            insideSlot2=false;
+            insideSlot3=false;
+            insideSlot4=false;
         }
 
         i++;
@@ -249,11 +274,15 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-
-        if(button == Buttons.LEFT){
-            posX = screenX - cardGUI.getCardSprite().getWidth()/2;
-            posY = Gdx.graphics.getHeight() - screenY - cardGUI.getCardSprite().getHeight()/2;
-            //cardGUI.render(posX, posY);
+        System.out.println(insideCard(screenX, screenY, card0) +" lmao");
+        if(insideCard(screenX, screenY, card0) && button == Buttons.LEFT){
+            touchedDownCard0=true;
+        }
+        if(insideCard(screenX, screenY, card1) && button == Buttons.LEFT){
+            touchedDownCard1=true;
+        }
+        if(insideCard(screenX, screenY, card2) && button == Buttons.LEFT){
+            touchedDownCard2=true;
         }
 
         /*
@@ -270,39 +299,52 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
+        CardGUI card;
         //viss inni slot 1 ny card position
         if(insideSlot0){
-            cardX = cardSlot0.getCardSlotSprite().getX()+getCardSlotCenterX(cardSlot0)-getCardCenterX(cardGUI);
-            cardY = cardSlot0.getCardSlotSprite().getY()+getCardSlotCenterY(cardSlot0)-getCardCenterY(cardGUI);
+            card0.getCardSprite().setPosition(cardSlot0.getCardSlotSprite().getX()+getCardSlotCenterX(cardSlot0)-getCardCenterX(card0), cardSlot0.getCardSlotSprite().getY()+getCardSlotCenterY(cardSlot0)-getCardCenterY(card0));
         }
         else if(insideSlot1){
-            cardX = cardSlot1.getCardSlotSprite().getX()+getCardSlotCenterX(cardSlot1)-getCardCenterX(cardGUI);
-            cardY = cardSlot1.getCardSlotSprite().getY()+getCardSlotCenterY(cardSlot1)-getCardCenterY(cardGUI);
+            card0.getCardSprite().setPosition(cardSlot1.getCardSlotSprite().getX()+getCardSlotCenterX(cardSlot1)-getCardCenterX(card0),cardSlot1.getCardSlotSprite().getY()+getCardSlotCenterY(cardSlot1)-getCardCenterY(card0));
         }
         else if(insideSlot2){
-            cardX = cardSlot2.getCardSlotSprite().getX()+getCardSlotCenterX(cardSlot2)-getCardCenterX(cardGUI);
-            cardY = cardSlot2.getCardSlotSprite().getY()+getCardSlotCenterY(cardSlot2)-getCardCenterY(cardGUI);
+            card0.getCardSprite().setPosition(cardSlot2.getCardSlotSprite().getX()+getCardSlotCenterX(cardSlot2)-getCardCenterX(card0), cardSlot2.getCardSlotSprite().getY()+getCardSlotCenterY(cardSlot2)-getCardCenterY(card0));
         }
         else if(insideSlot3){
-            cardX = cardSlot3.getCardSlotSprite().getX()+getCardSlotCenterX(cardSlot3)-getCardCenterX(cardGUI);
-            cardY = cardSlot3.getCardSlotSprite().getY()+getCardSlotCenterY(cardSlot3)-getCardCenterY(cardGUI);
+            card0.getCardSprite().setPosition(cardSlot3.getCardSlotSprite().getX()+getCardSlotCenterX(cardSlot3)-getCardCenterX(card0),  cardSlot3.getCardSlotSprite().getY()+getCardSlotCenterY(cardSlot3)-getCardCenterY(card0));
         }
         else if(insideSlot4){
-            cardX = cardSlot4.getCardSlotSprite().getX()+getCardSlotCenterX(cardSlot4)-getCardCenterX(cardGUI);
-            cardY = cardSlot4.getCardSlotSprite().getY()+getCardSlotCenterY(cardSlot4)-getCardCenterY(cardGUI);
+            card0.getCardSprite().setPosition(cardSlot4.getCardSlotSprite().getX()+getCardSlotCenterX(cardSlot4)-getCardCenterX(card0),  cardSlot4.getCardSlotSprite().getY()+getCardSlotCenterY(cardSlot4)-getCardCenterY(card0));
         }
         else{
-            cardY= 400;
-            cardX = 400;
+            card0.getCardSprite().setPosition(card0.getDefaultPosX(), card0.getDefaultPosY());
         }
+
+        touchedDownCard0=false;
+        touchedDownCard1=false;
+        touchedDownCard2=false;
+
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        cardX= screenX - cardGUI.getCardSprite().getWidth()/2;
-        cardY= Gdx.graphics.getHeight() - screenY - cardGUI.getCardSprite().getHeight()/2;
+        //System.out.println(insideCard(screenX, screenY, card0) +" lmao");
 
+        if(touchedDownCard0) {
+            card0.getCardSprite().setPosition(screenX - card0.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - card0.getCardSprite().getHeight() / 2);
+        }
+        if(touchedDownCard1){
+            card1.getCardSprite().setPosition(screenX - card0.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - card0.getCardSprite().getHeight() / 2);
+        }
+        if(touchedDownCard2){
+            card2.getCardSprite().setPosition(screenX - card0.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - card0.getCardSprite().getHeight() / 2);
+        }
+
+/*
+        if(insideCard(screenX, screenY, card1)) {
+            card1.getCardSprite().setPosition(screenX - card0.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - card0.getCardSprite().getHeight() / 2);
+        }*/
         return false;
     }
 
@@ -328,11 +370,44 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     //the x cordinate at the centre of a card
-    public Float getCardSlotCenterX(CardGUI card){
+    public Float getCardSlotCenterX(CardSlots card){
         return card.getCardSlotSprite().getWidth()/2;
     }
 
-    public Float getCardSlotCenterY(CardGUI card){
+    public Float getCardSlotCenterY(CardSlots card){
         return card.getCardSlotSprite().getHeight()/2;
+    }
+
+    //metode for å sjekke om midten av et kort er innenfor ein cardSlot
+    public boolean insideCardSlot(CardGUI card, CardSlots cardSlotX){
+        if((card.getCardSprite().getX()+getCardCenterX(card)> cardSlotX.getCardSlotSprite().getX() && card.getCardSprite().getX()+getCardCenterX(card)<(cardSlotX.getCardSlotSprite().getX()+cardSlotX.getCardSlotSprite().getWidth()))&&(card.getCardSprite().getY()+getCardCenterY(card)> cardSlotX.getCardSlotSprite().getY() && card.getCardSprite().getY()+getCardCenterY(card)<(cardSlotX.getCardSlotSprite().getY()+cardSlotX.getCardSlotSprite().getHeight()))){
+            return true;
+        }
+        return false;
+    }
+
+    //metode for å sjekke om muspeikeren er over et kort
+    public boolean insideCard(float screenX, float screenY, CardGUI card){
+        float cardDeltaH = getCardCenterY(card);
+        float cardDeltaW = getCardCenterX(card);
+        float NewscreenY=Gdx.graphics.getHeight() - screenY;
+        System.out.println(card.getCardSprite().getX()+" "+ (card.getCardSprite().getX()+card.getCardSprite().getWidth()) + " " + card.getCardSprite().getY() + " "+(card.getCardSprite().getY()+card.getCardSprite().getHeight()));
+
+        System.out.println(screenX + " " +  NewscreenY);
+        System.out.println((screenX>card.getCardSprite().getX()) + " " + (screenX<(card.getCardSprite().getX()+card.getCardSprite().getWidth())) + " " + (NewscreenY>card.getCardSprite().getY()) + " "+((NewscreenY<card.getCardSprite().getY()+card.getCardSprite().getHeight())));
+
+        if((screenX>card.getCardSprite().getX()) && (screenX<(card.getCardSprite().getX()+card.getCardSprite().getWidth())) && (NewscreenY>card.getCardSprite().getY()) && (NewscreenY<(card.getCardSprite().getY()+card.getCardSprite().getHeight()))){
+            return true;
+        }
+        return false;
+    }
+
+    public CardGUI cardTouchedDown(){
+        if(touchedDownCard0){
+            return card0;
+        }else if(touchedDownCard1){
+            return card1;
+        }
+        return null;
     }
 }
