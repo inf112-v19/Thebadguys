@@ -6,6 +6,8 @@ public class Robot {
     private float posY = 6;
     private float[] checkpoint = {posX, posY};
     private int flagsPassed = 0;
+    private int[] Direction {0, 1, 2, 3];
+    public int direction = Direction[0];
 
     public Robot(String sprite) {
         this.sprite = sprite;

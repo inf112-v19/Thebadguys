@@ -13,6 +13,7 @@ public class Cards implements ICard{
         this.sprite=sprite;
         this.name=name;
         this.priority=priority;
+        //this.texture = texture;
     }
 
     //returns the sprite
