@@ -15,7 +15,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
-import javax.smartcardio.Card;
+//import javax.smartcardio.Card;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private TiledMap tiledMap;
