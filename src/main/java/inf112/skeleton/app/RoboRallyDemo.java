@@ -21,8 +21,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     OrthographicCamera camera;
 
 
+    private Robot robot;
     private SpriteBatch batch;
-    private Texture texture;
+    /*private Texture texture;*/
     private Sprite sprite;
     private float posX, posY;
 
@@ -39,11 +40,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         tiledMap = new TmxMapLoader().load("roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
-        texture = new Texture(Gdx.files.internal("tank.png"));
+        robot = new Robot("tank.png", -4, 6);
+        this.sprite = robot.getSprite();
+
+        /*texture = new Texture(Gdx.files.internal("tank.png"));
         sprite = new Sprite(texture);
         posX = -4;
-        posY = 6;
-        sprite.setPosition(posX,posY);
+        posY = 6;*/
+        this.sprite.setPosition(posX,posY);
 
         Gdx.input.setInputProcessor(this);
     }
@@ -51,7 +55,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     @Override
     public void dispose() {
         batch.dispose();
-        texture.dispose();
+        //texture.dispose();
     }
 
     @Override
