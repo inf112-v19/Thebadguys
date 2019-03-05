@@ -18,3 +18,5 @@ Idag gikk vi gjennom mandatory 3 filen og snakket om de forskjellige punktene. V
 ### Arbeidssammendrag 01.03
 I dag jobbet vi med oppgavene vi fikk fra forige møtet.
   
+### Arbeidssammendrag 05.03
+I dag begynte vi med å diskutere hvq vi ønsket å få til til innleveringen på fredag. Vi fordelte noen arbeidsoppgaver i mellom oss også jobbet vi hovedsakelig med koding av kort og bevegelses systemet.
