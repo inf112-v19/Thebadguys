@@ -25,6 +25,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Cards clickedCard;
     private Cards CardButton;
     private ArrayList<CardSlots> cardSlotPos;
+    private ArrayList<Sprite> randomSpriteList;
     private ArrayList<Sprite> spritePos;
     private Deck Deck;
     private SpriteBatch batch;
@@ -61,7 +62,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         sprite.setPosition(posX+300,posY+300);
 
         //create the card that Is clicked
-        cardTexture = new Texture(Gdx.files.internal("Models/genericCard.png"));
+        cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
         clickedCard=new Cards(batch, 0,0, "",0, cardSprite10);
 
@@ -73,6 +74,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
         cardSlotPos= new ArrayList<>();
+        randomSpriteList=new ArrayList();
         Deck = new Deck();
 
         //set the position of all the cardsprites
@@ -322,10 +324,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //method to set the position of sprites
     private void setCardSprites() {
         int x=0;
+        addSprites();
+        System.out.println(randomSpriteList.size());
         for (int i = 0; i < 9; i++) {
             //"Models"+(i+1)+".png";
-            String path = "Models/genericCard.png";
-            spritePos.add(setSprite(path));
+            String path = "Models/AlleBevegelseKortUtenPrioritet/genericCard.png";
+            //spritePos.add(setSprite(path));
+            spritePos.add(getRandomSprite());
             spritePos.get(i).setPosition(x, 250);
             x+=105;
         }
@@ -369,5 +374,51 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             temp=cardSlotPos.get(i);
             temp.getCardSlotSprite().draw(batch);
         }
+    }
+
+    //returns a random sprite form the spritesList , uses the rng method
+    private Sprite getRandomSprite(){
+        int v= rng();
+        Sprite random = randomSpriteList.get(v);
+        randomSpriteList.remove(v);
+        return random;
+    }
+
+    //returns a random index from the spriteList
+    private int rng(){
+        return (int)(Math.random() * randomSpriteList.size()-1 + 1);
+    }
+
+    //add all the sprites into the sprite list, burde finne ein bedre løsning på dette
+    private void addSprites(){
+        Texture texture0 = new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png");
+        Texture texture1 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png");
+        Texture texture2 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-2.png");
+        Texture texture3 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-3.png");
+        Texture texture4 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png");
+        Texture texture5 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png");
+        Texture texture6 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png");
+        Texture texture7 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png");
+        Texture texture8 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-2.png");
+
+        Sprite sprite0 = new Sprite(texture0);
+        Sprite sprite1 = new Sprite(texture1);
+        Sprite sprite2 = new Sprite(texture2);
+        Sprite sprite3 = new Sprite(texture3);
+        Sprite sprite4 = new Sprite(texture4);
+        Sprite sprite5 = new Sprite(texture5);
+        Sprite sprite6 = new Sprite(texture6);
+        Sprite sprite7 = new Sprite(texture7);
+        Sprite sprite8 = new Sprite(texture8);
+
+        randomSpriteList.add(sprite0);
+        randomSpriteList.add(sprite1);
+        randomSpriteList.add(sprite2);
+        randomSpriteList.add(sprite3);
+        randomSpriteList.add(sprite4);
+        randomSpriteList.add(sprite5);
+        randomSpriteList.add(sprite6);
+        randomSpriteList.add(sprite7);
+        randomSpriteList.add(sprite8);
     }
 }
