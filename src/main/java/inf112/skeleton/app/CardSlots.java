@@ -21,7 +21,7 @@ public class CardSlots {
         this.posX=posX;
         this.posY=posY;
         this.insideCardslot=insideCardSlot;
-        cardSlotTexture = new Texture(Gdx.files.internal("Models/cardSlotTest.png"));
+        cardSlotTexture = new Texture(Gdx.files.internal("Models/CardSlot.jpg"));
         cardSlotSprite1= new Sprite(cardSlotTexture);
         cardSlotSprite1.setPosition(posX, posY);
     }

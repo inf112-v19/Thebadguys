@@ -19,7 +19,6 @@ public class AppTest
 
     private Texture cardTexture = new Texture(Gdx.files.internal("Models/cardTest.PNG"));
     private Sprite sprite = new Sprite(cardTexture);
-    private Cards testCard = new Cards(sprite, "Move-1", 100);
     private Deck deck = new Deck();
 
 

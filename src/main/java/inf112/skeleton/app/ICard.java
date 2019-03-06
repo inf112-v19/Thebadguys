@@ -1,15 +1,25 @@
 package inf112.skeleton.app;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public interface ICard  {
+public interface ICard {
 
-    public Sprite getSprite();
+    //create the cardSprites in the GUI
+    //public void createCard(float posX, float posY);
 
-    //public Texture getTexture();
+    //return the Card Sprite
+    public Sprite getCardSprite();
 
-    public String getName();
+    //return the Cardslot Sprite
+    //public Sprite getCardSlotSprite();
 
-    public int getPriority();
+    public float getPosX();
+
+    public float getPosY();
+
+    public float getDefaultPosX();
+
+    public float getDefaultPosY();
+
+   // public void createCardSlots(float posX, float posY);
 }

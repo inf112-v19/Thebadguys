@@ -1,12 +1,12 @@
 package inf112.skeleton.app;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public interface IDeck {
 
-    public HashMap<Cards, Integer> getDeckList();
+    public ArrayList<Cards> getDeckList();
 
-    public void addCard(Cards card);
+    //public void addCard(Cards card);
 
    // public Cards getCard(Cards card);
 
