@@ -46,6 +46,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private boolean test=false;
 
     //create the initial state of the game
+
+    //made a constructor, because I need it for testing
+    public RoboRallyDemo(){
+
+    }
+
     @Override
     public void create() {
         float w = Gdx.graphics.getWidth();
@@ -72,12 +78,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //create the card that Is clicked
         cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
-        clickedCard=new Cards(batch, 0,0, "",0, cardSprite10);
+        clickedCard=new Cards(0,0, "",0, cardSprite10);
 
         buttonTexture = new Texture(Gdx.files.internal("Models/Button.png"));
         buttonSprite= new Sprite(buttonTexture);
         buttonSprite.setPosition(500,500);
-        CardButton = new Cards(batch, 500, 500, "", 0 ,buttonSprite);
+        CardButton = new Cards(500, 500, "", 0 ,buttonSprite);
 
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
@@ -345,7 +351,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         Cards listCard;
         int x=0;
         for(int i=0; i<9; i++){
-            listCard=new Cards(batch, x, 250, "card"+i, i,spritePos.get(i));
+            listCard=new Cards(x, 250, "card"+i, i,spritePos.get(i));
             Deck.addCard(listCard);
             x+=105;
         }

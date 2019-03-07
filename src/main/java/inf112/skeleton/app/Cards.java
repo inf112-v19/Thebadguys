@@ -22,12 +22,24 @@ public class Cards implements ICard {
 
 
 
-    public Cards(Batch batch, float posX, float posY, String name, int priority, Sprite cardSprite){
+    public Cards(float posX, float posY, String name, int priority, Sprite cardSprite){
         this.batch=batch;
         this.posX=posX;
         this.posY=posY;
         this.name=name;
         this.cardSprite=cardSprite;
+        this.priority=priority;
+        defaultPosX=posX;
+        defaultPosY=posY;
+    }
+
+    //extra constructor for testing
+    public Cards(float posX, float posY, String name, int priority){
+        this.batch=batch;
+        this.posX=posX;
+        this.posY=posY;
+        this.name=name;
+        //this.cardSprite=cardSprite;
         this.priority=priority;
         defaultPosX=posX;
         defaultPosY=posY;

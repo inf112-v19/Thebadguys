@@ -26,6 +26,16 @@ public class CardSlots {
         cardSlotSprite1.setPosition(posX, posY);
     }
 
+    public CardSlots(float posX, float posY, boolean insideCardSlot){
+        //this.batch=batch;
+        this.posX=posX;
+        this.posY=posY;
+        this.insideCardslot=insideCardSlot;
+        //cardSlotTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/CardSlot.jpg"));
+       // cardSlotSprite1= new Sprite(cardSlotTexture);
+        //cardSlotSprite1.setPosition(posX, posY);
+    }
+
     public Sprite getCardSlotSprite(){ return cardSlotSprite1;}
 
     public boolean getIsInsideSlot(){
