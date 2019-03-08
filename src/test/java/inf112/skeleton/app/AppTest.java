@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.junit.Test;
 
-import javax.smartcardio.Card;
+//import javax.smartcardio.Card;
 
 /**
  * Unit test for simple App.
