@@ -14,8 +14,6 @@ public class CardSlots {
     private Batch batch;
     private boolean insideCardslot;
 
-
-
     public CardSlots(Batch batch, float posX, float posY, boolean insideCardSlot){
         this.batch=batch;
         this.posX=posX;

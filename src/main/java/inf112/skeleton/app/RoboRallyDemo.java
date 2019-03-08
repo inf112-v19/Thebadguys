@@ -67,6 +67,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
+
         //creation of the robot
         texture = new Texture(Gdx.files.internal("Models/tank.png"));
         sprite = new Sprite(texture);
@@ -86,6 +87,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         buttonSprite= new Sprite(buttonTexture);
         buttonSprite.setPosition(800,500);
         CardButton = new Cards(800, 500, "", 0 ,buttonSprite);
+
 
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
