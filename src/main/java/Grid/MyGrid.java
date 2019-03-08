@@ -24,7 +24,6 @@ public class MyGrid<T> implements IGrid<T> {
         for (int i = 0; i < height * width; ++i) {
 
             tiles.add(initElement);
-
         }
     }
 
