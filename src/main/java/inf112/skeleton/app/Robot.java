@@ -11,6 +11,10 @@ public class Robot {
     private int flagsPassed = 0;
     private int direction = 0;
 
+    public void Robot() {
+
+    }
+
     public void Robot(Sprite sprite){
         this.sprite = sprite;
     }
@@ -22,7 +26,7 @@ public class Robot {
         this.posY = startingPos[1];
         this.flagsPassed = flagsPassed;
     }
-
+    // a bunch of get functions
     public int getPosX(){
         return this.posX;
     }
@@ -46,7 +50,7 @@ public class Robot {
     public int getDirection() {
         return this.direction;
     }
-
+    // a bunch of set functions
     public void setCheckpoint(int[] checkpoint){
         this.checkpoint = checkpoint;
     }
@@ -88,7 +92,7 @@ public class Robot {
         if (current_direction == 0) {
             int newY = this.getPosY() + amount;
             this.setPosY(newY);
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + 300 * amount);
+            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + 300 * amount); // temp moving sprite
         }
         else if (current_direction == 1) {
             int newX = this.getPosX() + amount;
@@ -110,37 +114,37 @@ public class Robot {
         }
     }
 
-    public void move(Cards card){
-        String command = card.getName();
+    public void move(Cards card){ // gets the command from a card and figures out which command to execute
+        String command = card.getCardSprite().getTexture().toString();
         switch (command){
-            case "BackUp":
+            case "Models/AlleBevegelseKortUtenPrioritet/BackUp.png":
                 this.moveForward(-1);
                 break;
-            case "Move-1":
+            case "Models/AlleBevegelseKortUtenPrioritet/Move-1.png":
                 this.moveForward(1);
                 break;
-            case "Move-2":
+            case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
                 this.moveForward(1); // added twice so we can incrimentally check for collisions
                 this.moveForward(1); // along the robots move-path
                 break;
-            case "Move-3":
+            case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
                 this.moveForward(1);
                 this.moveForward(1);
                 this.moveForward(1);
                 break;
-            case "Rotate-90":
+            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
                 this.rotate_right();
                 break;
-            case "Rotate-180":
+            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png":
                 this.rotate_right();
                 this.rotate_right();
                 break;
-            case "Rotate-C90":
+            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png":
                 this.rotate_left();
                 break;
             default:
                 System.out.println("Something went wrong");
         }
-
+        // need check if robot is on map, and check for hazard, should integrate with grid
     }
 }

@@ -24,7 +24,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private int i = 0;
     private Cards clickedCard;
     private Cards CardButton;
-
+    private Robot robot;
     private int counter;
 
     //lister
@@ -73,8 +73,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         posX = -4;
         posY = 6;
         int[] startpos = {Math.round(posX), Math.round(posY)};
-        Robot robot = new Robot(sprite, startpos, 0);
-        sprite.setPosition(posX+300,posY+300);
+        robot = new Robot(sprite, startpos, 0);
+        sprite.setPosition(posX+300,posY+600);
+
 
         //create the card that Is clicked
         cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
@@ -129,7 +130,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //rotation of sprite, rotate 90 degrees every 100th gametick
         if(i%100==0){
             //clockwise rotation
-            sprite.rotate(90);
+            //sprite.rotate(90);
             //System.out.println(Deck.getDeckList().size());
             System.out.println(selectedCards[0]);
             System.out.println(selectedCards[1]);
@@ -138,11 +139,15 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             System.out.println(selectedCards[4]);
 
             if(selectedCards[0]!=null && selectedCards[1]!=null && selectedCards[2]!=null && selectedCards[3]!=null && selectedCards[4]!=null){
+              for(int i=0; i<selectedCards.length; i++){
+                  robot.move(selectedCards[i]);
+              }
+                /*
                System.out.println(selectedCards[0].getCardSprite().getTexture());
                System.out.println(selectedCards[1].getCardSprite().getTexture());
                System.out.println(selectedCards[2].getCardSprite().getTexture());
                System.out.println(selectedCards[3].getCardSprite().getTexture());
-               System.out.println(selectedCards[4].getCardSprite().getTexture());
+               System.out.println(selectedCards[4].getCardSprite().getTexture());*/
             }
         }
 
