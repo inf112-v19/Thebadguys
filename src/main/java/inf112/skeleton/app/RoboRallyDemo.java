@@ -72,7 +72,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         sprite = new Sprite(texture);
         posX = -4;
         posY = 6;
-
+        int[] startpos = {Math.round(posX), Math.round(posY)};
+        Robot robot = new Robot(sprite, startpos, 0);
         sprite.setPosition(posX+300,posY+300);
 
         //create the card that Is clicked
