@@ -20,3 +20,6 @@ I dag jobbet vi med oppgavene vi fikk fra forige møtet.
   
 ### Arbeidssammendrag 05.03
 I dag begynte vi med å diskutere hvq vi ønsket å få til til innleveringen på fredag. Vi fordelte noen arbeidsoppgaver i mellom oss også jobbet vi hovedsakelig med koding av kort og bevegelses systemet.
+
+### Arbeidssammendrag 08.03
+I dag jobbet vi med å merge arbeidet vi alle har gjort den siste uken. Vi gikk så gjennom arbeidet for å forsikre oss om at vi hadde nådd mål satt av kunden. FOr så å oppdatere mandatory 3 filesn, og flyttet på koden vår for å kunne lage en release.
