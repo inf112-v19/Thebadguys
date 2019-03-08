@@ -18,7 +18,7 @@ Kommunikasjonen er et forbedrinspunkt, vi har hatt noe problem med at vi jobber 
 så vi har et mål om å få bedre kommunikasjon i front-end og back-end teamene.
 Ellers er kommunikasjonen vår bra, med tanke på at dersom noen ikke kan komme blir det gitt beskjed,
 og vi har produktive samtaler når vi møtes.
- 
+
 For et tilbakeblikk på hva vi har gjort innenfor prosjektstruktur er jo Project board og branches to store fremskritt.  
 Vi har enda noe problemer med overlapp på rollene våre, men Project Board hjelper noe her.
 Vi kan enda bli flinkere med bruken av Project Board, og kommunikasjon innad i front-end og back-end teamene.
