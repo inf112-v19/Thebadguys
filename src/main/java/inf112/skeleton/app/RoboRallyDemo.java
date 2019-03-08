@@ -141,6 +141,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if(selectedCards[0]!=null && selectedCards[1]!=null && selectedCards[2]!=null && selectedCards[3]!=null && selectedCards[4]!=null && isDone){
               for(int i=0; i<selectedCards.length; i++){
                   robot.move(selectedCards[i]);
+                  if(i==selectedCards.length-1){
+                      isDone=false;
+                  }
               }
                 /*
                System.out.println(selectedCards[0].getCardSprite().getTexture());
