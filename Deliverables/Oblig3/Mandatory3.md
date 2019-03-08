@@ -32,3 +32,8 @@ på listen. Listen er filen "Requirements w priority.xlsx" som er vedlagt og opp
 
 For å kjøre testene våre kjør src/test/java/inf112/skeleton/app/AppTest.java
 Angående hvordan testene skal fungere er dette dokumentert i samme filen.
+
+Etter du runner main så runnes create() ein gong for å plassere brikker og kartet til GUIen. Render() er der alle
+metoder kjøres frå, utenom touchUp, touchDown og touchDrgged. touchDown er der eg sjekker om du er inne i et kort når
+du skal flytte eit kort, derreter kan du flytte kortet ved hjelp av touchDragged. Deretter når du slepper kortet kalles
+touchUp og kortet vil enten sitte fast i kortslotten eller gå tilbake til sin default posisjon.
