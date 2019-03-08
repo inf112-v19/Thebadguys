@@ -32,8 +32,6 @@ public class GameMap implements IGameMap {
         }
     }
 
-
-
     public MapTile getCell(int x, int y) {
         if(x < 0 || x >= tiles.getWidth())
             throw new IndexOutOfBoundsException();
@@ -79,7 +77,7 @@ public class GameMap implements IGameMap {
 
 
     public void movePlayer(Direction dir) throws MovePlayerException {
-        if(!isValidPosition(this.x,this.y)) {
+        if(!playerCanGo(dir)) {
             throw new MovePlayerException("The new position is illegal");
         }
         else if(dir == Direction.NORTH) {
@@ -96,20 +94,40 @@ public class GameMap implements IGameMap {
             x++;
         }
 
+
     }
 
 
     public boolean playerCanGo(Direction d){
-        if(!isValidPosition(this.x,this.y)) {
-            return false;
+        if(d == Direction.NORTH){
+            if(!isValidPosition(this.x,this.y++)){
+                return false;
+            }
         }
+        else if(d == Direction.EAST){
+            if(!isValidPosition(this.x++,this.y)){
+                return false;
+            }
+        }
+        else if(d == Direction.WEST){
+            if(!isValidPosition(this.x--,this.y)){
+                return false;
+            }
+        }
+        else if (d == Direction.SOUTH){
+            if(!isValidPosition(this.x, this.y--)){
+                return false;
+            }
+        }
+
         return true;
+
     }
+
 
     public boolean isValidPosition(int x, int y) {
         if(x>tiles.getWidth() || y>tiles.getHeight() || x<0 || y<0 ||
-                tiles.get(x--,y) == MapTile.WALL || tiles.get(x++,y) == MapTile.WALL ||
-                tiles.get(x,y--) == MapTile.WALL || tiles.get(x,y++) == MapTile.WALL) {
+                tiles.get(x,y) == MapTile.WALL){
             return false;
         }
         return true;
