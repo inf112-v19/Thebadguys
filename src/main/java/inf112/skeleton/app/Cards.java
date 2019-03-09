@@ -33,6 +33,8 @@ public class Cards implements ICard {
         defaultPosY=posY;
     }
 
+
+
     //extra constructor for testing
     public Cards(float posX, float posY, String name, int priority){
         this.batch=batch;

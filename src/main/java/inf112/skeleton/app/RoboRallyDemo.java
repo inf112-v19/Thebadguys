@@ -62,6 +62,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w * 4  ,h * 4);
         camera.update();
+        //camera.rotate(-90);
+        //camera.translate(w,h);
 
         //creation of the map
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
@@ -74,7 +76,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         posX = -4;
         posY = 6;
 
-        sprite.setPosition(posX+300,posY+300);
+        sprite.setPosition(posX+300,posY+600);
 
         //create the card that Is clicked
         cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
@@ -130,6 +132,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         if(i%100==0){
             //clockwise rotation
             sprite.rotate(90);
+            sprite.setPosition(sprite.getX()+100, sprite.getY());
             //System.out.println(Deck.getDeckList().size());
             System.out.println(selectedCards[0]);
             System.out.println(selectedCards[1]);
