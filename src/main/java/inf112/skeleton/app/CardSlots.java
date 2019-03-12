@@ -14,24 +14,19 @@ public class CardSlots {
     private Batch batch;
     private boolean insideCardslot;
 
-    public CardSlots(Batch batch, float posX, float posY, boolean insideCardSlot){
+    public CardSlots(Batch batch, float posX, float posY){
         this.batch=batch;
         this.posX=posX;
         this.posY=posY;
-        this.insideCardslot=insideCardSlot;
         cardSlotTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/CardSlot.jpg"));
         cardSlotSprite1= new Sprite(cardSlotTexture);
         cardSlotSprite1.setPosition(posX, posY);
     }
 
-    public CardSlots(float posX, float posY, boolean insideCardSlot){
+    public CardSlots(float posX, float posY){
         //this.batch=batch;
         this.posX=posX;
         this.posY=posY;
-        this.insideCardslot=insideCardSlot;
-        //cardSlotTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/CardSlot.jpg"));
-       // cardSlotSprite1= new Sprite(cardSlotTexture);
-        //cardSlotSprite1.setPosition(posX, posY);
     }
 
     public Sprite getCardSlotSprite(){ return cardSlotSprite1;}
@@ -40,14 +35,9 @@ public class CardSlots {
         return insideCardslot;
     }
 
-    public void setInsideCardslot(boolean inside){
-        insideCardslot=inside;
-    }
-
     public Float getPosX(){
         return posX;
     }
-
 
     public Float getPosY(){
         return posY;

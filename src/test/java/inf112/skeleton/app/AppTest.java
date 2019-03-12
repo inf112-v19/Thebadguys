@@ -26,7 +26,7 @@ public class AppTest{
     //RoboRallyDemo roboRallyDemo = new RoboRallyDemo();
 
     Cards testCard = new Cards(10,10, "testNavn", 100);
-    CardSlots testCardSlot = new CardSlots(10,10, false);
+    CardSlots testCardSlot = new CardSlots(10, 10);
     Deck deck= new Deck();
     float test=10;
     /**
@@ -53,7 +53,6 @@ public class AppTest{
     //creating a cardslot and checking if the paramaters are what I expect
     @Test
     public void createCardSlotTest(){
-        assertEquals(testCardSlot.getIsInsideSlot(), false);
         assertEquals(testCardSlot.getPosX(),  test, 0);
         assertEquals(testCardSlot.getPosY(),  test, 0);
     }
@@ -157,8 +156,4 @@ public class AppTest{
         map.movePlayer(Direction.SOUTH);
         assertEquals(MapTile.PLAYER, map.getCell(2, 3));
     }
-
-
-
-
 }
