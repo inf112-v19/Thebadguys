@@ -1,7 +1,6 @@
 package inf112.skeleton.app;
-import com.badlogic.gdx.graphics.Texture;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Robot {
     private Sprite sprite;
@@ -11,22 +10,17 @@ public class Robot {
     private int flagsPassed = 0;
     private int direction = 0;
 
-    public void Robot() {
-
-    }
-
     public void Robot(Sprite sprite){
         this.sprite = sprite;
     }
 
-    public Robot(Sprite sprite, int[] startingPos, int flagsPassed){
-        this.sprite = sprite;
-        this.checkpoint = startingPos;
-        this.posX = startingPos[0];
-        this.posY = startingPos[1];
+    public Robot(Sprite sprite, int[] checkpoint, int flagsPassed){
+        this.sprite=sprite;
+        this.checkpoint[0]=posX;
+        this.checkpoint[1]=posY;
         this.flagsPassed = flagsPassed;
     }
-    // a bunch of get functions
+
     public int getPosX(){
         return this.posX;
     }
@@ -50,7 +44,7 @@ public class Robot {
     public int getDirection() {
         return this.direction;
     }
-    // a bunch of set functions
+
     public void setCheckpoint(int[] checkpoint){
         this.checkpoint = checkpoint;
     }
@@ -74,7 +68,7 @@ public class Robot {
         else{
             this.direction += 1;
         }
-        this.sprite.rotate(90);
+        //this.sprite.rotate(90);
     }
 
     public void rotate_left() {
@@ -84,67 +78,63 @@ public class Robot {
         else{
             this.direction -= 1;
         }
-        this.sprite.rotate(-90);
+        //this.sprite.rotate(-90);
     }
 
-    public void moveForward(int amount){ // does the actual changing of robot position and the robot sprite
+    public void moveForward(int amount){
         int current_direction = this.getDirection();
         if (current_direction == 0) {
             int newY = this.getPosY() + amount;
             this.setPosY(newY);
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + 300 * amount); // temp moving sprite
         }
         else if (current_direction == 1) {
             int newX = this.getPosX() + amount;
             this.setPosX(newX);
-            this.sprite.setPosition(this.sprite.getX() + 300 * amount, this.sprite.getY());
         }
         else if (current_direction == 2) {
             int newY = this.getPosY() - amount;
             this.setPosY(newY);
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - 300 * amount);
         }
         else if (current_direction == 3) {
             int newX = this.getPosX() - amount;
             this.setPosX(newX);
-            this.sprite.setPosition(this.sprite.getX() - 300 * amount, this.sprite.getY());
         }
         else {
             System.out.println("Something went terribly wrong");
         }
     }
 
-    public void move(Cards card){ // gets the command from a card and figures out which command to execute
-        String command = card.getCardSprite().getTexture().toString();
+    public void move(Cards card){
+        String command = card.getName();
         switch (command){
-            case "Models/AlleBevegelseKortUtenPrioritet/BackUp.png":
+            case "BackUp":
                 this.moveForward(-1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-1.png":
+            case "Move-1":
                 this.moveForward(1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
+            case "Move-2":
                 this.moveForward(1); // added twice so we can incrimentally check for collisions
                 this.moveForward(1); // along the robots move-path
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
+            case "Move-3":
                 this.moveForward(1);
                 this.moveForward(1);
                 this.moveForward(1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
+            case "Rotate-90":
                 this.rotate_right();
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png":
+            case "Rotate-180":
                 this.rotate_right();
                 this.rotate_right();
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png":
+            case "Rotate-C90":
                 this.rotate_left();
                 break;
             default:
                 System.out.println("Something went wrong");
         }
-        // need check if robot is on map, and check for hazard, should integrate with grid
+
     }
 }
