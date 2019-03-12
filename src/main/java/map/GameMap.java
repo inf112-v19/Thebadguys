@@ -102,7 +102,7 @@ public class GameMap implements IGameMap {
         if(d == Direction.NORTH){
             if(!isValidPosition(this.x,this.y++)){
                 return false;
-            }else{
+            } else{
                 return true;
             }
         }
@@ -123,7 +123,7 @@ public class GameMap implements IGameMap {
         else if (d == Direction.SOUTH){
             if(!isValidPosition(this.x, this.y--)){
                 return false;
-            }else {
+            }else{
                 return true;
             }
         }
