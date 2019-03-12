@@ -92,22 +92,22 @@ public class Robot {
         if (current_direction == 0) {
             int newY = this.getPosY() + amount;
             this.setPosY(newY);
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + 300 * amount); // temp moving sprite
+            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + 75 * amount); // temp moving sprite
         }
         else if (current_direction == 1) {
             int newX = this.getPosX() + amount;
             this.setPosX(newX);
-            this.sprite.setPosition(this.sprite.getX() + 300 * amount, this.sprite.getY());
+            this.sprite.setPosition(this.sprite.getX() + 75 * amount, this.sprite.getY());
         }
         else if (current_direction == 2) {
             int newY = this.getPosY() - amount;
             this.setPosY(newY);
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - 300 * amount);
+            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - 75 * amount);
         }
         else if (current_direction == 3) {
             int newX = this.getPosX() - amount;
             this.setPosX(newX);
-            this.sprite.setPosition(this.sprite.getX() - 300 * amount, this.sprite.getY());
+            this.sprite.setPosition(this.sprite.getX() - 75 * amount, this.sprite.getY());
         }
         else {
             System.out.println("Something went terribly wrong");
