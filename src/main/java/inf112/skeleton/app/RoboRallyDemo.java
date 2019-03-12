@@ -188,7 +188,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return false;
     }
 
-    //this method is used to click and move a card around on the screen
+    //this method is used to click and move a card around on the screen. if you click a card, the clickedCard, will get the right card from the Deck
+    //if tou click a card and it is inside a cardSlot a boolean will change (test=true), this I will use in the touchUp method
+    // And if you click the Execute button the it will change a boolean value
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         counter=0;
@@ -201,7 +203,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 clickedCard=Deck.getCard(i);
                 for(int j=0; j<5; j++){
                     if(insideCardSlot(clickedCard, cardSlotPos.get(j))){
-                        System.out.println("du er inne i cardslot" + j);
                         test=true;
                         counter=j;
                         break;
@@ -229,9 +230,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             isDone=true;
             return false;
         }
+        //if a card is inside a cardslot and it is released move it into the middle of the slot
         for(int i=0; i<5; i++){
             if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
-                System.out.println("du er inne i cardslot" + i);
+                if(test){
+                    selectedCards[counter]=null;
+                    test=false;
+                }
                 selectedCards[i]=clickedCard;
                 isInside=true;
                 clickedCard.getCardSprite().setPosition(cardSlotPos.get(i).getCardSlotSprite().getX()+getCardSlotCenterX(cardSlotPos.get(i))-getCardCenterX(clickedCard), cardSlotPos.get(i).getCardSlotSprite().getY()+getCardSlotCenterY(cardSlotPos.get(i))-getCardCenterY(clickedCard));
@@ -239,6 +244,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 break;
             }
         }
+        //if it is outside then move it back to its default pos
         if(!isInside){
             clickedCard.getCardSprite().setPosition(clickedCard.getDefaultPosX(), clickedCard.getDefaultPosY());
             isInside=false;
