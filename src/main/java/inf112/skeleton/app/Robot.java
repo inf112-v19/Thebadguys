@@ -2,6 +2,7 @@ package inf112.skeleton.app;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import java.util.regex.*;
 
 public class Robot {
     private Sprite sprite;
@@ -147,4 +148,47 @@ public class Robot {
         }
         // need check if robot is on map, and check for hazard, should integrate with grid
     }
+    /*
+    //future move method with regex to allow cards with priority
+    public void move(Cards card){ // gets the command from a card and figures out which command to execute
+        String command = card.getCardSprite().getTexture().toString();
+        String path = "Models/AlleBevegelseKortUtenPrioritet/"; // temp path
+        Pattern backup = Pattern.compile(path + "Backup[0-9][0-9][0-9].png");
+        Pattern move1 = Pattern.compile(path + "Move-1-[0-9][0-9][0-9].png");
+        Pattern move2 = Pattern.compile(path + "Move-2-[0-9][0-9][0-9].png");
+        Pattern move3 = Pattern.compile(path + "Move-3-[0-9][0-9][0-9].png");
+        Pattern rotater = Pattern.compile(path + "Rotate-90-[0-9][0-9][0-9].png");
+        Pattern rotatel = Pattern.compile(path + "Rotate-C90-[0-9][0-9][0-9].png");
+        Pattern rotateu = Pattern.compile(path + "Rotate-180-[0-9][0-9][0-9].png");
+            if(backup.matcher(command).matches()) {
+                this.moveForward(-1);
+                }
+            else if (move1.matcher(command).matches()) {
+                this.moveForward(1);
+                }
+            else if (move2.matcher(command).matches()) {
+                this.moveForward(1); // added twice so we can incrimentally check for collisions
+                this.moveForward(1); // along the robots move-path
+            }
+            else if (move3.matcher(command).matches()) {
+                this.moveForward(1);
+                this.moveForward(1);
+                this.moveForward(1);
+            }
+            else if (rotater.matcher(command).matches()) {
+                this.rotate_right();
+            }
+            else if (rotateu.matcher(command).matches()) {
+                this.rotate_right();
+                this.rotate_right();
+            }
+            else if (rotatel.matcher(command).matches()) {
+                this.rotate_left();
+            }
+            else{
+                System.out.println("Something went wrong");
+        }
+        // need check if robot is on map, and check for hazard, should integrate with grid
+    } */
+
 }
