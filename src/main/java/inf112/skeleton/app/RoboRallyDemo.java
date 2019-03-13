@@ -52,13 +52,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
+
         counter=0;
         //camera that is for scaling viewpoint
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w * 4  ,h * 4);
-        camera.update();
-        //camera.rotate(-90);
-        //camera.translate(w,h);
+        camera.setToOrtho(false, w * 6  ,h * 6);
+        camera.translate(-1000,-2700);
 
         //creation of the map
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
@@ -126,11 +125,19 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             for(int i=0; i<selectedCards.length; i++){
                 System.out.println(selectedCards[i]);
             }
+            System.out.println("\n");
             if(selectedCards[0]!=null && selectedCards[1]!=null && selectedCards[2]!=null && selectedCards[3]!=null && selectedCards[4]!=null && isDone){
               for(int i=0; i<selectedCards.length; i++) {
                   robot.move(selectedCards[i]);
                   if (i == selectedCards.length - 1) {
                       isDone = false;
+                      //set the position of all the cardsprites
+                      setCardSprites();
+
+                      //create the 9 cards cards
+                      createDecklist();
+
+                      nullyFy();
                   }
               }
             }
@@ -253,6 +260,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 test=false;
             }
         }
+        //create a new clickedCard so that a card doesent stick to the mouse when let go of
+        clickedCard=new Cards(0,0, "",0, cardSprite10);
         return false;
     }
 
@@ -325,9 +334,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         int x=0;
         addSprites();
         for (int i = 0; i < 9; i++) {
-            //"Models"+(i+1)+".png";
-            //String path = "Models/AlleBevegelseKortUtenPrioritet/genericCard.png";
-            //spritePos.add(setSprite(path));
             spritePos.add(getRandomSprite());
             spritePos.get(i).setPosition(x, 250);
             x+=105;
@@ -418,5 +424,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         randomSpriteList.add(sprite6);
         randomSpriteList.add(sprite7);
         randomSpriteList.add(sprite8);
+    }
+
+    //method that empties the selectedCards array, that is used when an turn is over
+    public void nullyFy(){
+        for(int i=0; i<selectedCards.length; i++){
+            selectedCards[i]=null;
+        }
     }
 }
