@@ -23,7 +23,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private OrthographicCamera camera;
     private int i = 0;
     private Cards clickedCard;
+    private Cards listCard;
     private Cards CardButton;
+    private CardSlots temp;
     private Robot robot;
     private int counter;
     private boolean isDone=false;
@@ -54,7 +56,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         float h = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
 
-        counter=0;
         //camera that is for scaling viewpoint
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w * 6  ,h * 6);
@@ -330,7 +331,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return new Sprite(texture);
     }
 
-    //method to set the position of sprites
+    //method to set the position of sprites, if it is the first turn then just set the position of the sprites,
+    //if it is not the first turn then I use this method to change the sprites of the cards to get 9 new random cards
     private void setCardSprites() {
         int x=0;
         addSprites();
@@ -355,33 +357,27 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //method to create the card-Objects
     private void createDecklist(){
-        Cards listCard;
         int x=0;
             for(int i=0; i<9; i++){
                 listCard=new Cards(x, 250, "card"+i, i,spritePos.get(i));
                 Deck.addCard(listCard);
                 x+=105;
         }
-
     }
 
     //method to draw the cards
     private void drawCards(){
-        Cards listCard;
-
-            for(int i=0; i<Deck.getDeckList().size();i++){
-                listCard=Deck.getCard(i);
-                listCard.getCardSprite().draw(batch);
-            }
-
+        for(int i=0; i<Deck.getDeckList().size();i++){
+            listCard=Deck.getCard(i);
+            listCard.getCardSprite().draw(batch);
+        }
     }
 
     //method to create and place cardslots
     private void createCardSlots(){
-        CardSlots temp;
         int x=0;
         for(int i=0; i<5; i++){
-            temp = new CardSlots(batch, x, posY);
+            temp = new CardSlots(x, posY);
             cardSlotPos.add(temp);
             x+=185;
         }
@@ -389,7 +385,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //method to draw the cardslots
     private void drawCardSlots(){
-        CardSlots temp;
         for(int i=0; i<5; i++){
             temp=cardSlotPos.get(i);
             temp.getCardSlotSprite().draw(batch);
