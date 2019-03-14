@@ -27,6 +27,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Robot robot;
     private int counter;
     private boolean isDone=false;
+    private boolean notFirst=false;
 
     //lister
     private ArrayList<CardSlots> cardSlotPos;
@@ -123,7 +124,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //rotation of sprite, rotate 90 degrees every 100th gametick
         if(i%100==0){
             for(int i=0; i<selectedCards.length; i++){
-                System.out.println(selectedCards[i]);
+               System.out.println(selectedCards[i]);
             }
             System.out.println("\n");
             if(selectedCards[0]!=null && selectedCards[1]!=null && selectedCards[2]!=null && selectedCards[3]!=null && selectedCards[4]!=null && isDone){
@@ -131,12 +132,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                   robot.move(selectedCards[i]);
                   if (i == selectedCards.length - 1) {
                       isDone = false;
-                      //set the position of all the cardsprites
+                      notFirst=true;
+
+                      //set new sprites for the cards for next turn
                       setCardSprites();
 
-                      //create the 9 cards cards
-                      createDecklist();
-
+                      //the cardSlots need to become null again since they will be cleared at the end of a turn
                       nullyFy();
                   }
               }
@@ -333,31 +334,46 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private void setCardSprites() {
         int x=0;
         addSprites();
-        for (int i = 0; i < 9; i++) {
-            spritePos.add(getRandomSprite());
-            spritePos.get(i).setPosition(x, 250);
-            x+=105;
+        if(notFirst){
+            spritePos.clear();
+            for (int i = 0; i < 9; i++) {
+                spritePos.add(getRandomSprite());
+                spritePos.get(i).setPosition(x, 250);
+                Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
+                x+=105;
+            }
+        }else{
+            for (int i = 0; i < 9; i++) {
+                spritePos.add(getRandomSprite());
+                spritePos.get(i).setPosition(x, 250);
+
+                x+=105;
+            }
         }
+        System.out.println("\n");
     }
 
     //method to create the card-Objects
     private void createDecklist(){
         Cards listCard;
         int x=0;
-        for(int i=0; i<9; i++){
-            listCard=new Cards(x, 250, "card"+i, i,spritePos.get(i));
-            Deck.addCard(listCard);
-            x+=105;
+            for(int i=0; i<9; i++){
+                listCard=new Cards(x, 250, "card"+i, i,spritePos.get(i));
+                Deck.addCard(listCard);
+                x+=105;
         }
+
     }
 
     //method to draw the cards
     private void drawCards(){
         Cards listCard;
-        for(int i=0; i<spritePos.size();i++){
-            listCard=Deck.getCard(i);
-            listCard.getCardSprite().draw(batch);
-        }
+
+            for(int i=0; i<Deck.getDeckList().size();i++){
+                listCard=Deck.getCard(i);
+                listCard.getCardSprite().draw(batch);
+            }
+
     }
 
     //method to create and place cardslots
@@ -385,6 +401,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         int v= rng();
         Sprite random = randomSpriteList.get(v);
         randomSpriteList.remove(v);
+        System.out.println(random.getTexture());
         return random;
     }
 

@@ -78,4 +78,6 @@ public class Cards implements ICard {
     public float getDefaultPosY(){
         return defaultPosY;
     }
+
+    public void setCardSprite(Sprite sprite){this.cardSprite=sprite;}
 }
