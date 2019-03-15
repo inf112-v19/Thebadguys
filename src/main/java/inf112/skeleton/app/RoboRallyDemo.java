@@ -128,20 +128,20 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                System.out.println(selectedCards[i]);
             }
             System.out.println("\n");
-            if(selectedCards[0]!=null && selectedCards[1]!=null && selectedCards[2]!=null && selectedCards[3]!=null && selectedCards[4]!=null && isDone){
-              for(int i=0; i<selectedCards.length; i++) {
-                  robot.move(selectedCards[i]);
-                  if (i == selectedCards.length - 1) {
-                      isDone = false;
-                      notFirst=true;
+        }
+        if(selectedCards[0]!=null && selectedCards[1]!=null && selectedCards[2]!=null && selectedCards[3]!=null && selectedCards[4]!=null && isDone){
+            for(int i=0; i<selectedCards.length; i++) {
+                robot.move(selectedCards[i]);
+                if (i == selectedCards.length - 1) {
+                    isDone = false;
+                    notFirst=true;
 
-                      //set new sprites for the cards for next turn
-                      setCardSprites();
+                    //set new sprites for the cards for next turn
+                    setCardSprites();
 
-                      //the cardSlots need to become null again since they will be cleared at the end of a turn
-                      nullyFy();
-                  }
-              }
+                    //the cardSlots need to become null again since they will be cleared at the end of a turn
+                    nullyFy();
+                }
             }
         }
         //draw the cardslots
