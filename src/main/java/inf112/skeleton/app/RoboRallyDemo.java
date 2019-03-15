@@ -125,7 +125,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //rotation of sprite, rotate 90 degrees every 100th gametick
         if(i%100==0){
             for(int i=0; i<selectedCards.length; i++){
-               System.out.println(selectedCards[i]);
+                System.out.println(selectedCards[i]);
             }
             System.out.println("\n");
         }
@@ -217,7 +217,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                         break;
                     }
                 }
-            break;
+                break;
             }
         }
         /*
@@ -342,6 +342,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 spritePos.add(getRandomSprite());
                 spritePos.get(i).setPosition(x, 250);
                 Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
+                Deck.getDeckList().get(i).setCardName(CardValues.values()[i].getName());
+                Deck.getDeckList().get(i).setPriority(CardValues.values()[i].getPriority());
                 x+=105;
             }
         }else{
@@ -358,10 +360,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //method to create the card-Objects
     private void createDecklist(){
         int x=0;
-            for(int i=0; i<9; i++){
-                listCard=new Cards(x, 250, "card"+i, i,spritePos.get(i));
-                Deck.addCard(listCard);
-                x+=105;
+        for(int i=0; i<9; i++){
+            listCard=new Cards(x, 250, CardValues.values()[i].getName(), CardValues.values()[i].getPriority(),spritePos.get(i));
+            Deck.addCard(listCard);
+            x+=105;
         }
     }
 
@@ -407,35 +409,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //add all the sprites into the sprite list, burde finne ein bedre løsning på dette
     private void addSprites(){
-        Texture texture0 = new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png");
-        Texture texture1 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png");
-        Texture texture2 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-2.png");
-        Texture texture3 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-3.png");
-        Texture texture4 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png");
-        Texture texture5 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png");
-        Texture texture6 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png");
-        Texture texture7 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png");
-        Texture texture8 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-2.png");
-
-        Sprite sprite0 = new Sprite(texture0);
-        Sprite sprite1 = new Sprite(texture1);
-        Sprite sprite2 = new Sprite(texture2);
-        Sprite sprite3 = new Sprite(texture3);
-        Sprite sprite4 = new Sprite(texture4);
-        Sprite sprite5 = new Sprite(texture5);
-        Sprite sprite6 = new Sprite(texture6);
-        Sprite sprite7 = new Sprite(texture7);
-        Sprite sprite8 = new Sprite(texture8);
-
-        randomSpriteList.add(sprite0);
-        randomSpriteList.add(sprite1);
-        randomSpriteList.add(sprite2);
-        randomSpriteList.add(sprite3);
-        randomSpriteList.add(sprite4);
-        randomSpriteList.add(sprite5);
-        randomSpriteList.add(sprite6);
-        randomSpriteList.add(sprite7);
-        randomSpriteList.add(sprite8);
+        for(int i = 0; i < CardValues.values().length; i++){
+            randomSpriteList.add(CardValues.values()[i].getSprite());
+        }
+        System.out.print(randomSpriteList.size());
     }
 
     //method that empties the selectedCards array, that is used when an turn is over

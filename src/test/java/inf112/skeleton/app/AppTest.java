@@ -26,7 +26,7 @@ public class AppTest{
     //RoboRallyDemo roboRallyDemo = new RoboRallyDemo();
 
     Cards testCard = new Cards(10,10, "testNavn", 100);
-    CardSlots testCardSlot = new CardSlots(10, 10);
+    CardSlots testCardSlot = new CardSlots(10,10);
     Deck deck= new Deck();
     float test=10;
     /**
@@ -156,4 +156,8 @@ public class AppTest{
         map.movePlayer(Direction.SOUTH);
         assertEquals(MapTile.PLAYER, map.getCell(2, 3));
     }
+
+
+
+
 }
