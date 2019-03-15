@@ -23,10 +23,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private OrthographicCamera camera;
     private int i = 0;
     private Cards clickedCard;
+    private Cards listCard;
     private Cards CardButton;
+    private CardSlots temp;
     private Robot robot;
     private int counter;
     private boolean isDone=false;
+    private boolean notFirst=false;
 
     //lister
     private ArrayList<CardSlots> cardSlotPos;
@@ -52,13 +55,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
-        counter=0;
+
         //camera that is for scaling viewpoint
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w * 4  ,h * 4);
-        camera.update();
-        //camera.rotate(-90);
-        //camera.translate(w,h);
+        camera.setToOrtho(false, w * 6  ,h * 6);
+        camera.translate(-1000,-2700);
 
         //creation of the map
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
@@ -124,13 +125,21 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //rotation of sprite, rotate 90 degrees every 100th gametick
         if(i%100==0){
             for(int i=0; i<selectedCards.length; i++){
-                System.out.println(selectedCards[i]);
+               System.out.println(selectedCards[i]);
             }
+            System.out.println("\n");
             if(selectedCards[0]!=null && selectedCards[1]!=null && selectedCards[2]!=null && selectedCards[3]!=null && selectedCards[4]!=null && isDone){
               for(int i=0; i<selectedCards.length; i++) {
                   robot.move(selectedCards[i]);
                   if (i == selectedCards.length - 1) {
                       isDone = false;
+                      notFirst=true;
+
+                      //set new sprites for the cards for next turn
+                      setCardSprites();
+
+                      //the cardSlots need to become null again since they will be cleared at the end of a turn
+                      nullyFy();
                   }
               }
             }
@@ -253,6 +262,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 test=false;
             }
         }
+        //create a new clickedCard so that a card doesent stick to the mouse when let go of
+        clickedCard=new Cards(0,0, "",0, cardSprite10);
         return false;
     }
 
@@ -320,35 +331,43 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return new Sprite(texture);
     }
 
-    //method to set the position of sprites
+    //method to set the position of sprites, if it is the first turn then just set the position of the sprites,
+    //if it is not the first turn then I use this method to change the sprites of the cards to get 9 new random cards
     private void setCardSprites() {
         int x=0;
         addSprites();
-        for (int i = 0; i < 9; i++) {
-            //"Models"+(i+1)+".png";
-            //String path = "Models/AlleBevegelseKortUtenPrioritet/genericCard.png";
-            //spritePos.add(setSprite(path));
-            spritePos.add(getRandomSprite());
-            spritePos.get(i).setPosition(x, 250);
-            x+=105;
+        if(notFirst){
+            spritePos.clear();
+            for (int i = 0; i < 9; i++) {
+                spritePos.add(getRandomSprite());
+                spritePos.get(i).setPosition(x, 250);
+                Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
+                x+=105;
+            }
+        }else{
+            for (int i = 0; i < 9; i++) {
+                spritePos.add(getRandomSprite());
+                spritePos.get(i).setPosition(x, 250);
+
+                x+=105;
+            }
         }
+        System.out.println("\n");
     }
 
     //method to create the card-Objects
     private void createDecklist(){
-        Cards listCard;
         int x=0;
-        for(int i=0; i<9; i++){
-            listCard=new Cards(x, 250, "card"+i, i,spritePos.get(i));
-            Deck.addCard(listCard);
-            x+=105;
+            for(int i=0; i<9; i++){
+                listCard=new Cards(x, 250, "card"+i, i,spritePos.get(i));
+                Deck.addCard(listCard);
+                x+=105;
         }
     }
 
     //method to draw the cards
     private void drawCards(){
-        Cards listCard;
-        for(int i=0; i<spritePos.size();i++){
+        for(int i=0; i<Deck.getDeckList().size();i++){
             listCard=Deck.getCard(i);
             listCard.getCardSprite().draw(batch);
         }
@@ -356,10 +375,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //method to create and place cardslots
     private void createCardSlots(){
-        CardSlots temp;
         int x=0;
         for(int i=0; i<5; i++){
-            temp = new CardSlots(batch, x, posY);
+            temp = new CardSlots(x, posY);
             cardSlotPos.add(temp);
             x+=185;
         }
@@ -367,7 +385,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //method to draw the cardslots
     private void drawCardSlots(){
-        CardSlots temp;
         for(int i=0; i<5; i++){
             temp=cardSlotPos.get(i);
             temp.getCardSlotSprite().draw(batch);
@@ -379,6 +396,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         int v= rng();
         Sprite random = randomSpriteList.get(v);
         randomSpriteList.remove(v);
+        System.out.println(random.getTexture());
         return random;
     }
 
@@ -418,5 +436,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         randomSpriteList.add(sprite6);
         randomSpriteList.add(sprite7);
         randomSpriteList.add(sprite8);
+    }
+
+    //method that empties the selectedCards array, that is used when an turn is over
+    public void nullyFy(){
+        for(int i=0; i<selectedCards.length; i++){
+            selectedCards[i]=null;
+        }
     }
 }
