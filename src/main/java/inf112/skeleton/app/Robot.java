@@ -11,12 +11,10 @@ public class Robot {
     private int[] checkpoint = {posX, posY};
     private int flagsPassed = 0;
     private int direction = 0;
+    private int lives = 3;
+    private int damage = 0;
 
-    public void Robot() {
-
-    }
-
-    public void Robot(Sprite sprite){
+    public Robot(Sprite sprite){
         this.sprite = sprite;
     }
 
@@ -51,6 +49,15 @@ public class Robot {
     public int getDirection() {
         return this.direction;
     }
+
+    public int getLives() {
+        return this.lives;
+    }
+
+    public int getDamage() {
+        return this.damage;
+    }
+
     // a bunch of set functions
     public void setCheckpoint(int[] checkpoint){
         this.checkpoint = checkpoint;
@@ -167,7 +174,7 @@ public class Robot {
                 this.moveForward(1);
                 }
             else if (move2.matcher(command).matches()) {
-                this.moveForward(1); // added twice so we can incrimentally check for collisions
+                this.moveForward(1); // added twice so we can incrementally check for collisions
                 this.moveForward(1); // along the robots move-path
             }
             else if (move3.matcher(command).matches()) {
@@ -190,5 +197,54 @@ public class Robot {
         }
         // need check if robot is on map, and check for hazard, should integrate with grid
     } */
+    public void died() {
+        this.lives -= 1; // loose an option card of the players choice
+        if (this.lives == 0) {
+            // the robot needs to be deleted from the game.
+        }
+        else { // moves the sprite the appropriate amount in both x and y direction to the robots backup
+            if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
+                this.sprite.setPosition(this.sprite.getX() + 75 * (this.getCheckpoint()[0] - this.getPosX()), this.sprite.getY() + 75 * (this.getCheckpoint()[1] - this.getPosY()));
+            }
+            else if(this.getPosX() >= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
+                this.sprite.setPosition(this.sprite.getX() - 75 * (this.getPosX() - this.getCheckpoint()[0]), this.sprite.getY() + 75 * (this.getCheckpoint()[1] - this.getPosY()));
+            }
+            else if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() >= this.getCheckpoint()[1]) {
+                this.sprite.setPosition(this.sprite.getX() + 75 * (this.getCheckpoint()[0] - this.getPosX()), this.sprite.getY() - 75 * (this.getPosY() - this.getCheckpoint()[1]));
+            }
+            else if(this.getPosX() >= this.getCheckpoint()[0] && this.getPosY() >= this.getCheckpoint()[1]) {
+                this.sprite.setPosition(this.sprite.getX() - 75 * (this.getPosX() - this.getCheckpoint()[0]), this.sprite.getY() - 75 * (this.getPosY() - this.getCheckpoint()[1]));
+            }
+            else {
+                System.out.println("Should definitely not be possible");
+            }
 
+            this.setPosX(this.getCheckpoint()[0]); //update internal numbers of robot location
+            this.setPosY(this.getCheckpoint()[1]);
+        }
+    }
+
+    public void takeDamage() {
+        this.damage += 1;
+        switch(this.damage) {
+            case 5:
+                //lock slot 5
+                break;
+            case 6:
+                //lock slot 4
+                break;
+            case 7:
+                //lock slot 3
+                break;
+            case 8:
+                //lock slot 2
+                break;
+            case 9:
+                //lock slot 1
+                break;
+            case 10:
+                this.died();
+                break;
+        }
+    }
 }
