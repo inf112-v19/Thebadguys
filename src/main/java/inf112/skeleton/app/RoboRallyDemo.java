@@ -23,9 +23,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private OrthographicCamera camera;
     private int i = 0;
     private Cards clickedCard;
+    private Cards listCard;
     private Cards CardButton;
-
+    private CardSlots temp;
+    private Robot robot;
     private int counter;
+    private boolean isDone=false;
+    private boolean notFirst=false;
 
     //lister
     private ArrayList<CardSlots> cardSlotPos;
@@ -33,7 +37,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private ArrayList<Sprite> spritePos;
     private Deck Deck;
     protected Cards[] selectedCards;
-
 
     private SpriteBatch batch;
     private Texture texture;
@@ -47,34 +50,29 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //create the initial state of the game
 
-    //made a constructor, because I need it for testing
-    public RoboRallyDemo(){
-
-    }
-
     @Override
     public void create() {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
-        counter=0;
+
         //camera that is for scaling viewpoint
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w * 4  ,h * 4);
-        camera.update();
+        camera.setToOrtho(false, w * 6  ,h * 6);
+        camera.translate(-1000,-2700);
 
         //creation of the map
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-
 
         //creation of the robot
         texture = new Texture(Gdx.files.internal("Models/tank.png"));
         sprite = new Sprite(texture);
         posX = -4;
         posY = 6;
-
-        sprite.setPosition(posX+300,posY+300);
+        int[] startpos = {Math.round(posX), Math.round(posY)};
+        robot = new Robot(sprite, startpos, 0);
+        sprite.setPosition(posX+300,posY+600);
 
         //create the card that Is clicked
         cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
@@ -83,8 +81,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         buttonTexture = new Texture(Gdx.files.internal("Models/Button.png"));
         buttonSprite= new Sprite(buttonTexture);
-        buttonSprite.setPosition(900,450);
-        CardButton = new Cards(500, 500, "", 0 ,buttonSprite);
+        buttonSprite.setPosition(800,500);
+        CardButton = new Cards(800, 500, "", 0 ,buttonSprite);
 
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
@@ -114,7 +112,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //rendering of the map and all the sprites
     @Override
     public void render() {
-
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -125,27 +122,28 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         batch.begin();
         sprite.draw(batch);
 
-
         //rotation of sprite, rotate 90 degrees every 100th gametick
         if(i%100==0){
-            //clockwise rotation
-            sprite.rotate(90);
-            //System.out.println(Deck.getDeckList().size());
-            System.out.println(selectedCards[0]);
-            System.out.println(selectedCards[1]);
-            System.out.println(selectedCards[2]);
-            System.out.println(selectedCards[3]);
-            System.out.println(selectedCards[4]);
+            for(int i=0; i<selectedCards.length; i++){
+                System.out.println(selectedCards[i]);
+            }
+            System.out.println("\n");
+            if(selectedCards[0]!=null && selectedCards[1]!=null && selectedCards[2]!=null && selectedCards[3]!=null && selectedCards[4]!=null && isDone){
+                for(int i=0; i<selectedCards.length; i++) {
+                    robot.move(selectedCards[i]);
+                    if (i == selectedCards.length - 1) {
+                        isDone = false;
+                        notFirst=true;
 
-            if(selectedCards[0]!=null && selectedCards[1]!=null && selectedCards[2]!=null && selectedCards[3]!=null && selectedCards[4]!=null){
-               System.out.println(selectedCards[0].getCardSprite().getTexture());
-               System.out.println(selectedCards[1].getCardSprite().getTexture());
-               System.out.println(selectedCards[2].getCardSprite().getTexture());
-               System.out.println(selectedCards[3].getCardSprite().getTexture());
-               System.out.println(selectedCards[4].getCardSprite().getTexture());
+                        //set new sprites for the cards for next turn
+                        setCardSprites();
+
+                        //the cardSlots need to become null again since they will be cleared at the end of a turn
+                        nullyFy();
+                    }
+                }
             }
         }
-
         //draw the cardslots
         drawCardSlots();
 
@@ -154,26 +152,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         //draw Cards
         drawCards();
-        //if the center of the card is inside the cardslot then it is inside the slot and its new default cordinates will be in the middle of the cardslot
 
-
-        boolean check=false;
-        for(int i=0; i<5; i++){
-            if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
-                cardSlotPos.get(i).setInsideCardslot(true);
-                check=true;
-                break;
-            }
-        }
-        if(!check){
-            cardSlotPos.get(0).setInsideCardslot(false);
-            cardSlotPos.get(1).setInsideCardslot(false);
-            cardSlotPos.get(2).setInsideCardslot(false);
-            cardSlotPos.get(3).setInsideCardslot(false);
-            cardSlotPos.get(4).setInsideCardslot(false);
-        }
         i++;
-
         batch.end();
     }
 
@@ -217,25 +197,29 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return false;
     }
 
-    //this method is used to click and move a card around on the screen
+    //this method is used to click and move a card around on the screen. if you click a card, the clickedCard, will get the right card from the Deck
+    //if tou click a card and it is inside a cardSlot a boolean will change (test=true), this I will use in the touchUp method
+    // And if you click the Execute button the it will change a boolean value
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         counter=0;
+        if( insideCard(screenX, screenY, CardButton)){
+            isDone=true;
+            return false;
+        }
         for(int i=0; i<9; i++){
             if(insideCard(screenX, screenY,Deck.getCard(i)) && button == Buttons.LEFT){
                 clickedCard=Deck.getCard(i);
                 for(int j=0; j<5; j++){
                     if(insideCardSlot(clickedCard, cardSlotPos.get(j))){
-                        System.out.println("du er inne i cardslot" + j);
                         test=true;
                         counter=j;
                         break;
                     }
                 }
-            break;
+                break;
             }
         }
-
         /*
         // rigth click moves the card to the middle of the screenc
         if(button == Buttons.RIGHT){
@@ -250,30 +234,46 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //if it is outside then move it back to its default pos
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        boolean check=false;
+        boolean isInside=false;
+        if( insideCard(screenX, screenY, CardButton)){
+            isDone=true;
+            return false;
+        }
+        //if a card is inside a cardslot and it is released move it into the middle of the slot
         for(int i=0; i<5; i++){
-            if(cardSlotPos.get(i).getIsInsideSlot()){
-                System.out.println("hei");
+            if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
+                if(test){
+                    selectedCards[counter]=null;
+                    test=false;
+                }
                 selectedCards[i]=clickedCard;
-                //cardSlotPos.get(i).setInsideCardslot(true);
+                isInside=true;
                 clickedCard.getCardSprite().setPosition(cardSlotPos.get(i).getCardSlotSprite().getX()+getCardSlotCenterX(cardSlotPos.get(i))-getCardCenterX(clickedCard), cardSlotPos.get(i).getCardSlotSprite().getY()+getCardSlotCenterY(cardSlotPos.get(i))-getCardCenterY(clickedCard));
-                check=true;
+                counter=i;
                 break;
             }
         }
-        if(!check ){
-            System.out.println(counter);
+        //if it is outside then move it back to its default pos
+        if(!isInside){
             clickedCard.getCardSprite().setPosition(clickedCard.getDefaultPosX(), clickedCard.getDefaultPosY());
-            //cardSlotPos.get(counter).setInsideCardslot(false);
-            selectedCards[counter]=null;
-            test=false;
+            isInside=false;
+            if(test){
+                selectedCards[counter]=null;
+                test=false;
+            }
         }
+        //create a new clickedCard so that a card doesent stick to the mouse when let go of
+        clickedCard=new Cards(0,0, "",0, cardSprite10);
         return false;
     }
 
     @Override
     //if a card is clicked on and draged, then move that clicked card
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        if( insideCard(screenX, screenY, CardButton)){
+            isDone=true;
+            return false;
+        }
         clickedCard.getCardSprite().setPosition(screenX - clickedCard.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - clickedCard.getCardSprite().getHeight() / 2);
         return false;
     }
@@ -292,7 +292,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public Float getCardCenterX(Cards card){
         return card.getCardSprite().getWidth()/2;
     }
-
 
     //the y cordinate at the centre of a card
     public Float getCardCenterY(Cards card){
@@ -326,30 +325,38 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return false;
     }
 
-
     //method to get a sprite
     private Sprite setSprite(String texturePath) {
         Texture texture = new Texture(Gdx.files.internal(texturePath));
         return new Sprite(texture);
     }
 
-    //method to set the position of sprites
+    //method to set the position of sprites, if it is the first turn then just set the position of the sprites,
+    //if it is not the first turn then I use this method to change the sprites of the cards to get 9 new random cards
     private void setCardSprites() {
         int x=0;
         addSprites();
-        for (int i = 0; i < 9; i++) {
-            //"Models"+(i+1)+".png";
-            //String path = "Models/AlleBevegelseKortUtenPrioritet/genericCard.png";
-            //spritePos.add(setSprite(path));
-            spritePos.add(getRandomSprite());
-            spritePos.get(i).setPosition(x, 250);
-            x+=105;
+        if(notFirst){
+            spritePos.clear();
+            for (int i = 0; i < 9; i++) {
+                spritePos.add(getRandomSprite());
+                spritePos.get(i).setPosition(x, 250);
+                Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
+                x+=105;
+            }
+        }else{
+            for (int i = 0; i < 9; i++) {
+                spritePos.add(getRandomSprite());
+                spritePos.get(i).setPosition(x, 250);
+
+                x+=105;
+            }
         }
+        System.out.println("\n");
     }
 
     //method to create the card-Objects
     private void createDecklist(){
-        Cards listCard;
         int x=0;
         for(int i=0; i<9; i++){
             listCard=new Cards(x, 250, "card"+i, i,spritePos.get(i));
@@ -360,8 +367,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //method to draw the cards
     private void drawCards(){
-        Cards listCard;
-        for(int i=0; i<spritePos.size();i++){
+        for(int i=0; i<Deck.getDeckList().size();i++){
             listCard=Deck.getCard(i);
             listCard.getCardSprite().draw(batch);
         }
@@ -369,10 +375,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //method to create and place cardslots
     private void createCardSlots(){
-        CardSlots temp;
         int x=0;
         for(int i=0; i<5; i++){
-            temp = new CardSlots(batch, x, posY, false);
+            temp = new CardSlots(x, posY);
             cardSlotPos.add(temp);
             x+=185;
         }
@@ -380,7 +385,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //method to draw the cardslots
     private void drawCardSlots(){
-        CardSlots temp;
         for(int i=0; i<5; i++){
             temp=cardSlotPos.get(i);
             temp.getCardSlotSprite().draw(batch);
@@ -392,6 +396,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         int v= rng();
         Sprite random = randomSpriteList.get(v);
         randomSpriteList.remove(v);
+        System.out.println(random.getTexture());
         return random;
     }
 
@@ -402,34 +407,16 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //add all the sprites into the sprite list, burde finne ein bedre løsning på dette
     private void addSprites(){
-        Texture texture0 = new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png");
-        Texture texture1 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png");
-        Texture texture2 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-2.png");
-        Texture texture3 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-3.png");
-        Texture texture4 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png");
-        Texture texture5 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png");
-        Texture texture6 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png");
-        Texture texture7 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png");
-        Texture texture8 = new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-2.png");
+        for(int i = 0; i < CardValues.values().length; i++){
+            randomSpriteList.add(CardValues.values()[i].getSprite());
+        }
+        System.out.print(randomSpriteList.size());
+    }
 
-        Sprite sprite0 = new Sprite(texture0);
-        Sprite sprite1 = new Sprite(texture1);
-        Sprite sprite2 = new Sprite(texture2);
-        Sprite sprite3 = new Sprite(texture3);
-        Sprite sprite4 = new Sprite(texture4);
-        Sprite sprite5 = new Sprite(texture5);
-        Sprite sprite6 = new Sprite(texture6);
-        Sprite sprite7 = new Sprite(texture7);
-        Sprite sprite8 = new Sprite(texture8);
-
-        randomSpriteList.add(sprite0);
-        randomSpriteList.add(sprite1);
-        randomSpriteList.add(sprite2);
-        randomSpriteList.add(sprite3);
-        randomSpriteList.add(sprite4);
-        randomSpriteList.add(sprite5);
-        randomSpriteList.add(sprite6);
-        randomSpriteList.add(sprite7);
-        randomSpriteList.add(sprite8);
+    //method that empties the selectedCards array, that is used when an turn is over
+    public void nullyFy(){
+        for(int i=0; i<selectedCards.length; i++){
+            selectedCards[i]=null;
+        }
     }
 }
