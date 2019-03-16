@@ -127,6 +127,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             for(int i=0; i<selectedCards.length; i++){
                 System.out.println(selectedCards[i]);
             }
+            System.out.println(isDone);
             System.out.println("\n");
         }
         if(selectedCards[0]!=null && selectedCards[1]!=null && selectedCards[2]!=null && selectedCards[3]!=null && selectedCards[4]!=null && isDone){
@@ -236,7 +237,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         boolean isInside=false;
         if( insideCard(screenX, screenY, CardButton)){
-            isDone=true;
+            isDone=false;
             return false;
         }
         //if a card is inside a cardslot and it is released move it into the middle of the slot
@@ -271,7 +272,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //if a card is clicked on and draged, then move that clicked card
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if( insideCard(screenX, screenY, CardButton)){
-            isDone=true;
+            isDone=false;
             return false;
         }
         clickedCard.getCardSprite().setPosition(screenX - clickedCard.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - clickedCard.getCardSprite().getHeight() / 2);
