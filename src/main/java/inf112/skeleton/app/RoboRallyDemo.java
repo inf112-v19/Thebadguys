@@ -18,7 +18,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import java.util.ArrayList;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
-    private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera;
     private int i = 0;
@@ -28,28 +27,25 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private CardSlots temp;
     private Robot robot;
     private int counter;
+
     private boolean isDone=false;
     private boolean notFirst=false;
+    private boolean isClicked=false;
 
     //lister
     private ArrayList<CardSlots> cardSlotPos;
     private ArrayList<Sprite> randomSpriteList;
     private ArrayList<Sprite> spritePos;
     private Deck Deck;
-    protected Cards[] selectedCards;
+    private Cards[] selectedCards;
 
     private SpriteBatch batch;
     private Texture texture;
-    private Texture buttonTexture;
-    private Sprite buttonSprite;
     private Sprite sprite;
     private Sprite cardSprite10;
-    private Texture cardTexture;
     private float posX, posY;
-    private boolean test=false;
 
     //create the initial state of the game
-
     @Override
     public void create() {
         float w = Gdx.graphics.getWidth();
@@ -62,7 +58,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         camera.translate(-1000,-2700);
 
         //creation of the map
-        tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
+        TiledMap tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         //creation of the robot
@@ -75,19 +71,19 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         sprite.setPosition(posX+300,posY+600);
 
         //create the card that Is clicked
-        cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
+        Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
         clickedCard=new Cards(0,0, "",0, cardSprite10);
 
-        buttonTexture = new Texture(Gdx.files.internal("Models/Button.png"));
-        buttonSprite= new Sprite(buttonTexture);
+        Texture buttonTexture = new Texture(Gdx.files.internal("Models/Button.png"));
+        Sprite buttonSprite = new Sprite(buttonTexture);
         buttonSprite.setPosition(800,500);
-        CardButton = new Cards(800, 500, "", 0 ,buttonSprite);
+        CardButton = new Cards(800, 500, "", 0 , buttonSprite);
 
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
         cardSlotPos= new ArrayList<>();
-        randomSpriteList=new ArrayList();
+        randomSpriteList=new ArrayList<>();
         Deck = new Deck();
         selectedCards = new Cards[5];
 
@@ -199,7 +195,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     //this method is used to click and move a card around on the screen. if you click a card, the clickedCard, will get the right card from the Deck
-    //if tou click a card and it is inside a cardSlot a boolean will change (test=true), this I will use in the touchUp method
+    //if tou click a card and it is inside a cardSlot a boolean will change (isClicked=true), this I will use in the touchUp method
     // And if you click the Execute button the it will change a boolean value
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -209,11 +205,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             return false;
         }
         for(int i=0; i<9; i++){
-            if(insideCard(screenX, screenY,Deck.getCard(i)) && button == Buttons.LEFT){
-                clickedCard=Deck.getCard(i);
+            if(insideCard(screenX, screenY,Deck.getDeckList().get(i)) && button == Buttons.LEFT){
+                clickedCard=Deck.getDeckList().get(i);
                 for(int j=0; j<5; j++){
                     if(insideCardSlot(clickedCard, cardSlotPos.get(j))){
-                        test=true;
+                        isClicked=true;
                         counter=j;
                         break;
                     }
@@ -243,9 +239,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //if a card is inside a cardslot and it is released move it into the middle of the slot
         for(int i=0; i<5; i++){
             if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
-                if(test){
+                if(isClicked){
                     selectedCards[counter]=null;
-                    test=false;
+                    isClicked=false;
                 }
                 selectedCards[i]=clickedCard;
                 isInside=true;
@@ -257,13 +253,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //if it is outside then move it back to its default pos
         if(!isInside){
             clickedCard.getCardSprite().setPosition(clickedCard.getDefaultPosX(), clickedCard.getDefaultPosY());
-            isInside=false;
-            if(test){
+            if(isClicked){
                 selectedCards[counter]=null;
-                test=false;
+                isClicked=false;
             }
         }
-        //create a new clickedCard so that a card doesent stick to the mouse when let go of
+        //create a new clickedCard so that a card does not stick to the mouse when let go of
         clickedCard=new Cards(0,0, "",0, cardSprite10);
         return false;
     }
@@ -290,46 +285,34 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     //the x cordinate at the centre of a card
-    public Float getCardCenterX(Cards card){
+    private Float getCardCenterX(Cards card){
         return card.getCardSprite().getWidth()/2;
     }
 
     //the y cordinate at the centre of a card
-    public Float getCardCenterY(Cards card){
+    private Float getCardCenterY(Cards card){
         return card.getCardSprite().getHeight()/2;
     }
 
     //the x cordinate at the centre of a cardSlot
-    public Float getCardSlotCenterX(CardSlots card){
+    private Float getCardSlotCenterX(CardSlots card){
         return card.getCardSlotSprite().getWidth()/2;
     }
 
     //the y cordinate at the center of a cardSlot
-    public Float getCardSlotCenterY(CardSlots card){
+    private Float getCardSlotCenterY(CardSlots card){
         return card.getCardSlotSprite().getHeight()/2;
     }
 
     //metode for å sjekke om midten av et kort er innenfor ein cardSlot
-    public boolean insideCardSlot(Cards card, CardSlots cardSlotX){
-        if((card.getCardSprite().getX()+getCardCenterX(card)> cardSlotX.getCardSlotSprite().getX() && card.getCardSprite().getX()+getCardCenterX(card)<(cardSlotX.getCardSlotSprite().getX()+cardSlotX.getCardSlotSprite().getWidth()))&&(card.getCardSprite().getY()+getCardCenterY(card)> cardSlotX.getCardSlotSprite().getY() && card.getCardSprite().getY()+getCardCenterY(card)<(cardSlotX.getCardSlotSprite().getY()+cardSlotX.getCardSlotSprite().getHeight()))){
-            return true;
-        }
-        return false;
+    private boolean insideCardSlot(Cards card, CardSlots cardSlotX){
+        return (card.getCardSprite().getX() + getCardCenterX(card) > cardSlotX.getCardSlotSprite().getX() && card.getCardSprite().getX() + getCardCenterX(card) < (cardSlotX.getCardSlotSprite().getX() + cardSlotX.getCardSlotSprite().getWidth())) && (card.getCardSprite().getY() + getCardCenterY(card) > cardSlotX.getCardSlotSprite().getY() && card.getCardSprite().getY() + getCardCenterY(card) < (cardSlotX.getCardSlotSprite().getY() + cardSlotX.getCardSlotSprite().getHeight()));
     }
 
     //metode for å sjekke om muspeikeren er over et kort
-    public boolean insideCard(float screenX, float screenY, Cards card){
+    private boolean insideCard(float screenX, float screenY, Cards card){
         float NewscreenY=Gdx.graphics.getHeight() - screenY;
-        if((screenX>card.getCardSprite().getX()) && (screenX<(card.getCardSprite().getX()+card.getCardSprite().getWidth())) && (NewscreenY>card.getCardSprite().getY()) && (NewscreenY<(card.getCardSprite().getY()+card.getCardSprite().getHeight()))){
-            return true;
-        }
-        return false;
-    }
-
-    //method to get a sprite
-    private Sprite setSprite(String texturePath) {
-        Texture texture = new Texture(Gdx.files.internal(texturePath));
-        return new Sprite(texture);
+        return (screenX > card.getCardSprite().getX()) && (screenX < (card.getCardSprite().getX() + card.getCardSprite().getWidth())) && (NewscreenY > card.getCardSprite().getY()) && (NewscreenY < (card.getCardSprite().getY() + card.getCardSprite().getHeight()));
     }
 
     //method to set the position of sprites, if it is the first turn then just set the position of the sprites,
@@ -363,7 +346,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         int x=0;
         for(int i=0; i<9; i++){
             listCard=new Cards(x, 250, CardValues.values()[i].getName(), CardValues.values()[i].getPriority(),spritePos.get(i));
-            Deck.addCard(listCard);
+            Deck.getDeckList().add(listCard);
             x+=105;
         }
     }
@@ -371,7 +354,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //method to draw the cards
     private void drawCards(){
         for(int i=0; i<Deck.getDeckList().size();i++){
-            listCard=Deck.getCard(i);
+            listCard=Deck.getDeckList().get(i);
             listCard.getCardSprite().draw(batch);
         }
     }
@@ -417,7 +400,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     //method that empties the selectedCards array, that is used when an turn is over
-    public void nullyFy(){
+    private void nullyFy(){
         for(int i=0; i<selectedCards.length; i++){
             selectedCards[i]=null;
         }
