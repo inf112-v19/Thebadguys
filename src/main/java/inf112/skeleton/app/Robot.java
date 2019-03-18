@@ -132,7 +132,7 @@ public class Robot {
                 this.moveForward(1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
-                this.moveForward(1); // added twice so we can incrimentally check for collisions
+                this.moveForward(1); // added twice so we can incrementally check for collisions
                 this.moveForward(1); // along the robots move-path
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
@@ -197,6 +197,38 @@ public class Robot {
         }
         // need check if robot is on map, and check for hazard, should integrate with grid
     } */
+    /*
+    public void move(String command){ // added for use with conveyor belts etc
+        switch (command){
+            case "BackUp":
+                this.moveForward(-1);
+                break;
+            case "Move-1":
+                this.moveForward(1);
+                break;
+            case "Move-2":
+                this.moveForward(1); // added twice so we can incrementally check for collisions
+                this.moveForward(1); // along the robots move-path
+                break;
+            case "Move-3":
+                this.moveForward(1);
+                this.moveForward(1);
+                this.moveForward(1);
+                break;
+            case "Rotate-90":
+                this.rotate_right();
+                break;
+            case "Rotate-180":
+                this.rotate_right();
+                this.rotate_right();
+                break;
+            case "Rotate-C90":
+                this.rotate_left();
+                break;
+            default:
+                System.out.println("Something went wrong");
+        }
+    */
     public void died() {
         this.lives -= 1; // loose an option card of the players choice
         if (this.lives == 0) {
