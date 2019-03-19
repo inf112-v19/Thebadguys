@@ -1,5 +1,6 @@
 package inf112.skeleton.app;
 
+import Grid.Direction;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Robot {
@@ -8,7 +9,7 @@ public class Robot {
     private int posY = 6;
     private int[] checkpoint = {posX, posY};
     private int flagsPassed = 0;
-    private int direction = 0;
+    private Direction dir = Direction.NORTH;
 
     public void Robot(Sprite sprite){
         this.sprite = sprite;
@@ -41,8 +42,8 @@ public class Robot {
         return this.flagsPassed;
     }
 
-    public int getDirection() {
-        return this.direction;
+    public Direction getDirection() {
+        return dir;
     }
 
     public void setCheckpoint(int[] checkpoint){
@@ -62,40 +63,52 @@ public class Robot {
     }
 
     public void rotate_right() {
-        if(this.getDirection() == 3){
-            this.direction = 0;
+        if(this.getDirection() == Direction.WEST){
+            this.dir = Direction.NORTH;
         }
-        else{
-            this.direction += 1;
+        else if (this.getDirection() == Direction.NORTH){
+            this.dir = Direction.EAST;
+        }
+        else if (this.getDirection() == Direction.EAST){
+            this.dir = Direction.SOUTH;
+        }
+        else if (this.getDirection() == Direction.SOUTH){
+            this.dir = Direction.WEST;
         }
         //this.sprite.rotate(90);
     }
 
     public void rotate_left() {
-        if(this.getDirection() == 0){
-            this.direction = 3;
+        if(this.getDirection() == Direction.NORTH){
+            this.dir = Direction.WEST;
         }
-        else{
-            this.direction -= 1;
+        else if (this.getDirection() == Direction.WEST){
+            this.dir = Direction.SOUTH;
+        }
+        else if (this.getDirection() == Direction.SOUTH){
+            this.dir = Direction.EAST;
+        }
+        else if (this.getDirection() == Direction.EAST){
+            this.dir = Direction.NORTH;
         }
         //this.sprite.rotate(-90);
     }
 
     public void moveForward(int amount){
-        int current_direction = this.getDirection();
-        if (current_direction == 0) {
+        Direction current_direction = this.getDirection();
+        if (current_direction == Direction.NORTH) {
             int newY = this.getPosY() + amount;
             this.setPosY(newY);
         }
-        else if (current_direction == 1) {
+        else if (current_direction == Direction.EAST) {
             int newX = this.getPosX() + amount;
             this.setPosX(newX);
         }
-        else if (current_direction == 2) {
+        else if (current_direction == Direction.SOUTH) {
             int newY = this.getPosY() - amount;
             this.setPosY(newY);
         }
-        else if (current_direction == 3) {
+        else if (current_direction == Direction.WEST) {
             int newX = this.getPosX() - amount;
             this.setPosX(newX);
         }
