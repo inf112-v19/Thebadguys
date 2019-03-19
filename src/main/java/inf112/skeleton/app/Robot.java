@@ -159,14 +159,14 @@ public class Robot {
     //future move method with regex to allow cards with priority
     public void move(Cards card){ // gets the command from a card and figures out which command to execute
         String command = card.getCardSprite().getTexture().toString();
-        String path = "Models/AlleBevegelseKortUtenPrioritet/"; // temp path
-        Pattern backup = Pattern.compile(path + "Backup[0-9][0-9][0-9].png");
-        Pattern move1 = Pattern.compile(path + "Move-1-[0-9][0-9][0-9].png");
-        Pattern move2 = Pattern.compile(path + "Move-2-[0-9][0-9][0-9].png");
-        Pattern move3 = Pattern.compile(path + "Move-3-[0-9][0-9][0-9].png");
-        Pattern rotater = Pattern.compile(path + "Rotate-90-[0-9][0-9][0-9].png");
-        Pattern rotatel = Pattern.compile(path + "Rotate-C90-[0-9][0-9][0-9].png");
-        Pattern rotateu = Pattern.compile(path + "Rotate-180-[0-9][0-9][0-9].png");
+        String path = "Models/Movement Cards/";
+        Pattern backup = Pattern.compile(path + "card backwards - [0-9][0-9][0-9].png");
+        Pattern move1 = Pattern.compile(path + "card template forward 1 - [0-9][0-9][0-9].png");
+        Pattern move2 = Pattern.compile(path + "card template forward 2 - [0-9][0-9][0-9].png");
+        Pattern move3 = Pattern.compile(path + "card template forward 3 - [0-9][0-9][0-9].png");
+        Pattern rotater = Pattern.compile(path + "card template right - [0-9][0-9][0-9].png");
+        Pattern rotatel = Pattern.compile(path + "card template left - [0-9][0-9][0-9].png");
+        Pattern rotateu = Pattern.compile(path + "card template u-turn - [0-9][0-9][0-9].png");
             if(backup.matcher(command).matches()) {
                 this.moveForward(-1);
                 }
@@ -197,7 +197,7 @@ public class Robot {
         }
         // need check if robot is on map, and check for hazard, should integrate with grid
     } */
-    /*
+
     public void move(String command){ // added for use with conveyor belts etc
         switch (command){
             case "BackUp":
@@ -227,8 +227,9 @@ public class Robot {
                 break;
             default:
                 System.out.println("Something went wrong");
+            }
         }
-    */
+
     public void died() {
         this.lives -= 1; // loose an option card of the players choice
         if (this.lives == 0) {
