@@ -1,5 +1,7 @@
 package inf112.skeleton.app;
 
+import Grid.IGrid;
+import Grid.MyGrid;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -14,6 +16,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import map.GameMap;
+import map.IGameMap;
+import map.MapTile;
 
 import java.util.ArrayList;
 
@@ -38,6 +43,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Deck Deck;
     protected Cards[] selectedCards;
 
+
     private SpriteBatch batch;
     private Texture texture;
     private Texture buttonTexture;
@@ -47,6 +53,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Texture cardTexture;
     private float posX, posY;
     private boolean test=false;
+
+    private IGameMap map;
+    private IGrid grid;
 
     //create the initial state of the game
 
@@ -65,6 +74,32 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
+        //create grid
+        grid = new MyGrid(12,12, MapTile.OPEN);
+        //sets conveyerbelt element on map
+        grid.set(0,6, MapTile.CONVEYERBELT);
+        grid.set(0,7,MapTile.CONVEYERBELT);
+        grid.set(0,8,MapTile.CONVEYERBELT);
+        grid.set(0,9,MapTile.CONVEYERBELT);
+        grid.set(1,6,MapTile.CONVEYERBELT);
+        grid.set(2,6,MapTile.CONVEYERBELT);
+        grid.set(2,7,MapTile.CONVEYERBELT);
+        grid.set(2,8,MapTile.CONVEYERBELT);
+        grid.set(2,9,MapTile.CONVEYERBELT);
+        grid.set(1,9,MapTile.CONVEYERBELT);
+
+        //setting repairsite elements on map
+        grid.set(1,2,MapTile.REPAIRSITE);
+        grid.set(6,6,MapTile.REPAIRSITE);
+        //setting lasers on elements on map
+        grid.set(2,0,MapTile.LASER);
+        grid.set(2,1,MapTile.LASER);
+        grid.set(2,2,MapTile.LASER);
+        grid.set(2,3,MapTile.LASER);
+        grid.set(2,4,MapTile.LASER);
+
+
+
         //creation of the robot
         texture = new Texture(Gdx.files.internal("Models/tank.png"));
         sprite = new Sprite(texture);
@@ -75,6 +110,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         sprite.setPosition(posX+300,posY+600);
 
         //create the card that Is clicked
+        //loads map with elements and robot
+        grid.set(robot.getPosX(),robot.getPosY(), MapTile.PLAYER);
+        IGameMap map = new GameMap(grid);
+
+
+                //create the card that Is clicked
         cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
         clickedCard=new Cards(0,0, "",0, cardSprite10);
@@ -133,13 +174,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                   robot.move(selectedCards[i]);
                   if (i == selectedCards.length - 1) {
                       isDone = false;
-                      notFirst=true;
+                      notFirst = true;
 
                       //set new sprites for the cards for next turn
                       setCardSprites();
 
                       //the cardSlots need to become null again since they will be cleared at the end of a turn
                       nullyFy();
+                      map.move(selectedCards[i]);
+                      if (i == selectedCards.length - 1) {
+                          isDone = false;
+                      }
                   }
               }
             }

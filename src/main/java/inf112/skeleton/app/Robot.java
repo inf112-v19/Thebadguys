@@ -1,5 +1,6 @@
 package inf112.skeleton.app;
-import com.badlogic.gdx.graphics.Texture;
+
+import Grid.Direction;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.regex.*;
@@ -10,22 +11,21 @@ public class Robot {
     private int posY = 6;
     private int[] checkpoint = {posX, posY};
     private int flagsPassed = 0;
-    private int direction = 0;
     private int lives = 3;
     private int damage = 0;
+    private Direction dir = Direction.NORTH;
 
     public Robot(Sprite sprite){
         this.sprite = sprite;
     }
 
-    public Robot(Sprite sprite, int[] startingPos, int flagsPassed){
-        this.sprite = sprite;
-        this.checkpoint = startingPos;
-        this.posX = startingPos[0];
-        this.posY = startingPos[1];
+    public Robot(Sprite sprite, int[] checkpoint, int flagsPassed){
+        this.sprite=sprite;
+        this.checkpoint[0]=posX;
+        this.checkpoint[1]=posY;
         this.flagsPassed = flagsPassed;
     }
-    // a bunch of get functions
+
     public int getPosX(){
         return this.posX;
     }
@@ -46,8 +46,8 @@ public class Robot {
         return this.flagsPassed;
     }
 
-    public int getDirection() {
-        return this.direction;
+    public Direction getDirection() {
+        return dir;
     }
 
     public int getLives() {
@@ -59,6 +59,7 @@ public class Robot {
     }
 
     // a bunch of set functions
+
     public void setCheckpoint(int[] checkpoint){
         this.checkpoint = checkpoint;
     }
@@ -76,43 +77,55 @@ public class Robot {
     }
 
     public void rotate_right() {
-        if(this.getDirection() == 3){
-            this.direction = 0;
+        if(this.getDirection() == Direction.WEST){
+            this.dir = Direction.NORTH;
         }
-        else{
-            this.direction += 1;
+        else if (this.getDirection() == Direction.NORTH){
+            this.dir = Direction.EAST;
         }
-        this.sprite.rotate(90);
+        else if (this.getDirection() == Direction.EAST){
+            this.dir = Direction.SOUTH;
+        }
+        else if (this.getDirection() == Direction.SOUTH){
+            this.dir = Direction.WEST;
+        }
+        //this.sprite.rotate(90);
     }
 
     public void rotate_left() {
-        if(this.getDirection() == 0){
-            this.direction = 3;
+        if(this.getDirection() == Direction.NORTH){
+            this.dir = Direction.WEST;
         }
-        else{
-            this.direction -= 1;
+        else if (this.getDirection() == Direction.WEST){
+            this.dir = Direction.SOUTH;
         }
-        this.sprite.rotate(-90);
+        else if (this.getDirection() == Direction.SOUTH){
+            this.dir = Direction.EAST;
+        }
+        else if (this.getDirection() == Direction.EAST){
+            this.dir = Direction.NORTH;
+        }
+        //this.sprite.rotate(-90);
     }
 
-    public void moveForward(int amount){ // does the actual changing of robot position and the robot sprite
-        int current_direction = this.getDirection();
-        if (current_direction == 0) {
+    public void moveForward(int amount){
+        Direction current_direction = this.getDirection();
+        if (current_direction == Direction.NORTH) {
             int newY = this.getPosY() + amount;
             this.setPosY(newY);
             this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + 75 * amount); // temp moving sprite
         }
-        else if (current_direction == 1) {
+        else if (current_direction == Direction.EAST) {
             int newX = this.getPosX() + amount;
             this.setPosX(newX);
             this.sprite.setPosition(this.sprite.getX() + 75 * amount, this.sprite.getY());
         }
-        else if (current_direction == 2) {
+        else if (current_direction == Direction.SOUTH) {
             int newY = this.getPosY() - amount;
             this.setPosY(newY);
             this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - 75 * amount);
         }
-        else if (current_direction == 3) {
+        else if (current_direction == Direction.WEST) {
             int newX = this.getPosX() - amount;
             this.setPosX(newX);
             this.sprite.setPosition(this.sprite.getX() - 75 * amount, this.sprite.getY());
