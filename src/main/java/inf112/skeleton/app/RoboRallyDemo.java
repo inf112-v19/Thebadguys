@@ -23,7 +23,7 @@ import map.MapTile;
 import java.util.ArrayList;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
-    private TiledMap tiledMap;
+    private static TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera;
     private int i = 0;
@@ -488,5 +488,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         for(int i=0; i<selectedCards.length; i++){
             selectedCards[i]=null;
         }
+    }
+
+    public static TiledMap getTiledMap() {
+        return tiledMap;
     }
 }

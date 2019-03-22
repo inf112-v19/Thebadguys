@@ -1,8 +1,11 @@
 package inf112.skeleton.app;
 
 import Grid.Direction;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import java.util.regex.*;
 
 public class Robot {
@@ -14,7 +17,16 @@ public class Robot {
     private int lives = 3;
     private int damage = 0;
     private Direction dir = Direction.NORTH;
-
+    private float w = Gdx.graphics.getWidth();
+    private float h = Gdx.graphics.getHeight();
+    private TiledMap tiledMap = RoboRallyDemo.getTiledMap();
+    private MapProperties prop = tiledMap.getProperties();
+    private int mapWidth = prop.get("width", Integer.class);
+    private int mapHeight = prop.get("height", Integer.class);
+    private int tilePixelWidth = prop.get("tilewidth", Integer.class);
+    private int tilePixelHeight = prop.get("tileheight", Integer.class);
+    private int x0 = ((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2);
+    private int y0 = ((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2);
     public Robot(Sprite sprite){
         this.sprite = sprite;
     }
@@ -89,7 +101,7 @@ public class Robot {
         else if (this.getDirection() == Direction.SOUTH){
             this.dir = Direction.WEST;
         }
-        //this.sprite.rotate(90);
+        this.sprite.rotate(90);
     }
 
     public void rotate_left() {
@@ -105,7 +117,7 @@ public class Robot {
         else if (this.getDirection() == Direction.EAST){
             this.dir = Direction.NORTH;
         }
-        //this.sprite.rotate(-90);
+        this.sprite.rotate(-90);
     }
 
     public void moveForward(int amount){
