@@ -1,29 +1,17 @@
 package inf112.skeleton.app;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Cards implements ICard {
 
-    private Texture cardTexture;
-    private Texture cardSlotTexture;
     private Sprite cardSprite;
     private float defaultPosX;
     private float defaultPosY;
     private float posX, posY;
-    private Batch batch;
     private String name;
     private int priority;
 
-    //cards and deck
-    private Cards Dummycard0;
-    private Deck deck;
-
-
-
     public Cards(float posX, float posY, String name, int priority, Sprite cardSprite){
-        this.batch=batch;
         this.posX=posX;
         this.posY=posY;
         this.name=name;
@@ -35,16 +23,13 @@ public class Cards implements ICard {
 
     //extra constructor for testing
     public Cards(float posX, float posY, String name, int priority){
-        this.batch=batch;
         this.posX=posX;
         this.posY=posY;
         this.name=name;
-        //this.cardSprite=cardSprite;
         this.priority=priority;
         defaultPosX=posX;
         defaultPosY=posY;
     }
-
 
     //returns the name
     public String getName(){
@@ -76,4 +61,11 @@ public class Cards implements ICard {
     public float getDefaultPosY(){
         return defaultPosY;
     }
+
+    //makes it possible to change the sprite of a Card
+    public void setCardSprite(Sprite sprite){this.cardSprite=sprite;}
+
+    public void setCardName(String name){this.name=name;}
+
+    public void setPriority(int priority){this.priority=priority;}
 }

@@ -9,9 +9,7 @@ public class Main {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Robo Rally";
         cfg.width = 1050;
-        cfg.height = 900;
-
-
+        cfg.height = 1100;
         new LwjglApplication(new RoboRallyDemo(), cfg);
     }
 }

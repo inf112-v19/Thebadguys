@@ -1,6 +1,7 @@
 package map;
 
 import Grid.Direction;
+import inf112.skeleton.app.Cards;
 
 public interface IGameMap {
 
@@ -58,4 +59,6 @@ public interface IGameMap {
      */
     boolean playerCanGo(Direction d);
 
+
+    void move(Cards selectedCard);
 }
