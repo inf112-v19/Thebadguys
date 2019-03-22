@@ -10,10 +10,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.ArrayList;
 
@@ -27,6 +27,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private CardSlots temp;
     private Robot robot;
     private int counter;
+    private FitViewport viewPort;
 
     private boolean isDone=false;
     private boolean notFirst=false;
@@ -44,6 +45,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Sprite sprite;
     private Sprite cardSprite10;
     private float posX, posY;
+    private TiledMapTileSet mapSet;
 
     //create the initial state of the game
     @Override
@@ -54,13 +56,21 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         //camera that is for scaling viewpoint
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w * 6  ,h * 6);
-        camera.translate(-1000,-2700);
+        viewPort = new FitViewport(w, h, camera);
+        //camera.setToOrtho(false, w, h);
+        camera.position.set(viewPort.getWorldWidth()/2, viewPort.getWorldHeight()/2, 0);
+
+        //camera.setToOrtho(false, w * 6  ,h * 6);
+        //camera.translate(-1000,-2700);
 
         //creation of the map
         TiledMap tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+       // MapLayer map= tiledMap.getLayers().get(0);
+        //mapSet=tiledMap.getTileSets().getTileSet(0);
+        //System.out.println(tiledMap.getTileSets().getTileSet(0).getTile(1).toString());
 
+        System.out.println(tiledMap.getTileSets().getTileSet(0));
         //creation of the robot
         texture = new Texture(Gdx.files.internal("Models/tank.png"));
         sprite = new Sprite(texture);
@@ -154,8 +164,25 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         batch.end();
     }
 
+    /*
+    * this.gameCam = new OrthographicCamera();
+    this.gamePort = new FitViewport(RoboRally.width, RoboRally.height, gameCam);
+    gameCam.position.set(gamePort.getWorldWidth() / 2, (gamePort.getWorldHeight() / 2), 0);
+
+    * */
+
     @Override
     public void resize(int width, int height) {
+       // float w = Gdx.graphics.getWidth();
+       // float h = Gdx.graphics.getHeight();
+       // camera.translate(-1000,-2700);
+      //  camera.setToOrtho(false, width, height);
+        //viewPort.update(width, height);
+        //viewPort.update(width, height);
+        //camera.update();
+        Gdx.graphics.setWindowedMode(width, height);
+        camera.update();
+        System.out.println(width+" " +height);
     }
 
     @Override
