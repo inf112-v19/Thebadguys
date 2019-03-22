@@ -26,7 +26,7 @@ public class AppTest{
     //RoboRallyDemo roboRallyDemo = new RoboRallyDemo();
 
     Cards testCard = new Cards(10,10, "testNavn", 100);
-    CardSlots testCardSlot = new CardSlots(10, 10);
+    CardSlots testCardSlot = new CardSlots(10,10);
     Deck deck= new Deck();
     float test=10;
     /**
@@ -66,9 +66,9 @@ public class AppTest{
     //adding a card to the deck and checking if the size is 1, and if the card is the same as I added.
     @Test
     public void addCardToDeckTest(){
-        deck.addCard(testCard);
+        deck.getDeckList().add(testCard);
         assertEquals(deck.getDeckList().size(), 1);
-        assertEquals(deck.getCard(0), testCard);
+        assertEquals(deck.getDeckList().get(0), testCard);
     }
     //trying to put a card into a decklist and check if it exists in the HashMap
 
@@ -156,4 +156,8 @@ public class AppTest{
         map.movePlayer(Direction.SOUTH);
         assertEquals(MapTile.PLAYER, map.getCell(2, 3));
     }
+
+
+
+
 }

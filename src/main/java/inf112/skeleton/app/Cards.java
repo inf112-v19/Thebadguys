@@ -1,7 +1,5 @@
 package inf112.skeleton.app;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Cards implements ICard {
@@ -66,4 +64,8 @@ public class Cards implements ICard {
 
     //makes it possible to change the sprite of a Card
     public void setCardSprite(Sprite sprite){this.cardSprite=sprite;}
+
+    public void setCardName(String name){this.name=name;}
+
+    public void setPriority(int priority){this.priority=priority;}
 }

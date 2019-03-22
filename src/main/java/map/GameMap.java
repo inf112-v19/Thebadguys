@@ -2,13 +2,14 @@ package map;
 
 import Grid.Direction;
 import Grid.IGrid;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import inf112.skeleton.app.Cards;
 
 public class GameMap implements IGameMap {
-    protected IGrid<MapTile> tiles;
-    protected int x;
-    protected int y;
-    protected Direction dir = Direction.NORTH;
+    private IGrid<MapTile> tiles;
+    private int x;
+    private int y;
+    private Direction dir = Direction.NORTH;
 
     public GameMap(IGrid<MapTile> tiles) {
         tiles.copy();
@@ -219,38 +220,38 @@ public class GameMap implements IGameMap {
         }
     }
 
-    public void move(Cards card){
-        String command = card.getName();
+    public void move(Cards card){ // gets the command from a card and figures out which command to execute
+        String command = card.getCardSprite().getTexture().toString();
         switch (command){
-            case "BackUp":
+            case "Models/AlleBevegelseKortUtenPrioritet/BackUp.png":
                 this.moveForward(-1);
                 break;
-            case "Move-1":
+            case "Models/AlleBevegelseKortUtenPrioritet/Move-1.png":
                 this.moveForward(1);
                 break;
-            case "Move-2":
-                this.moveForward(1); // added twice so we can incrimentally check for collisions
+            case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
+                this.moveForward(1); // added twice so we can incrementally check for collisions
                 this.moveForward(1); // along the robots move-path
                 break;
-            case "Move-3":
+            case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
                 this.moveForward(1);
                 this.moveForward(1);
                 this.moveForward(1);
                 break;
-            case "Rotate-90":
+            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
                 this.rotate_right();
                 break;
-            case "Rotate-180":
+            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png":
                 this.rotate_right();
                 this.rotate_right();
                 break;
-            case "Rotate-C90":
+            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png":
                 this.rotate_left();
                 break;
             default:
                 System.out.println("Something went wrong");
         }
-
+        // need check if robot is on map, and check for hazard, should integrate with grid
     }
 
 
