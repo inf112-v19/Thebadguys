@@ -10,8 +10,8 @@ import java.util.regex.*;
 
 public class Robot {
     private Sprite sprite;
-    private int posX = -4;
-    private int posY = 6;
+    private int posX = 0;
+    private int posY = 0;
     private int[] checkpoint = {posX, posY};
     private int flagsPassed = 0;
     private int lives = 3;

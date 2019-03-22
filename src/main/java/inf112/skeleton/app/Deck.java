@@ -13,11 +13,5 @@ public class Deck implements IDeck{
         return DeckList;
     }
 
-    public static void addCard(Cards card){
-       DeckList.add(card);
-    }
 
-    public static Cards getCard(int i){
-        return DeckList.get(i);
-    }
 }
