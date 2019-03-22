@@ -2,10 +2,6 @@ package inf112.skeleton.app;
 
 public interface IItem extends Comparable<IItem> {
 
-    @Override
-    default int compareTo(IItem other) {
-        return Integer.compare(getSize(), other.getSize());
-    }
 
     int getDamage();
 

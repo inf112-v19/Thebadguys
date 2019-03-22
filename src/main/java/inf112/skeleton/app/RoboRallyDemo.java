@@ -103,8 +103,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //creation of the robot
         texture = new Texture(Gdx.files.internal("Models/tank.png"));
         sprite = new Sprite(texture);
-        posX = -4;
-        posY = 6;
+        posX = 0;
+        posY = 0;
         int[] startpos = {Math.round(posX), Math.round(posY)};
         robot = new Robot(sprite, startpos, 0);
         sprite.setPosition(posX+300,posY+600);
