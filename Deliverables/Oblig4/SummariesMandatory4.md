@@ -8,3 +8,6 @@ I dag oppdaterte vi prioriteringslisten som vanlig. Vi jobbet med å integrere e
 ### Arbeidssammendrag 19.03
 I dag jobbet vi videre med oppgaver fra sist, og diskuterte litt om hvordan vi skal gå frem med flyttingen av robot spriten,
 og hvor dette skal gjøres. Vi tar det litt på sikt og skal for nå teste å gjøre dette via en total map size fraksjon.
+
+### Arbeidssammendrag 22.03
+I dag drev vi med en del troubleshooting i sammenheng med kjøring av forskjellige fil versjoner og merging av filer. Nå er alt relevant kode merget i master. Vi fikk også intergrert grid klassen til resten av koden. 
