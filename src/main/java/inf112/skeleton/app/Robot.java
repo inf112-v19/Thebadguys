@@ -278,16 +278,16 @@ public class Robot {
         }
         else { // moves the sprite the appropriate amount in both x and y direction to the robots backup
             if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
-                this.sprite.setPosition(this.sprite.getX() + (this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX()), this.sprite.getY() + (this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY()));
+                this.sprite.setPosition(this.sprite.getX() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX())), this.sprite.getY() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY())));
             }
             else if(this.getPosX() >= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
-                this.sprite.setPosition(this.sprite.getX() - (this.tilePixelWidth / 6) * (this.getPosX() - this.getCheckpoint()[0]), this.sprite.getY() + (this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY()));
+                this.sprite.setPosition(this.sprite.getX() - ((this.tilePixelWidth / 6) * (this.getPosX() - this.getCheckpoint()[0])), this.sprite.getY() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY())));
             }
             else if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() >= this.getCheckpoint()[1]) {
-                this.sprite.setPosition(this.sprite.getX() + (this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX()), this.sprite.getY() - (this.tilePixelWidth / 6) * (this.getPosY() - this.getCheckpoint()[1]));
+                this.sprite.setPosition(this.sprite.getX() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX())), this.sprite.getY() - ((this.tilePixelWidth / 6) * (this.getPosY() - this.getCheckpoint()[1])));
             }
             else if(this.getPosX() >= this.getCheckpoint()[0] && this.getPosY() >= this.getCheckpoint()[1]) {
-                this.sprite.setPosition(this.sprite.getX() - (this.tilePixelWidth / 6) * (this.getPosX() - this.getCheckpoint()[0]), this.sprite.getY() - (this.tilePixelWidth / 6) * (this.getPosY() - this.getCheckpoint()[1]));
+                this.sprite.setPosition(this.sprite.getX() - ((this.tilePixelWidth / 6) * (this.getPosX() - this.getCheckpoint()[0])), this.sprite.getY() - ((this.tilePixelWidth / 6) * (this.getPosY() - this.getCheckpoint()[1])));
             }
             else {
                 System.out.println("Should definitely not be possible");
