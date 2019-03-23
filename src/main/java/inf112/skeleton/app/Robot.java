@@ -10,23 +10,23 @@ import java.util.regex.*;
 
 public class Robot {
     private Sprite sprite;
-    private int posX = 0;
-    private int posY = 0;
+    private int posX = 1;
+    private int posY = 1;
     private int[] checkpoint = {posX, posY};
     private int flagsPassed = 0;
     private int lives = 3;
     private int damage = 0;
     private Direction dir = Direction.NORTH;
-    private float w = Gdx.graphics.getWidth();
-    private float h = Gdx.graphics.getHeight();
+    private float w = Gdx.graphics.getWidth() * 6;
+    private float h = Gdx.graphics.getHeight() * 6;
     private TiledMap tiledMap = RoboRallyDemo.getTiledMap();
     private MapProperties prop = tiledMap.getProperties();
     private int mapWidth = prop.get("width", Integer.class);
     private int mapHeight = prop.get("height", Integer.class);
     private int tilePixelWidth = prop.get("tilewidth", Integer.class);
     private int tilePixelHeight = prop.get("tileheight", Integer.class);
-    private int x0 = ((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2);
-    private int y0 = ((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2);
+    private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10;
+    private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
     public Robot(Sprite sprite){
         this.sprite = sprite;
     }
@@ -68,6 +68,22 @@ public class Robot {
 
     public int getDamage() {
         return this.damage;
+    }
+
+    public int getX1(){
+        System.out.println(this.x1);
+        System.out.println(this.mapWidth);
+        System.out.println(this.mapHeight);
+        System.out.println(this.tilePixelWidth);
+        System.out.println(this.tilePixelHeight);
+        System.out.println(this.w);
+        System.out.println(this.h);
+        return this.x1;
+    }
+
+    public int getY1(){
+        System.out.println(this.y1);
+        return this.y1;
     }
 
     // a bunch of set functions
@@ -125,22 +141,22 @@ public class Robot {
         if (current_direction == Direction.NORTH) {
             int newY = this.getPosY() + amount;
             this.setPosY(newY);
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + 75 * amount); // temp moving sprite
+            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + (amount * (this.tilePixelWidth / 6))); // temp moving sprite
         }
         else if (current_direction == Direction.EAST) {
             int newX = this.getPosX() + amount;
             this.setPosX(newX);
-            this.sprite.setPosition(this.sprite.getX() + 75 * amount, this.sprite.getY());
+            this.sprite.setPosition(this.sprite.getX() + (amount * (this.tilePixelWidth / 6)), this.sprite.getY());
         }
         else if (current_direction == Direction.SOUTH) {
             int newY = this.getPosY() - amount;
             this.setPosY(newY);
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - 75 * amount);
+            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - (amount * (this.tilePixelWidth / 6)));
         }
         else if (current_direction == Direction.WEST) {
             int newX = this.getPosX() - amount;
             this.setPosX(newX);
-            this.sprite.setPosition(this.sprite.getX() - 75 * amount, this.sprite.getY());
+            this.sprite.setPosition(this.sprite.getX() - (amount * (this.tilePixelWidth / 6)), this.sprite.getY());
         }
         else {
             System.out.println("Something went terribly wrong");
