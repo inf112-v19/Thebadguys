@@ -10,6 +10,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -20,6 +21,7 @@ import map.IGameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import javax.smartcardio.Card;
 import java.util.ArrayList;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
@@ -35,6 +37,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private int counter;
     private FitViewport viewPort;
 
+    private int cardDelt=9;
+
     private boolean isDone=false;
     private boolean notFirst=false;
     private boolean isClicked=false;
@@ -45,6 +49,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private ArrayList<Sprite> spritePos;
     private Deck Deck;
     private Cards[] selectedCards;
+    private int randomPriority[];
 
 
     private SpriteBatch batch;
@@ -53,6 +58,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Sprite cardSprite10;
     private float posX, posY;
     private TiledMapTileSet mapSet;
+    private BitmapFont font;
 
     private IGameMap map;
     private IGrid grid;
@@ -64,23 +70,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         float h = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
 
-        //camera that is for scaling viewpoint
-        camera = new OrthographicCamera();
-        //viewPort = new FitViewport(w, h, camera);
-        //camera.setToOrtho(false, w, h);
-        //camera.position.set(viewPort.getWorldWidth()/2, viewPort.getWorldHeight()/2, 0);
-
-        camera.setToOrtho(false, w * 6  ,h * 6);
-        camera.translate(-1000,-2700);
-
+        //set the camera
+        setCamera(w,h);
         //creation of the map
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-       // MapLayer map= tiledMap.getLayers().get(0);
-        //mapSet=tiledMap.getTileSets().getTileSet(0);
-        //System.out.println(tiledMap.getTileSets().getTileSet(0).getTile(1).toString());
 
-        System.out.println(tiledMap.getTileSets().getTileSet(0));
         //create grid
         grid = new MyGrid(12,12, MapTile.OPEN);
         //sets conveyerbelt element on map
@@ -116,6 +111,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         robot = new Robot(sprite, startpos, 0);
         sprite.setPosition(posX+300,posY+600);
 
+        robot.takeDamage();
+        robot.takeDamage();
+        robot.takeDamage();
+        robot.takeDamage();
+        lockDown(robot.getDamage());
+        System.out.println(robot.getDamage());
+
+
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         //loads map with elements and robot
@@ -123,15 +126,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         map = new GameMap(grid);
 
 
-                //create the card that Is clicked
+        //create the card that Is clicked
         cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
         clickedCard=new Cards(0,0, "",0, cardSprite10);
 
-        Texture buttonTexture = new Texture(Gdx.files.internal("Models/Button.png"));
-        Sprite buttonSprite = new Sprite(buttonTexture);
-        buttonSprite.setPosition(800,500);
-        CardButton = new Cards(800, 500, "", 0 , buttonSprite);
+        //create the end turn button
+        buttonCreation(700,500);
 
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
@@ -139,6 +140,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         randomSpriteList=new ArrayList<>();
         Deck = new Deck();
         selectedCards = new Cards[5];
+
+        font = new BitmapFont();
 
         //set the position of all the cardsprites
         setCardSprites();
@@ -161,7 +164,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //rendering of the map and all the sprites
     @Override
     public void render() {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        //Gray background color
+        Gdx.gl.glClearColor (128/255f, 128/255f, 128/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
@@ -175,6 +179,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         if (i % 100 == 0) {
             for (int i = 0; i < selectedCards.length; i++) {
                 System.out.println(selectedCards[i]);
+            }
+            System.out.println(selectedCards.length + "HEI!");
+            System.out.println(Deck.getDeckList().size());
+            for(i=0; i<Deck.getDeckList().size();i++){
+                System.out.println(Deck.getDeckList().get(i).getName() + " " + Deck.getDeckList().get(i).getPriority());
             }
             System.out.println(isDone);
             System.out.println("\n");
@@ -206,26 +215,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         batch.end();
     }
 
-    /*
-    * this.gameCam = new OrthographicCamera();
-    this.gamePort = new FitViewport(RoboRally.width, RoboRally.height, gameCam);
-    gameCam.position.set(gamePort.getWorldWidth() / 2, (gamePort.getWorldHeight() / 2), 0);
-
-    * */
-
     @Override
+    //an atempt on an resize method
     public void resize(int width, int height) {
-       // float w = Gdx.graphics.getWidth();
-       // float h = Gdx.graphics.getHeight();
-       // camera.translate(-1000,-2700);
-      //  camera.setToOrtho(false, width, height);
-        //viewPort.update(width, height);
-        //viewPort.update(width, height);
-        //camera.update();
-        /*
-        Gdx.graphics.setWindowedMode(width, height);
+        viewPort.update(width, height);
         camera.update();
-        System.out.println(width+" " +height);*/
     }
 
     @Override
@@ -274,7 +268,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             isDone=true;
             return false;
         }
-        for(int i=0; i<9; i++){
+        for(int i=0; i<cardDelt; i++){
             if(insideCard(screenX, screenY,Deck.getDeckList().get(i)) && button == Buttons.LEFT){
                 clickedCard=Deck.getDeckList().get(i);
                 for(int j=0; j<5; j++){
@@ -382,6 +376,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //metode for å sjekke om muspeikeren er over et kort
     private boolean insideCard(float screenX, float screenY, Cards card){
         float NewscreenY=Gdx.graphics.getHeight() - screenY;
+        float newscreenX=Gdx.graphics.getHeight()/2 + screenX;
         return (screenX > card.getCardSprite().getX()) && (screenX < (card.getCardSprite().getX() + card.getCardSprite().getWidth())) && (NewscreenY > card.getCardSprite().getY()) && (NewscreenY < (card.getCardSprite().getY() + card.getCardSprite().getHeight()));
     }
 
@@ -392,16 +387,26 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         addSprites();
         if(notFirst){
             spritePos.clear();
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < cardDelt; i++) {
                 spritePos.add(getRandomSprite());
-                spritePos.get(i).setPosition(x, 250);
                 Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
                 Deck.getDeckList().get(i).setCardName(CardValues.values()[i].getName());
                 Deck.getDeckList().get(i).setPriority(CardValues.values()[i].getPriority());
+                /*
+                for(int h=0; h<CardValues.values().length; h++){
+                    if(spritePos.get(i)==CardValues.values()[h].getSprite()){
+                        spritePos.get(i).setPosition(x, 250);
+                        Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
+                        Deck.getDeckList().get(i).setCardName(CardValues.values()[i].getName());
+                        Deck.getDeckList().get(i).setPriority(CardValues.values()[i].getPriority());
+                        break;
+                    }
+                }*/
+
                 x+=105;
             }
         }else{
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < cardDelt; i++) {
                 spritePos.add(getRandomSprite());
                 spritePos.get(i).setPosition(x, 250);
 
@@ -414,7 +419,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //method to create the card-Objects
     private void createDecklist(){
         int x=0;
-        for(int i=0; i<9; i++){
+        for(int i=0; i<cardDelt; i++){
             listCard=new Cards(x, 250, CardValues.values()[i].getName(), CardValues.values()[i].getPriority(),spritePos.get(i));
             Deck.getDeckList().add(listCard);
             x+=105;
@@ -423,9 +428,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //method to draw the cards
     private void drawCards(){
-        for(int i=0; i<Deck.getDeckList().size();i++){
-            listCard=Deck.getDeckList().get(i);
-            listCard.getCardSprite().draw(batch);
+        for(Cards card: Deck.getDeckList()){
+            card.getCardSprite().draw(batch);
+            font.draw(batch,""+card.getPriority(),card.getCardSprite().getX()+card.getCardSprite().getWidth()-30,card.getCardSprite().getY()+card.getCardSprite().getHeight()-10);
         }
     }
 
@@ -466,7 +471,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         for(int i = 0; i < CardValues.values().length; i++){
             randomSpriteList.add(CardValues.values()[i].getSprite());
         }
-        System.out.print(randomSpriteList.size());
     }
 
     //method that empties the selectedCards array, that is used when an turn is over
@@ -478,5 +482,24 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public static TiledMap getTiledMap() {
         return tiledMap;
+    }
+
+    public void setCamera(float w, float h){
+        //camera that is for scaling viewpoint
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, w*6   ,h*6);
+        camera.translate(-400,-2700);
+        viewPort= new FitViewport(w*6, h*6);
+    }
+
+    public void buttonCreation(float x, float y){
+        Texture buttonTexture = new Texture(Gdx.files.internal("Models/Button.png"));
+        Sprite buttonSprite = new Sprite(buttonTexture);
+        buttonSprite.setPosition(x,y);
+        CardButton = new Cards(x, y, "", 0 , buttonSprite);
+    }
+
+    public void lockDown(int damage){
+        cardDelt=cardDelt-damage;
     }
 }
