@@ -87,13 +87,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         sprite.setPosition(robot.getX1(),robot.getY1());
 
 
-
+        /*
         robot.takeDamage();
         robot.takeDamage();
         robot.takeDamage();
         robot.takeDamage();
         lockDown(robot.getDamage());
-        System.out.println(robot.getDamage());
+        System.out.println(robot.getDamage());*/
 
 
         //create the card that Is clicked
