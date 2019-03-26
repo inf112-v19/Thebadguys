@@ -75,32 +75,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //creation of the map
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-
-        //create grid
-        grid = new MyGrid(12,12, MapTile.OPEN);
-        //sets conveyerbelt element on map
-        grid.set(0,6, MapTile.CONVEYERBELT);
-        grid.set(0,7,MapTile.CONVEYERBELT);
-        grid.set(0,8,MapTile.CONVEYERBELT);
-        grid.set(0,9,MapTile.CONVEYERBELT);
-        grid.set(1,6,MapTile.CONVEYERBELT);
-        grid.set(2,6,MapTile.CONVEYERBELT);
-        grid.set(2,7,MapTile.CONVEYERBELT);
-        grid.set(2,8,MapTile.CONVEYERBELT);
-        grid.set(2,9,MapTile.CONVEYERBELT);
-        grid.set(1,9,MapTile.CONVEYERBELT);
-
-        //setting repairsite elements on map
-        grid.set(1,2,MapTile.REPAIRSITE);
-        grid.set(6,6,MapTile.REPAIRSITE);
-        //setting lasers on elements on map
-        grid.set(2,0,MapTile.LASER);
-        grid.set(2,1,MapTile.LASER);
-        grid.set(2,2,MapTile.LASER);
-        grid.set(2,3,MapTile.LASER);
-        grid.set(2,4,MapTile.LASER);
-
-
+        createGrid();
 
         //creation of the robot
         texture = new Texture(Gdx.files.internal("Models/tank.png"));
@@ -109,7 +84,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         posY = 0;
         int[] startpos = {Math.round(posX), Math.round(posY)};
         robot = new Robot(sprite, startpos, 0);
-        sprite.setPosition(posX+300,posY+600);
+        sprite.setPosition(robot.getX1(),robot.getY1());
+
+
 
         robot.takeDamage();
         robot.takeDamage();
@@ -191,6 +168,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && isDone) {
             for (int i = 0; i < selectedCards.length; i++) {
                 robot.move(selectedCards[i]);
+                System.out.println(robot.getSprite().getX());
+                System.out.println(robot.getSprite().getY());
                 map.move(selectedCards[i]);
                 if (i == selectedCards.length - 1) {
                     isDone = false;
@@ -478,6 +457,31 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         for(int i=0; i<selectedCards.length; i++){
             selectedCards[i]=null;
         }
+    }
+
+    private void createGrid(){
+        grid = new MyGrid(12,12, MapTile.OPEN);
+        //sets conveyerbelt element on map
+        grid.set(0,6, MapTile.CONVEYERBELT);
+        grid.set(0,7,MapTile.CONVEYERBELT);
+        grid.set(0,8,MapTile.CONVEYERBELT);
+        grid.set(0,9,MapTile.CONVEYERBELT);
+        grid.set(1,6,MapTile.CONVEYERBELT);
+        grid.set(2,6,MapTile.CONVEYERBELT);
+        grid.set(2,7,MapTile.CONVEYERBELT);
+        grid.set(2,8,MapTile.CONVEYERBELT);
+        grid.set(2,9,MapTile.CONVEYERBELT);
+        grid.set(1,9,MapTile.CONVEYERBELT);
+
+        //setting repairsite elements on map
+        grid.set(1,2,MapTile.REPAIRSITE);
+        grid.set(6,6,MapTile.REPAIRSITE);
+        //setting lasers on elements on map
+        grid.set(2,0,MapTile.LASER);
+        grid.set(2,1,MapTile.LASER);
+        grid.set(2,2,MapTile.LASER);
+        grid.set(2,3,MapTile.LASER);
+        grid.set(2,4,MapTile.LASER);
     }
 
     public static TiledMap getTiledMap() {
