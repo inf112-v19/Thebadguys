@@ -9,7 +9,7 @@ import java.util.Random;
 public enum CardValues {
     BACKUP1(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png")), 10, "BACKUP")
     , MOVE12(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png")), 10, "MOVE1")
-    ,BACKUP(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png")), 10, "BACKUP")
+    , BACKUP(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png")), 10, "BACKUP")
     , MOVE1(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png")), 10, "MOVE1")
     , MOVE2(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-2.png")), 10, "MOVE2")
     , MOVE3(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-3.png")), 10, "MOVE3")
