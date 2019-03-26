@@ -21,7 +21,7 @@ import map.IGameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import javax.smartcardio.Card;
+//import javax.smartcardio.Card;
 import java.util.ArrayList;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
