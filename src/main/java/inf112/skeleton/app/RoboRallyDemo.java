@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.Pools;
 import map.GameMap;
 import map.IGameMap;
 import map.MapTile;
@@ -86,22 +87,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         robot = new Robot(sprite, startpos, 0);
         sprite.setPosition(robot.getX1(),robot.getY1());
 
-
-        /*
-        robot.takeDamage();
-        robot.takeDamage();
-        robot.takeDamage();
-        robot.takeDamage();
-        lockDown(robot.getDamage());
-        System.out.println(robot.getDamage());*/
-
-
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         //loads map with elements and robot
         grid.set(robot.getPosX(),robot.getPosY(), MapTile.PLAYER);
         map = new GameMap(grid);
-
 
         //create the card that Is clicked
         cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
@@ -152,34 +142,34 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         batch.begin();
         sprite.draw(batch);
 
+        if(i==300){
+            lockDown(4);
+        }
+
+        //check how mutch damage a robot has taken
         //rotation of sprite, rotate 90 degrees every 100th gametick
         if (i % 100 == 0) {
             for (int i = 0; i < selectedCards.length; i++) {
                 System.out.println(selectedCards[i]);
             }
-            System.out.println(selectedCards.length + "HEI!");
-            System.out.println(Deck.getDeckList().size());
-            for(i=0; i<Deck.getDeckList().size();i++){
-                System.out.println(Deck.getDeckList().get(i).getName() + " " + Deck.getDeckList().get(i).getPriority());
-            }
-            System.out.println(isDone);
             System.out.println("\n");
         }
+
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && isDone) {
             for (int i = 0; i < selectedCards.length; i++) {
                 robot.move(selectedCards[i]);
-                System.out.println(robot.getSprite().getX());
-                System.out.println(robot.getSprite().getY());
                 map.move(selectedCards[i]);
                 if (i == selectedCards.length - 1) {
-                    isDone = false;
+                    for(int v=0; v<spritePos.size(); v++){
+                        spritePos.get(v).setPosition(10000, 10000);
+                    }
                     notFirst=true;
-
                     setCardSprites();
-
                     nullyFy();
+                    isDone = false;
                 }
             }
+            System.out.println("\n");
         }
         //draw the cardslots
         drawCardSlots();
@@ -363,25 +353,16 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //if it is not the first turn then I use this method to change the sprites of the cards to get 9 new random cards
     private void setCardSprites() {
         int x=0;
+        randomSpriteList.clear();
         addSprites();
         if(notFirst){
             spritePos.clear();
             for (int i = 0; i < cardDelt; i++) {
                 spritePos.add(getRandomSprite());
+                spritePos.get(i).setPosition(x, 250);
                 Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
                 Deck.getDeckList().get(i).setCardName(CardValues.values()[i].getName());
                 Deck.getDeckList().get(i).setPriority(CardValues.values()[i].getPriority());
-                /*
-                for(int h=0; h<CardValues.values().length; h++){
-                    if(spritePos.get(i)==CardValues.values()[h].getSprite()){
-                        spritePos.get(i).setPosition(x, 250);
-                        Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
-                        Deck.getDeckList().get(i).setCardName(CardValues.values()[i].getName());
-                        Deck.getDeckList().get(i).setPriority(CardValues.values()[i].getPriority());
-                        break;
-                    }
-                }*/
-
                 x+=105;
             }
         }else{
@@ -392,7 +373,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 x+=105;
             }
         }
-        System.out.println("\n");
     }
 
     //method to create the card-Objects
@@ -409,7 +389,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private void drawCards(){
         for(Cards card: Deck.getDeckList()){
             card.getCardSprite().draw(batch);
-            font.draw(batch,""+card.getPriority(),card.getCardSprite().getX()+card.getCardSprite().getWidth()-30,card.getCardSprite().getY()+card.getCardSprite().getHeight()-10);
+            //font.draw(batch,""+card.getPriority(),card.getCardSprite().getX()+card.getCardSprite().getWidth()-30,card.getCardSprite().getY()+card.getCardSprite().getHeight()-10);
         }
     }
 
@@ -436,7 +416,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         int v= rng();
         Sprite random = randomSpriteList.get(v);
         randomSpriteList.remove(v);
-        System.out.println(random.getTexture());
         return random;
     }
 
@@ -447,9 +426,18 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //add all the sprites into the sprite list, burde finne ein bedre løsning på dette
     private void addSprites(){
-        for(int i = 0; i < CardValues.values().length; i++){
+        for(int i=0; i<CardValues.values().length;i++){
             randomSpriteList.add(CardValues.values()[i].getSprite());
         }
+    }
+
+    private boolean duplicateSprite(Sprite sprite){
+        for(int i=0; i<randomSpriteList.size(); i++){
+            if(randomSpriteList.get(i)==sprite){
+                return true;
+            }
+        }
+        return false;
     }
 
     //method that empties the selectedCards array, that is used when an turn is over
@@ -504,6 +492,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     public void lockDown(int damage){
+        for(int i=0; i<damage; i++){
+            robot.takeDamage();
+        }
         cardDelt=cardDelt-damage;
     }
 }
