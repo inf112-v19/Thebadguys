@@ -82,8 +82,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //creation of the robot
         texture = new Texture(Gdx.files.internal("Models/tank.png"));
         sprite = new Sprite(texture);
-        posX = 0;
-        posY = 0;
+        posX = 1;
+        posY = 1;
         int[] startpos = {Math.round(posX), Math.round(posY)};
         robot = new Robot(sprite, startpos, 0);
         sprite.setPosition(robot.getX1(),robot.getY1());
@@ -472,6 +472,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(2,2,MapTile.LASER);
         grid.set(2,3,MapTile.LASER);
         grid.set(2,4,MapTile.LASER);
+
+        grid.set(0,0,MapTile.CHECKPOINT1);
     }
 
     public static TiledMap getTiledMap() {

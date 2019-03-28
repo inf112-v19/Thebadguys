@@ -35,6 +35,21 @@ public class GameMap implements IGameMap {
         }
     }
 
+    public Boolean isCheckpoint(int x, int y, int flagspassed) {
+        if (tiles.get(x, y) == MapTile.CHECKPOINT1 && flagspassed == 0) {
+            return true;
+        }
+        else if(tiles.get(x, y) == MapTile.CHECKPOINT2 && flagspassed == 1) {
+            return true;
+        }
+        else if(tiles.get(x, y) == MapTile.CHECKPOINT3&& flagspassed == 2) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public MapTile getCell(int x, int y) {
         if(x < 0 || x >= tiles.getWidth())
             throw new IndexOutOfBoundsException();

@@ -1,14 +1,18 @@
 package inf112.skeleton.app;
 
+
 import Grid.Direction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import map.GameMap;
+
 import java.util.regex.*;
 
 public class Robot {
+    private GameMap map;
     private Sprite sprite;
     private int posX = 1;
     private int posY = 1;
@@ -88,8 +92,9 @@ public class Robot {
 
     // a bunch of set functions
 
-    public void setCheckpoint(int[] checkpoint){
-        this.checkpoint = checkpoint;
+    public void setCheckpoint(int x, int y){
+        this.checkpoint[0] = x;
+        this.checkpoint[1] = y;
     }
 
     public void setFlagsPassed(int flagsPassed){
@@ -269,6 +274,11 @@ public class Robot {
             default:
                 System.out.println("Something went wrong");
             }
+            if (map.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
+                this.flagsPassed += 1;
+                this.setCheckpoint(this.getPosX(), this.getPosY());
+            }
+
         }
 
     public void died() {
@@ -300,25 +310,7 @@ public class Robot {
 
     public void takeDamage() {
         this.damage += 1;
-        switch(this.damage) {
-            case 5:
-                //lock slot 5
-                break;
-            case 6:
-                //lock slot 4
-                break;
-            case 7:
-                //lock slot 3
-                break;
-            case 8:
-                //lock slot 2
-                break;
-            case 9:
-                //lock slot 1
-                break;
-            case 10:
-                this.died();
-                break;
-        }
+        cardHander.lockDown();
+
     }
 }
