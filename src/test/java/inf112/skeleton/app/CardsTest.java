@@ -1,21 +1,16 @@
 package inf112.skeleton.app;
 
-import Grid.Direction;
-import Grid.IGrid;
-import Grid.MyGrid;
-import map.GameMap;
-import map.IGameMap;
-import map.MapTile;
-import map.MovePlayerException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CardsTest {
+
     Cards testCard = new Cards(10,10, "testNavn", 100);
-    CardSlots testCardSlot = new CardSlots(10,10);
+    CardSlots testCardSlot = new CardSlots(10,10, 1);
     Deck deck= new Deck();
     float test=10;
+
     //trying to make a card and checking that the values are what I expect
     @Test
     public void createCardTest(){
@@ -47,6 +42,4 @@ public class CardsTest {
         assertEquals(deck.getDeckList().size(), 1);
         assertEquals(deck.getDeckList().get(0), testCard);
     }
-    //trying to put a card into a decklist and check if it exists in the HashMap
-
 }

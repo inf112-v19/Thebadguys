@@ -89,12 +89,9 @@ public class GridTest {
         //sets up map
         IGameMap map = new GameMap(grid);
 
-        //should all succeed
+        //should both succeed
         map.movePlayer(Direction.NORTH);
-        map.movePlayer(Direction.WEST);
-        map.movePlayer(Direction.EAST);
-        map.movePlayer(Direction.SOUTH);
-        assertEquals(MapTile.PLAYER, map.getCell(2, 3));
+        assertEquals(MapTile.PLAYER, map.getCell(2, 4));
+        assertEquals(MapTile.OPEN, map.getCell(2, 3 ));
     }
-
 }
