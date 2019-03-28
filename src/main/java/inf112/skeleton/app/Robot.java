@@ -8,14 +8,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
+import map.IGameMap;
+
 
 import java.util.regex.*;
 
 public class Robot {
-    private GameMap map;
+    private CardHandler cardHandler;
     private Sprite sprite;
-    private int posX = 1;
-    private int posY = 1;
+    private int posX = 0;
+    private int posY = 0;
     private int[] checkpoint = {posX, posY};
     private int flagsPassed = 0;
     private int lives = 3;
@@ -24,6 +26,7 @@ public class Robot {
     private float w = Gdx.graphics.getWidth() * 6;
     private float h = Gdx.graphics.getHeight() * 6;
     private TiledMap tiledMap = RoboRallyDemo.getTiledMap();
+    private GameMap gameMap = RoboRallyDemo.getIGameMap();
     private MapProperties prop = tiledMap.getProperties();
     private int mapWidth = prop.get("width", Integer.class);
     private int mapHeight = prop.get("height", Integer.class);
@@ -31,6 +34,7 @@ public class Robot {
     private int tilePixelHeight = prop.get("tileheight", Integer.class);
     private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
     private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
+
     public Robot(Sprite sprite){
         this.sprite = sprite;
     }
@@ -199,7 +203,15 @@ public class Robot {
             default:
                 System.out.println("Something went wrong");
         }
-        // need check if robot is on map, and check for hazard, should integrate with grid
+        if (gameMap == null) {
+            System.out.println("help");
+        }
+        if (gameMap.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
+            this.flagsPassed += 1;
+            this.setCheckpoint(this.getPosX(), this.getPosY());
+            System.out.println("You made it to backup number " + this.flagsPassed);
+        }
+        isOnMap();
     }
     /*
     //future move method with regex to allow cards with priority
@@ -274,12 +286,22 @@ public class Robot {
             default:
                 System.out.println("Something went wrong");
             }
-            if (map.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
+            if (gameMap.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
                 this.flagsPassed += 1;
                 this.setCheckpoint(this.getPosX(), this.getPosY());
             }
+            isOnMap();
 
         }
+
+    public void isOnMap() {
+        if(this.getPosX() >= 0 && this.getPosX() <= 11 && this.getPosY() >= 0  && this.getPosY() <= 11) {
+            System.out.println("You are on the map");
+        }
+        else {
+            this.died();
+        }
+    }
 
     public void died() {
         this.lives -= 1; // loose an option card of the players choice
@@ -310,7 +332,6 @@ public class Robot {
 
     public void takeDamage() {
         this.damage += 1;
-        cardHander.lockDown();
-
+        cardHandler.lockDown();
     }
 }

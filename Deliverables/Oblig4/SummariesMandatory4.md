@@ -20,5 +20,6 @@ Vi fikk beskjed i dag om at vi må inkludere hvem som var tilstede i hvert summa
 
 ### Arbeidssammendrag 28.03
 I dag var alle tilstede. Vi begynte med å se over kravene og kunngjøringene som har blitt lagt ut siden sist.
-Vi bestemte oss for å bli helt ferdig med all flag og backup funksjonalitet. Og arbeids fortsetter mot at card slots fungerer som de skal etter nye krav.
+Vi bestemte oss for å bli helt ferdig med all flag og backup funksjonalitet. Og arbeidet fortsetter mot at card slots fungerer som de skal etter nye krav.
+Vi har og endret på test foldere og lagde nye tester.
 

@@ -42,7 +42,7 @@ public class GameMap implements IGameMap {
         else if(tiles.get(x, y) == MapTile.CHECKPOINT2 && flagspassed == 1) {
             return true;
         }
-        else if(tiles.get(x, y) == MapTile.CHECKPOINT3&& flagspassed == 2) {
+        else if(tiles.get(x, y) == MapTile.CHECKPOINT3 && flagspassed == 2) {
             return true;
         }
         else{
