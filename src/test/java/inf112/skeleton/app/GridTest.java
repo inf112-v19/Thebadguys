@@ -93,5 +93,42 @@ public class GridTest {
         map.movePlayer(Direction.NORTH);
         assertEquals(MapTile.PLAYER, map.getCell(2, 4));
         assertEquals(MapTile.OPEN, map.getCell(2, 3 ));
+        map.movePlayer(Direction.NORTH);
+        assertEquals(MapTile.PLAYER, map.getCell(2, 5));
+        assertEquals(MapTile.OPEN, map.getCell(2, 4));
+
+    }
+
+    @Test
+    public void mapGoodMoveTest2() throws MovePlayerException{
+        IGrid grid = new MyGrid(25,25, MapTile.OPEN);
+        //sets player position
+        int x = 12;
+        int y = 12;
+        grid.set(x, y, MapTile.PLAYER);
+
+        //sets up map
+        IGameMap map = new GameMap(grid);
+
+        for(int i = 0; i < 13; i++){
+            Direction dir = Direction.getRandomDir();
+            map.movePlayer(dir);
+
+             if(dir == Direction.NORTH) {
+                y++;
+            }
+            else if(dir == Direction.WEST) {
+                x--;
+            }
+            else if(dir == Direction.SOUTH) {
+               y--;
+            }
+            else if(dir == Direction.EAST) {
+                x++;
+            }
+
+            assertEquals(MapTile.PLAYER, map.getCell(x, y));
+
+        }
     }
 }
