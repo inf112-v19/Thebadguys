@@ -39,6 +39,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private FitViewport viewPort;
 
     private int cardDelt=9;
+    private int cardSlotLock=5;
 
     private boolean isDone=false;
     private boolean notFirst=false;
@@ -143,7 +144,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         sprite.draw(batch);
 
         if(i==300){
-            lockDown(4);
+            lockDown(8);
         }
 
         //check how mutch damage a robot has taken
@@ -156,10 +157,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
 
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && isDone) {
-            for (int i = 0; i < selectedCards.length; i++) {
+            for (int i = 0; i < cardSlotLock; i++) {
                 robot.move(selectedCards[i]);
                 map.move(selectedCards[i]);
-                if (i == selectedCards.length - 1) {
+                robot.getSprite().draw(batch);
+                if (i == cardSlotLock - 1) {
                     for(int v=0; v<spritePos.size(); v++){
                         spritePos.get(v).setPosition(10000, 10000);
                     }
@@ -494,7 +496,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public void lockDown(int damage){
         for(int i=0; i<damage; i++){
             robot.takeDamage();
+            if(cardDelt>5){
+                cardDelt--;
+            }else{
+                cardSlotLock--;
+            }
+
         }
-        cardDelt=cardDelt-damage;
+
     }
 }
