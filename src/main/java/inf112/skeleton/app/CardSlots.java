@@ -11,9 +11,9 @@ public class CardSlots implements ICardSlot{
     public CardSlots(float posX, float posY){
         this.posX=posX;
         this.posY=posY;
-        Texture cardSlotTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/CardSlot.jpg"));
+       /* Texture cardSlotTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/CardSlot.jpg"));
         cardSlotSprite1= new Sprite(cardSlotTexture);
-        cardSlotSprite1.setPosition(posX, posY);
+        cardSlotSprite1.setPosition(posX, posY);*/
     }
 
     public Sprite getCardSlotSprite(){ return cardSlotSprite1;}
