@@ -45,6 +45,18 @@ public class GameMap implements IGameMap {
         else if(tiles.get(x, y) == MapTile.CHECKPOINT3 && flagspassed == 2) {
             return true;
         }
+        else if (tiles.get(x, y) == MapTile.CHECKPOINT4 && flagspassed == 3) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public Boolean isLaser(int x, int y){
+        if(tiles.get(x,y) == MapTile.LASER){
+            return true;
+        }
         else{
             return false;
         }

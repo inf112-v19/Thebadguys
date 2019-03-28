@@ -126,7 +126,7 @@ public class Robot {
         else if (this.getDirection() == Direction.SOUTH){
             this.dir = Direction.WEST;
         }
-        this.sprite.rotate(90);
+        this.sprite.rotate(-90);
     }
 
     public void rotate_left() {
@@ -142,7 +142,7 @@ public class Robot {
         else if (this.getDirection() == Direction.EAST){
             this.dir = Direction.NORTH;
         }
-        this.sprite.rotate(-90);
+        this.sprite.rotate(90);
     }
 
     public void moveForward(int amount){
@@ -183,11 +183,14 @@ public class Robot {
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
                 this.moveForward(1); // added twice so we can incrementally check for collisions
+                this.isOnMap();
                 this.moveForward(1); // along the robots move-path
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
                 this.moveForward(1);
+                this.isOnMap();
                 this.moveForward(1);
+                this.isOnMap();
                 this.moveForward(1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
@@ -203,58 +206,16 @@ public class Robot {
             default:
                 System.out.println("Something went wrong");
         }
-        if (gameMap == null) {
-            System.out.println("help");
-        }
         if (gameMap.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
             this.flagsPassed += 1;
             this.setCheckpoint(this.getPosX(), this.getPosY());
             System.out.println("You made it to backup number " + this.flagsPassed);
         }
-        isOnMap();
-    }
-    /*
-    //future move method with regex to allow cards with priority
-    public void move(Cards card){ // gets the command from a card and figures out which command to execute
-        String command = card.getCardSprite().getTexture().toString();
-        String path = "Models/Movement Cards/";
-        Pattern backup = Pattern.compile(path + "card backwards - [0-9][0-9][0-9].png");
-        Pattern move1 = Pattern.compile(path + "card template forward 1 - [0-9][0-9][0-9].png");
-        Pattern move2 = Pattern.compile(path + "card template forward 2 - [0-9][0-9][0-9].png");
-        Pattern move3 = Pattern.compile(path + "card template forward 3 - [0-9][0-9][0-9].png");
-        Pattern rotater = Pattern.compile(path + "card template right - [0-9][0-9][0-9].png");
-        Pattern rotatel = Pattern.compile(path + "card template left - [0-9][0-9][0-9].png");
-        Pattern rotateu = Pattern.compile(path + "card template u-turn - [0-9][0-9][0-9].png");
-            if(backup.matcher(command).matches()) {
-                this.moveForward(-1);
-                }
-            else if (move1.matcher(command).matches()) {
-                this.moveForward(1);
-                }
-            else if (move2.matcher(command).matches()) {
-                this.moveForward(1); // added twice so we can incrementally check for collisions
-                this.moveForward(1); // along the robots move-path
-            }
-            else if (move3.matcher(command).matches()) {
-                this.moveForward(1);
-                this.moveForward(1);
-                this.moveForward(1);
-            }
-            else if (rotater.matcher(command).matches()) {
-                this.rotate_right();
-            }
-            else if (rotateu.matcher(command).matches()) {
-                this.rotate_right();
-                this.rotate_right();
-            }
-            else if (rotatel.matcher(command).matches()) {
-                this.rotate_left();
-            }
-            else{
-                System.out.println("Something went wrong");
+        if (gameMap.isLaser(this.getPosX(),this.getPosY())){
+            //this.takeDamage();
         }
-        // need check if robot is on map, and check for hazard, should integrate with grid
-    } */
+        this.isOnMap();
+    }
 
     public void move(String command){ // added for use with conveyor belts etc
         switch (command){
@@ -286,11 +247,15 @@ public class Robot {
             default:
                 System.out.println("Something went wrong");
             }
-            if (gameMap.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
-                this.flagsPassed += 1;
-                this.setCheckpoint(this.getPosX(), this.getPosY());
-            }
-            isOnMap();
+        if (gameMap.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
+            this.flagsPassed += 1;
+            this.setCheckpoint(this.getPosX(), this.getPosY());
+            System.out.println("You made it to backup number " + this.flagsPassed);
+        }
+        if (gameMap.isLaser(this.getPosX(),this.getPosY())){
+            this.takeDamage();
+        }
+        this.isOnMap();
 
         }
 
