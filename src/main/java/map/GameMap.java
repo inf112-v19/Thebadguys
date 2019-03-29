@@ -103,28 +103,29 @@ public class GameMap implements IGameMap {
 
     public boolean playerCanGo(Direction d){
         if(d == Direction.NORTH){
-            if(!isValidPosition(this.x,this.y++)){
+
+            if(!isValidPosition(this.x,this.y+1)){
                 return false;
             } else{
                 return true;
             }
         }
         else if(d == Direction.EAST){
-            if(!isValidPosition(this.x++,this.y)){
+            if(!isValidPosition(this.x+1,this.y)){
                 return false;
             }else{
                 return true;
             }
         }
         else if(d == Direction.WEST){
-            if(!isValidPosition(this.x--,this.y)){
+            if(!isValidPosition(this.x-1,this.y)){
                 return false;
             }else{
                 return true;
             }
         }
         else if (d == Direction.SOUTH){
-            if(!isValidPosition(this.x, this.y--)){
+            if(!isValidPosition(this.x, this.y-1)){
                 return false;
             }else{
                 return true;
@@ -137,8 +138,7 @@ public class GameMap implements IGameMap {
 
 
     public boolean isValidPosition(int x, int y) {
-        if(x>tiles.getWidth() || y>tiles.getHeight() || x<0 || y<0 ||
-                tiles.get(x,y) == MapTile.WALL){
+        if(x>tiles.getWidth() || y>tiles.getHeight() || x<0 || y<0 || tiles.get(x,y) == MapTile.WALL){
             return false;
         }
         return true;
