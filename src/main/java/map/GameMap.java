@@ -103,28 +103,28 @@ public class GameMap implements IGameMap {
 
     public boolean playerCanGo(Direction d){
         if(d == Direction.NORTH){
-            if(!isValidPosition(this.x,this.y++)){
+            if(!isValidPosition(this.x,this.y+1)){
                 return false;
             } else{
                 return true;
             }
         }
         else if(d == Direction.EAST){
-            if(!isValidPosition(this.x++,this.y)){
+            if(!isValidPosition(this.x+1,this.y)){
                 return false;
             }else{
                 return true;
             }
         }
         else if(d == Direction.WEST){
-            if(!isValidPosition(this.x--,this.y)){
+            if(!isValidPosition(this.x-1,this.y)){
                 return false;
             }else{
                 return true;
             }
         }
         else if (d == Direction.SOUTH){
-            if(!isValidPosition(this.x, this.y--)){
+            if(!isValidPosition(this.x, this.y-1)){
                 return false;
             }else{
                 return true;
