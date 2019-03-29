@@ -231,7 +231,7 @@ public class Robot {
             System.out.println("You made it to backup number " + this.flagsPassed);
         }
         if (gameMap.isLaser(this.getPosX(),this.getPosY())){
-            //this.takeDamage();
+            this.takeDamage();
         }
         if(gameMap.isHole(this.getPosX(), this.getPosY())){
             System.out.println("You fell into a hole!");
@@ -247,6 +247,8 @@ public class Robot {
         this.lives -= 1; // loose an option card of the players choice
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
+            System.out.println("You lost the game");
+            System.exit(0);
         }
         else {
             System.out.println("you died");
