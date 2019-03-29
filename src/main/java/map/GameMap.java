@@ -35,43 +35,67 @@ public class GameMap implements IGameMap {
         }
     }
 
+    public Boolean isCheckpoint(int x, int y, int flagspassed) {
+        if (tiles.get(x, y) == MapTile.CHECKPOINT1 && flagspassed == 0) {
+            return true;
+        }
+        else if(tiles.get(x, y) == MapTile.CHECKPOINT2 && flagspassed == 1) {
+            return true;
+        }
+        else if(tiles.get(x, y) == MapTile.CHECKPOINT3 && flagspassed == 2) {
+            return true;
+        }
+        else if (tiles.get(x, y) == MapTile.CHECKPOINT4 && flagspassed == 3) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public Boolean isLaser(int x, int y){
+        if(tiles.get(x,y) == MapTile.LASER){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public MapTile getCell(int x, int y) {
         if(x < 0 || x >= tiles.getWidth())
             throw new IndexOutOfBoundsException();
         if(y < 0 || y >= tiles.getHeight())
             throw new IndexOutOfBoundsException();
         return tiles.get(x,y);
-
     }
 
-
+    public void setCell(int x, int y, MapTile maptile){
+        if(x < 0 || x >= tiles.getWidth())
+            throw new IndexOutOfBoundsException();
+        if(y < 0 || y >= tiles.getHeight())
+            throw new IndexOutOfBoundsException();
+        tiles.set(x, y, maptile);
+    }
 
     public int getHeight() {
         return tiles.getHeight();
     }
-
-
 
     @Override
     public int getPlayerGold() {
         return 0;
     }
 
-
-
     @Override
     public int getPlayerHitPoints() {
         return 0;
     }
 
-
-
     @Override
     public int getWidth() {
         return tiles.getWidth();
     }
-
-
 
     @Override
     public boolean isPlaying() {
@@ -84,17 +108,20 @@ public class GameMap implements IGameMap {
             throw new MovePlayerException("The new position is illegal");
         }
         else if(dir == Direction.NORTH) {
-            y++;
+            setCell(x, y++, MapTile.OPEN);
+            setCell(x, y, MapTile.PLAYER);
         }
         else if(dir == Direction.WEST) {
-            x--;
+            setCell(x--, y, MapTile.OPEN);
+            setCell(x, y, MapTile.PLAYER);
         }
         else if(dir == Direction.SOUTH) {
-            y--;
-
+            setCell(x, y--, MapTile.OPEN);
+            setCell(x, y, MapTile.PLAYER);
         }
         else if(dir == Direction.EAST) {
-            x++;
+            setCell(x++, y, MapTile.OPEN);
+            setCell(x, y, MapTile.PLAYER);
         }
 
 
@@ -103,28 +130,28 @@ public class GameMap implements IGameMap {
 
     public boolean playerCanGo(Direction d){
         if(d == Direction.NORTH){
-            if(!isValidPosition(this.x,this.y+1)){
+            if(!isValidPosition(this.x,this.y + 1)){
                 return false;
             } else{
                 return true;
             }
         }
         else if(d == Direction.EAST){
-            if(!isValidPosition(this.x+1,this.y)){
+            if(!isValidPosition(this.x + 1,this.y)){
                 return false;
             }else{
                 return true;
             }
         }
         else if(d == Direction.WEST){
-            if(!isValidPosition(this.x-1,this.y)){
+            if(!isValidPosition(this.x - 1,this.y)){
                 return false;
             }else{
                 return true;
             }
         }
         else if (d == Direction.SOUTH){
-            if(!isValidPosition(this.x, this.y-1)){
+            if(!isValidPosition(this.x, this.y - 1)){
                 return false;
             }else{
                 return true;
@@ -137,11 +164,17 @@ public class GameMap implements IGameMap {
 
 
     public boolean isValidPosition(int x, int y) {
-        if(x>tiles.getWidth() || y>tiles.getHeight() || x<0 || y<0 ||
-                tiles.get(x,y) == MapTile.WALL){
+        if(tiles.get(x,y) == MapTile.WALL){
             return false;
         }
         return true;
+    }
+
+    public boolean isOutsideMap(int x , int y){
+        if(x>tiles.getWidth() || y>tiles.getHeight() || x<0 || y<0){
+            return true;
+        }
+        return false;
     }
 
     public int getPosX(){

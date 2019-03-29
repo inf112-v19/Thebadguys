@@ -8,14 +8,14 @@ import java.util.Random;
 // Enum representing card value
 public enum CardValues {
     BACKUP1(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png")), 10, "BACKUP")
-    , MOVE12(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png")), 10, "MOVE1")
-    ,BACKUP(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png")), 10, "BACKUP")
-    , MOVE1(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png")), 10, "MOVE1")
-    , MOVE2(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-2.png")), 10, "MOVE2")
-    , MOVE3(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-3.png")), 10, "MOVE3")
-    , ROTATE90(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 10, "ROTATE90")
-    , ROTATE180(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png")), 10, "ROTATE180")
-    , ROTATEC90(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png")), 10, "ROTATEC90");
+    , MOVE12(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png")), 20, "MOVE1")
+    ,BACKUP(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png")), 30, "BACKUP")
+    , MOVE1(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-1.png")), 40, "MOVE1")
+    , MOVE2(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-2.png")), 50, "MOVE2")
+    , MOVE3(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Move-3.png")), 60, "MOVE3")
+    , ROTATE90(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 70, "ROTATE90")
+    , ROTATE180(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png")), 100, "ROTATE180")
+    , ROTATEC90(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png")), 200, "ROTATEC90");
 
     private final Sprite spr;
     private final int priority;
