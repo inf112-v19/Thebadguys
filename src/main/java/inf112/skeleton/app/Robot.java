@@ -1,17 +1,23 @@
 package inf112.skeleton.app;
 
+
 import Grid.Direction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import map.GameMap;
+import map.IGameMap;
+
+
 import java.util.regex.*;
 
 public class Robot {
+    private CardHandler cardHandler;
     private Sprite sprite;
-    private int posX = 1;
-    private int posY = 1;
+    private int posX = 0;
+    private int posY = 0;
     private int[] checkpoint = {posX, posY};
     private int flagsPassed = 0;
     private int lives = 3;
@@ -20,13 +26,15 @@ public class Robot {
     private float w = Gdx.graphics.getWidth() * 6;
     private float h = Gdx.graphics.getHeight() * 6;
     private TiledMap tiledMap = RoboRallyDemo.getTiledMap();
+    private GameMap gameMap = RoboRallyDemo.getIGameMap();
     private MapProperties prop = tiledMap.getProperties();
     private int mapWidth = prop.get("width", Integer.class);
     private int mapHeight = prop.get("height", Integer.class);
     private int tilePixelWidth = prop.get("tilewidth", Integer.class);
     private int tilePixelHeight = prop.get("tileheight", Integer.class);
-    private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10;
+    private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
     private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
+
     public Robot(Sprite sprite){
         this.sprite = sprite;
     }
@@ -88,8 +96,9 @@ public class Robot {
 
     // a bunch of set functions
 
-    public void setCheckpoint(int[] checkpoint){
-        this.checkpoint = checkpoint;
+    public void setCheckpoint(int x, int y){
+        this.checkpoint[0] = x;
+        this.checkpoint[1] = y;
     }
 
     public void setFlagsPassed(int flagsPassed){
@@ -117,7 +126,7 @@ public class Robot {
         else if (this.getDirection() == Direction.SOUTH){
             this.dir = Direction.WEST;
         }
-        this.sprite.rotate(90);
+        this.sprite.rotate(-90);
     }
 
     public void rotate_left() {
@@ -133,7 +142,7 @@ public class Robot {
         else if (this.getDirection() == Direction.EAST){
             this.dir = Direction.NORTH;
         }
-        this.sprite.rotate(-90);
+        this.sprite.rotate(90);
     }
 
     public void moveForward(int amount){
@@ -174,11 +183,14 @@ public class Robot {
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
                 this.moveForward(1); // added twice so we can incrementally check for collisions
+                this.isOnMap();
                 this.moveForward(1); // along the robots move-path
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
                 this.moveForward(1);
+                this.isOnMap();
                 this.moveForward(1);
+                this.isOnMap();
                 this.moveForward(1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
@@ -194,50 +206,16 @@ public class Robot {
             default:
                 System.out.println("Something went wrong");
         }
-        // need check if robot is on map, and check for hazard, should integrate with grid
-    }
-    /*
-    //future move method with regex to allow cards with priority
-    public void move(Cards card){ // gets the command from a card and figures out which command to execute
-        String command = card.getCardSprite().getTexture().toString();
-        String path = "Models/Movement Cards/";
-        Pattern backup = Pattern.compile(path + "card backwards - [0-9][0-9][0-9].png");
-        Pattern move1 = Pattern.compile(path + "card template forward 1 - [0-9][0-9][0-9].png");
-        Pattern move2 = Pattern.compile(path + "card template forward 2 - [0-9][0-9][0-9].png");
-        Pattern move3 = Pattern.compile(path + "card template forward 3 - [0-9][0-9][0-9].png");
-        Pattern rotater = Pattern.compile(path + "card template right - [0-9][0-9][0-9].png");
-        Pattern rotatel = Pattern.compile(path + "card template left - [0-9][0-9][0-9].png");
-        Pattern rotateu = Pattern.compile(path + "card template u-turn - [0-9][0-9][0-9].png");
-            if(backup.matcher(command).matches()) {
-                this.moveForward(-1);
-                }
-            else if (move1.matcher(command).matches()) {
-                this.moveForward(1);
-                }
-            else if (move2.matcher(command).matches()) {
-                this.moveForward(1); // added twice so we can incrementally check for collisions
-                this.moveForward(1); // along the robots move-path
-            }
-            else if (move3.matcher(command).matches()) {
-                this.moveForward(1);
-                this.moveForward(1);
-                this.moveForward(1);
-            }
-            else if (rotater.matcher(command).matches()) {
-                this.rotate_right();
-            }
-            else if (rotateu.matcher(command).matches()) {
-                this.rotate_right();
-                this.rotate_right();
-            }
-            else if (rotatel.matcher(command).matches()) {
-                this.rotate_left();
-            }
-            else{
-                System.out.println("Something went wrong");
+        if (gameMap.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
+            this.flagsPassed += 1;
+            this.setCheckpoint(this.getPosX(), this.getPosY());
+            System.out.println("You made it to backup number " + this.flagsPassed);
         }
-        // need check if robot is on map, and check for hazard, should integrate with grid
-    } */
+        if (gameMap.isLaser(this.getPosX(),this.getPosY())){
+            //this.takeDamage();
+        }
+        this.isOnMap();
+    }
 
     public void move(String command){ // added for use with conveyor belts etc
         switch (command){
@@ -269,7 +247,26 @@ public class Robot {
             default:
                 System.out.println("Something went wrong");
             }
+        if (gameMap.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
+            this.flagsPassed += 1;
+            this.setCheckpoint(this.getPosX(), this.getPosY());
+            System.out.println("You made it to backup number " + this.flagsPassed);
         }
+        if (gameMap.isLaser(this.getPosX(),this.getPosY())){
+            this.takeDamage();
+        }
+        this.isOnMap();
+
+        }
+
+    public void isOnMap() {
+        if(this.getPosX() >= 0 && this.getPosX() <= 11 && this.getPosY() >= 0  && this.getPosY() <= 11) {
+            System.out.println("You are on the map");
+        }
+        else {
+            this.died();
+        }
+    }
 
     public void died() {
         this.lives -= 1; // loose an option card of the players choice
@@ -300,25 +297,6 @@ public class Robot {
 
     public void takeDamage() {
         this.damage += 1;
-        switch(this.damage) {
-            case 5:
-                //lock slot 5
-                break;
-            case 6:
-                //lock slot 4
-                break;
-            case 7:
-                //lock slot 3
-                break;
-            case 8:
-                //lock slot 2
-                break;
-            case 9:
-                //lock slot 1
-                break;
-            case 10:
-                this.died();
-                break;
-        }
+        cardHandler.lockDown();
     }
 }

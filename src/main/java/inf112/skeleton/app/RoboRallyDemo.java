@@ -22,7 +22,6 @@ import map.IGameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import javax.smartcardio.Card;
 import java.util.ArrayList;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
@@ -34,8 +33,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Robot robot;
     private FitViewport viewPort;
 
-    private int cardSlotLock=5;
     private CardHandler cardHandler;
+
+
 
     private SpriteBatch batch;
     private Texture texture;
@@ -44,7 +44,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private TiledMapTileSet mapSet;
     private BitmapFont font;
 
-    private IGameMap map;
+    private static GameMap map;
     private IGrid grid;
 
     //create the initial state of the game
@@ -55,29 +55,37 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         batch = new SpriteBatch();
 
         //set the camera
-        setCamera(w,h);
+        setCamera(w, h);
         //creation of the map
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         createGrid();
-
-        //creation of the robot
         texture = new Texture(Gdx.files.internal("Models/tank.png"));
         sprite = new Sprite(texture);
+
+        map = new GameMap(grid);
         posX = 0;
         posY = 0;
         int[] startpos = {Math.round(posX), Math.round(posY)};
         robot = new Robot(sprite, startpos, 0);
-        sprite.setPosition(robot.getX1(),robot.getY1());
 
+        grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
+
+        //creation of the robot
+
+
+        sprite.setPosition(robot.getX1(), robot.getY1());
+
+        //create the card that Is clicked
+        Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardHandler = new CardHandler(batch, robot, map);
 
         //loads map with elements and robot
-        grid.set(robot.getPosX(),robot.getPosY(), MapTile.PLAYER);
-        map = new GameMap(grid);
+
+
 
         //create the end turn button
-        buttonCreation(700,500);
+        buttonCreation(700, 500);
 
         font = new BitmapFont();
 
@@ -103,7 +111,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     @Override
     public void render() {
         //Gray background color
-        Gdx.gl.glClearColor (128/255f, 128/255f, 128/255f,1);
+        Gdx.gl.glClearColor(128 / 255f, 128 / 255f, 128 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
@@ -115,23 +123,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
 
         //check how mutch damage a robot has taken
+
+          //check how mutch damage a robot has taken
         //rotation of sprite, rotate 90 degrees every 100th gametick
         if (i % 100 == 0) {
             for (int i = 0; i < selectedCards.length; i++) {
                 System.out.println(selectedCards[i]);
             }
-            /*
-            for(int i=0; i<map.getWidth(); i++){
-               for(int j=0; i<map.getHeight(); j++){
-                   if(map.getCell(i,j)==MapTile.PLAYER){
-                       System.out.println(i + " " + j);
-                   }
-               }
-            }*/
             System.out.println("\n");
         }
-        doTurn();
 
+        doTurn();
         //draw the cardslots
         cardHandler.drawCardSlots();
 
@@ -164,17 +166,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         float moveAmount = 75.0f;
-        if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
+        if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
             moveAmount = 150.0f;
 
-        if(keycode == Keys.LEFT)
-            posX-=moveAmount;
-        if(keycode == Keys.RIGHT)
-            posX+=moveAmount;
-        if(keycode == Keys.UP)
-            posY+=moveAmount;
-        if(keycode == Keys.DOWN)
-            posY-=moveAmount;
+        if (keycode == Keys.LEFT)
+            posX -= moveAmount;
+        if (keycode == Keys.RIGHT)
+            posX += moveAmount;
+        if (keycode == Keys.UP)
+            posY += moveAmount;
+        if (keycode == Keys.DOWN)
+            posY -= moveAmount;
         return true;
     }
 
@@ -221,65 +223,73 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
-
-    private void createGrid(){
-        grid = new MyGrid(12,12, MapTile.OPEN);
+    private void createGrid() {
+        grid = new MyGrid(12, 12, MapTile.OPEN);
         //sets conveyerbelt element on map
-        grid.set(0,6, MapTile.CONVEYERBELT);
-        grid.set(0,7,MapTile.CONVEYERBELT);
-        grid.set(0,8,MapTile.CONVEYERBELT);
-        grid.set(0,9,MapTile.CONVEYERBELT);
-        grid.set(1,6,MapTile.CONVEYERBELT);
-        grid.set(2,6,MapTile.CONVEYERBELT);
-        grid.set(2,7,MapTile.CONVEYERBELT);
-        grid.set(2,8,MapTile.CONVEYERBELT);
-        grid.set(2,9,MapTile.CONVEYERBELT);
-        grid.set(1,9,MapTile.CONVEYERBELT);
+        grid.set(0, 6, MapTile.CONVEYERBELT);
+        grid.set(0, 7, MapTile.CONVEYERBELT);
+        grid.set(0, 8, MapTile.CONVEYERBELT);
+        grid.set(0, 9, MapTile.CONVEYERBELT);
+        grid.set(1, 6, MapTile.CONVEYERBELT);
+        grid.set(2, 6, MapTile.CONVEYERBELT);
+        grid.set(2, 7, MapTile.CONVEYERBELT);
+        grid.set(2, 8, MapTile.CONVEYERBELT);
+        grid.set(2, 9, MapTile.CONVEYERBELT);
+        grid.set(1, 9, MapTile.CONVEYERBELT);
 
         //setting repairsite elements on map
-        grid.set(1,2,MapTile.REPAIRSITE);
-        grid.set(6,6,MapTile.REPAIRSITE);
+        grid.set(1, 2, MapTile.REPAIRSITE);
+        grid.set(6, 6, MapTile.REPAIRSITE);
         //setting lasers on elements on map
-        grid.set(2,0,MapTile.LASER);
-        grid.set(2,1,MapTile.LASER);
-        grid.set(2,2,MapTile.LASER);
-        grid.set(2,3,MapTile.LASER);
-        grid.set(2,4,MapTile.LASER);
+        grid.set(2, 0, MapTile.LASER);
+        grid.set(2, 1, MapTile.LASER);
+        grid.set(2, 2, MapTile.LASER);
+        grid.set(2, 3, MapTile.LASER);
+        grid.set(2, 4, MapTile.LASER);
+
+        grid.set(1, 1, MapTile.CHECKPOINT1);
+        grid.set(1, 8, MapTile.CHECKPOINT2);
+        grid.set(7, 7, MapTile.CHECKPOINT3);
+        grid.set(10, 3, MapTile.CHECKPOINT4);
     }
 
     public static TiledMap getTiledMap() {
         return tiledMap;
     }
 
-    public void setCamera(float w, float h){
+    public static GameMap getIGameMap() {
+        return map;
+    }
+
+    public void setCamera(float w, float h) {
         //camera that is for scaling viewpoint
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w*6   ,h*6);
-        camera.translate(-400,-2700);
-        viewPort= new FitViewport(w*6, h*6);
+        camera.setToOrtho(false, w * 6, h * 6);
+        camera.translate(-400, -2700);
+        viewPort = new FitViewport(w * 6, h * 6);
     }
 
-    public void buttonCreation(float x, float y){
+    public void buttonCreation(float x, float y) {
         Texture buttonTexture = new Texture(Gdx.files.internal("Models/Button.png"));
         Sprite buttonSprite = new Sprite(buttonTexture);
-        buttonSprite.setPosition(x,y);
-        CardButton = new Cards(x, y, "", 0 , buttonSprite);
+        buttonSprite.setPosition(x, y);
+        CardButton = new Cards(x, y, "", 0, buttonSprite);
     }
 
-    public void doTurn(){
+    public void doTurn () {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
-            for (int i = 0; i<selectedCards.length; i++) {
+            for (int i = 0; i < selectedCards.length; i++) {
                 robot.move(selectedCards[i]);
                 map.move(selectedCards[i]);
                 robot.getSprite().draw(batch);
                 if (i == selectedCards.length - 1) {
-                    if(!cardHandler.getNotFirst()){
-                        for(int h=0; h<8; h++){
-                            //cardHandler.lockDown();
+                    if (!cardHandler.getNotFirst()) {
+                        for (int h = 0; h < 8; h++) {
+                            cardHandler.lockDown();
                         }
                     }
-                    for(int v=0; v<cardHandler.getSpritePos().size(); v++){
+                    for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
                         cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
                     }
                     cardHandler.setNotFirst(true);

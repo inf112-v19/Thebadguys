@@ -16,6 +16,12 @@ public class CardSlots implements ICardSlot{
         cardSlotSprite1.setPosition(posX, posY);
     }
 
+    //Constructor necessary for testing.
+    public CardSlots( float posX, float posY, int i){
+        this.posX=posX;
+        this.posY=posY;
+    }
+
     public Sprite getCardSlotSprite(){ return cardSlotSprite1;}
 
     public Float getPosX(){

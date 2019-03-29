@@ -34,8 +34,6 @@ public class CardHandler {
     private int cardDelt=9;
     private int cardSlotLock=5;;
 
-    private int locked[];
-
     public CardHandler(SpriteBatch batch, Robot robot, IGameMap map){
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
@@ -43,7 +41,6 @@ public class CardHandler {
         randomSpriteList=new ArrayList<>();
         Deck = new Deck();
         selectedCards = new Cards[5];
-        locked = new int[5];
         this.batch=batch;
         this.robot=robot;
         this.map=map;
@@ -247,7 +244,29 @@ public class CardHandler {
     public int getCardSlotLock(){
         return cardSlotLock;
     }
-    
+
+    /*
+    public void doTurn(){
+        if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && isDone) {
+            for (int i = 0; i < selectedCards.length; i++) {
+                robot.move(selectedCards[i]);
+                map.move(selectedCards[i]);
+                // lockDown(4);
+                if (i == selectedCards.length - 1) {
+                    for(int v=0; v<spritePos.size(); v++){
+                        spritePos.get(v).setPosition(10000, 10000);
+                    }
+                    isDone = false;
+                    notFirst=true;
+                    setCardSprites();
+                    nullyFy();
+
+                }
+            }
+            System.out.println("\n");
+        }
+    }*/
+
     public Cards[] getSelectedCards(){
         return selectedCards;
     }
@@ -270,10 +289,6 @@ public class CardHandler {
 
     public boolean getisDone(){
         return isDone;
-    }
-
-    public void cardSlotLocked(){
-
     }
 }
 
