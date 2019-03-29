@@ -287,10 +287,23 @@ public class GameMap implements IGameMap {
         // need check if robot is on map, and check for hazard, should integrate with grid
     }
 
-
-
-
-
+    public boolean isConveyer(int x, int y) {
+        if (tiles.get(x, y) == MapTile.CONVEYERBELTNORTH) {
+            return true;
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTSOUTH){
+            return true;
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTEAST){
+            return true;
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTWEST){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
 }
 

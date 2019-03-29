@@ -226,26 +226,56 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private void createGrid() {
         grid = new MyGrid(12, 12, MapTile.OPEN);
         //sets conveyerbelt element on map
-        grid.set(0, 6, MapTile.CONVEYERBELT);
-        grid.set(0, 7, MapTile.CONVEYERBELT);
-        grid.set(0, 8, MapTile.CONVEYERBELT);
-        grid.set(0, 9, MapTile.CONVEYERBELT);
-        grid.set(1, 6, MapTile.CONVEYERBELT);
-        grid.set(2, 6, MapTile.CONVEYERBELT);
-        grid.set(2, 7, MapTile.CONVEYERBELT);
-        grid.set(2, 8, MapTile.CONVEYERBELT);
-        grid.set(2, 9, MapTile.CONVEYERBELT);
-        grid.set(1, 9, MapTile.CONVEYERBELT);
+        grid.set(6, 11, MapTile.CONVEYERBELTEAST);
+        grid.set(7, 11, MapTile.CONVEYERBELTEAST);
+        grid.set(8, 11, MapTile.CONVEYERBELTEAST);
+        grid.set(9, 11, MapTile.CONVEYERBELTSOUTH);
+        grid.set(9, 10, MapTile.CONVEYERBELTSOUTH);
+        grid.set(9, 9, MapTile.CONVEYERBELTWEST);
+        grid.set(8, 9, MapTile.CONVEYERBELTWEST);
+        grid.set(7, 9, MapTile.CONVEYERBELTWEST);
+        grid.set(6, 9, MapTile.CONVEYERBELTNORTH);
+        grid.set(6, 10, MapTile.CONVEYERBELTNORTH);
+
+        grid.set(2, 5, MapTile.CONVEYERBELTEAST);
+        grid.set(3, 5, MapTile.CONVEYERBELTEAST);
+        grid.set(4, 5, MapTile.CONVEYERBELTNORTH);
+
+        grid.set(4, 6, MapTile.CONVEYERBELTNORTH);
+        grid.set(4, 7, MapTile.CONVEYERBELTWEST);
+        grid.set(3, 7, MapTile.CONVEYERBELTSOUTH);
+        grid.set(3, 6, MapTile.CONVEYERBELTEAST);
 
         //setting repairsite elements on map
-        grid.set(1, 2, MapTile.REPAIRSITE);
-        grid.set(6, 6, MapTile.REPAIRSITE);
+        grid.set(11, 0, MapTile.REPAIRSITE);
+        grid.set(2, 10, MapTile.REPAIRSITE);
         //setting lasers on elements on map
-        grid.set(2, 0, MapTile.LASER);
-        grid.set(2, 1, MapTile.LASER);
-        grid.set(2, 2, MapTile.LASER);
-        grid.set(2, 3, MapTile.LASER);
-        grid.set(2, 4, MapTile.LASER);
+        grid.set(3, 0, MapTile.LASER);
+        grid.set(3, 1, MapTile.LASER);
+        grid.set(3, 2, MapTile.LASER);
+        grid.set(3, 3, MapTile.LASER);
+        grid.set(3, 4, MapTile.LASER);
+
+        grid.set(9,0, MapTile.LASER);
+        grid.set(9,1, MapTile.LASER);
+        grid.set(9,2, MapTile.LASER);
+
+        grid.set(10,5,MapTile.LASER);
+        grid.set(10,6,MapTile.LASER);
+        grid.set(10,7,MapTile.LASER);
+        grid.set(10,8,MapTile.LASER);
+
+        grid.set(7,5,MapTile.LASER);
+        grid.set(10,6,MapTile.LASER);
+        grid.set(10,7,MapTile.LASER);
+
+        grid.set(0,9,MapTile.LASER);
+        grid.set(1,9,MapTile.LASER);
+        grid.set(2,9,MapTile.LASER);
+        grid.set(3,9,MapTile.LASER);
+        grid.set(4,9,MapTile.LASER);
+
+
 
         grid.set(1, 1, MapTile.CHECKPOINT1);
         grid.set(1, 8, MapTile.CHECKPOINT2);

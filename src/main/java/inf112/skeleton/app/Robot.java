@@ -267,6 +267,8 @@ public class Robot {
         this.lives -= 1; // loose an option card of the players choice
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
+            System.out.println("You lost the game");
+            System.exit(0);
         }
         else { // moves the sprite the appropriate amount in both x and y direction to the robots backup
             if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
@@ -298,7 +300,7 @@ public class Robot {
     public void isOnMap(){
         if(gameMap.isOutsideMap(this.getPosX(),this.getPosY())){
             this.died();
-        }else{
+        }else {
             System.out.println("You are on the map");
         }
     }
