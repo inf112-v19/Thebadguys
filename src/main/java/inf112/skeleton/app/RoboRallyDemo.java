@@ -251,6 +251,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(1, 8, MapTile.CHECKPOINT2);
         grid.set(7, 7, MapTile.CHECKPOINT3);
         grid.set(10, 3, MapTile.CHECKPOINT4);
+
+        grid.set(2,2 ,MapTile.HOLE);
     }
 
     public static TiledMap getTiledMap() {
@@ -286,7 +288,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 if (i == selectedCards.length - 1) {
                     if (!cardHandler.getNotFirst()) {
                         for (int h = 0; h < 8; h++) {
-                            cardHandler.lockDown();
+                           // cardHandler.lockDown();
                         }
                     }
                     for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {

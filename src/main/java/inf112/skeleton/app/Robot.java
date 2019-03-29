@@ -214,51 +214,12 @@ public class Robot {
         if (gameMap.isLaser(this.getPosX(),this.getPosY())){
             //this.takeDamage();
         }
+        if(gameMap.isHole(this.getPosX(), this.getPosY())){
+            System.out.println("you died");
+        }
         this.isOnMap();
     }
-
-    public void move(String command){ // added for use with conveyor belts etc
-        switch (command){
-            case "BackUp":
-                this.moveForward(-1);
-                break;
-            case "Move-1":
-                this.moveForward(1);
-                break;
-            case "Move-2":
-                this.moveForward(1); // added twice so we can incrementally check for collisions
-                this.moveForward(1); // along the robots move-path
-                break;
-            case "Move-3":
-                this.moveForward(1);
-                this.moveForward(1);
-                this.moveForward(1);
-                break;
-            case "Rotate-90":
-                this.rotate_right();
-                break;
-            case "Rotate-180":
-                this.rotate_right();
-                this.rotate_right();
-                break;
-            case "Rotate-C90":
-                this.rotate_left();
-                break;
-            default:
-                System.out.println("Something went wrong");
-            }
-        if (gameMap.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
-            this.flagsPassed += 1;
-            this.setCheckpoint(this.getPosX(), this.getPosY());
-            System.out.println("You made it to backup number " + this.flagsPassed);
-        }
-        if (gameMap.isLaser(this.getPosX(),this.getPosY())){
-            this.takeDamage();
-        }
-        this.isOnMap();
-
-        }
-
+    
     public void isOnMap() {
         if(this.getPosX() >= 0 && this.getPosX() <= 11 && this.getPosY() >= 0  && this.getPosY() <= 11) {
             System.out.println("You are on the map");
