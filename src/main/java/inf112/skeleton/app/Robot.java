@@ -215,11 +215,16 @@ public class Robot {
             //this.takeDamage();
         }
         if(gameMap.isHole(this.getPosX(), this.getPosY())){
-            System.out.println("you died");
+            System.out.println("You fell into a hole!");
+            died();
+        }
+        if(gameMap.isSpinLeft(this.getPosX(), this.getPosY())){
+            System.out.println("SPIN!");
+            this.rotate_left();
         }
         this.isOnMap();
     }
-    
+
     public void isOnMap() {
         if(this.getPosX() >= 0 && this.getPosX() <= 11 && this.getPosY() >= 0  && this.getPosY() <= 11) {
             System.out.println("You are on the map");
@@ -234,7 +239,9 @@ public class Robot {
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
         }
-        else { // moves the sprite the appropriate amount in both x and y direction to the robots backup
+        else {
+            System.out.println("you died");
+            // moves the sprite the appropriate amount in both x and y direction to the robots backup
             if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
                 this.sprite.setPosition(this.sprite.getX() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX())), this.sprite.getY() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY())));
             }

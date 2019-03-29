@@ -5,6 +5,8 @@ import Grid.IGrid;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import inf112.skeleton.app.Cards;
 
+import java.util.Map;
+
 public class GameMap implements IGameMap {
     private IGrid<MapTile> tiles;
     private int x;
@@ -43,6 +45,12 @@ public class GameMap implements IGameMap {
         return false;
     }
 
+    public boolean isSpinLeft(int x, int y){
+        if(tiles.get(x,y) == MapTile.SPINLEFT){
+            return true;
+        }
+        return false;
+    }
     public Boolean isCheckpoint(int x, int y, int flagspassed) {
         if (tiles.get(x, y) == MapTile.CHECKPOINT1 && flagspassed == 0) {
             return true;

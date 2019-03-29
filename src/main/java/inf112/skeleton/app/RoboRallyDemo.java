@@ -247,6 +247,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(2, 3, MapTile.LASER);
         grid.set(2, 4, MapTile.LASER);
 
+        grid.set(1,3, MapTile.SPINLEFT);
+
         grid.set(1, 1, MapTile.CHECKPOINT1);
         grid.set(1, 8, MapTile.CHECKPOINT2);
         grid.set(7, 7, MapTile.CHECKPOINT3);
