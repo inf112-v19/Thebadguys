@@ -212,7 +212,7 @@ public class Robot {
             System.out.println("You made it to backup number " + this.flagsPassed);
         }
         if (gameMap.isLaser(this.getPosX(),this.getPosY())){
-            //this.takeDamage();
+            this.takeDamage();
         }
         this.isOnMap();
     }
@@ -297,6 +297,8 @@ public class Robot {
 
     public void takeDamage() {
         this.damage += 1;
+        cardHandler = RoboRallyDemo.getCardHandler();
         cardHandler.lockDown();
+        System.out.println(this.damage);
     }
 }

@@ -33,7 +33,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Robot robot;
     private FitViewport viewPort;
 
-    private CardHandler cardHandler;
+    private static CardHandler cardHandler;
 
 
 
@@ -241,11 +241,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(1, 2, MapTile.REPAIRSITE);
         grid.set(6, 6, MapTile.REPAIRSITE);
         //setting lasers on elements on map
-        grid.set(2, 0, MapTile.LASER);
-        grid.set(2, 1, MapTile.LASER);
-        grid.set(2, 2, MapTile.LASER);
-        grid.set(2, 3, MapTile.LASER);
-        grid.set(2, 4, MapTile.LASER);
+        grid.set(3, 0, MapTile.LASER);
+        grid.set(3, 1, MapTile.LASER);
+        grid.set(3, 2, MapTile.LASER);
+        grid.set(3, 3, MapTile.LASER);
+        grid.set(3, 4, MapTile.LASER);
 
         grid.set(1, 1, MapTile.CHECKPOINT1);
         grid.set(1, 8, MapTile.CHECKPOINT2);
@@ -282,7 +282,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             for (int i = 0; i < selectedCards.length; i++) {
                 robot.move(selectedCards[i]);
                 map.move(selectedCards[i]);
-                robot.getSprite().draw(batch);
+                //robot.getSprite().draw(batch);
                 if (i == selectedCards.length - 1) {
                     if (!cardHandler.getNotFirst()) {
                         for (int h = 0; h < 8; h++) {
@@ -301,4 +301,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             System.out.println("\n");
         }
     }
+
+    public static CardHandler getCardHandler(){
+        System.out.println(cardHandler);
+        return cardHandler;}
 }
