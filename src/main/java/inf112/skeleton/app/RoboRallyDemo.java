@@ -67,7 +67,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         posX = 0;
         posY = 0;
         int[] startpos = {Math.round(posX), Math.round(posY)};
-        robot = new Robot(sprite, startpos, 0);
+        robot = new Robot(sprite, startpos);
 
         grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
 
@@ -286,7 +286,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         grid.set(1, 1, MapTile.CHECKPOINT1);
         grid.set(1, 8, MapTile.CHECKPOINT2);
-        grid.set(7, 7, MapTile.CHECKPOINT3);
+        grid.set(6, 7, MapTile.CHECKPOINT3);
         grid.set(10, 3, MapTile.CHECKPOINT4);
 
         grid.set(2,2 ,MapTile.HOLE);

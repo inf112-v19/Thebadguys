@@ -36,11 +36,11 @@ public class Robot {
         this.sprite = sprite;
     }
 
-    public Robot(Sprite sprite, int[] checkpoint, int flagsPassed){
+    public Robot(Sprite sprite, int[] checkpoint){
         this.sprite=sprite;
-        this.checkpoint[0]=posX;
-        this.checkpoint[1]=posY;
-        this.flagsPassed = flagsPassed;
+        this.checkpoint = checkpoint;
+        this.posX = checkpoint[0];
+        this.posY = checkpoint[1];
     }
 
     public int getPosX(){
@@ -108,6 +108,14 @@ public class Robot {
 
     public void setPosY(int newY) {
         this.posY = newY;
+    }
+
+    public void setDamage(int newDamage) {
+        this.damage = newDamage;
+    }
+
+    public void setLives(int newLives) {
+        this.lives = newLives;
     }
 
     public void rotate_right() {
@@ -275,10 +283,16 @@ public class Robot {
     }
 
     public void takeDamage() {
-        this.damage += 1;
-        cardHandler = RoboRallyDemo.getCardHandler();
-        cardHandler.lockDown();
-        System.out.println(this.damage);
+        if (this.damage < 10) {
+            this.damage += 1;
+            cardHandler = RoboRallyDemo.getCardHandler();
+            cardHandler.lockDown();
+            System.out.println(this.damage);
+        }
+        else {
+            this.damage = 0;
+            this.died();
+        }
     }
 
     public Boolean checkNext() {
