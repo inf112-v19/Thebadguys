@@ -35,6 +35,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     private CardHandler cardHandler;
 
+    private int tick = 0;
+    private int turn = 0;
 
 
     private SpriteBatch batch;
@@ -83,7 +85,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //loads map with elements and robot
 
 
-
         //create the end turn button
         buttonCreation(700, 500);
 
@@ -124,7 +125,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         //check how mutch damage a robot has taken
 
-          //check how mutch damage a robot has taken
+        //check how mutch damage a robot has taken
         //rotation of sprite, rotate 90 degrees every 100th gametick
         if (i % 100 == 0) {
             for (int i = 0; i < selectedCards.length; i++) {
@@ -144,6 +145,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         cardHandler.drawCards();
 
         i++;
+        tick++;
         batch.end();
     }
 
@@ -223,6 +225,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
+
     private void createGrid() {
         grid = new MyGrid(12, 12, MapTile.OPEN);
         //sets conveyerbelt element on map
@@ -247,14 +250,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(2, 3, MapTile.LASER);
         grid.set(2, 4, MapTile.LASER);
 
-        grid.set(1,3, MapTile.SPINLEFT);
+        grid.set(1, 3, MapTile.SPINLEFT);
 
         grid.set(1, 1, MapTile.CHECKPOINT1);
         grid.set(1, 8, MapTile.CHECKPOINT2);
         grid.set(7, 7, MapTile.CHECKPOINT3);
         grid.set(10, 3, MapTile.CHECKPOINT4);
 
-        grid.set(2,2 ,MapTile.HOLE);
+        grid.set(2, 2, MapTile.HOLE);
     }
 
     public static TiledMap getTiledMap() {
@@ -280,17 +283,22 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         CardButton = new Cards(x, y, "", 0, buttonSprite);
     }
 
-    public void doTurn () {
+    public void doTurn() {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
-            for (int i = 0; i < selectedCards.length; i++) {
-                robot.move(selectedCards[i]);
-                map.move(selectedCards[i]);
+
+            if (tick % 40 == 0) {
+                System.out.println(tick);
+                robot.move(selectedCards[turn]);
+                map.move(selectedCards[turn]);
                 robot.getSprite().draw(batch);
-                if (i == selectedCards.length - 1) {
-                    if (!cardHandler.getNotFirst()) {
-                        for (int h = 0; h < 8; h++) {
-                           // cardHandler.lockDown();
+                turn++;
+
+            }
+            if (turn == 4) {
+                if (!cardHandler.getNotFirst()) {
+                    for (int h = 0; h < 5; h++) {
+                            //cardHandler.lockDown();
                         }
                     }
                     for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
@@ -300,9 +308,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     cardHandler.nullyFy();
                     cardHandler.setisDone(false);
                     cardHandler.setCardSprites();
+                    turn = 0;
                 }
             }
             System.out.println("\n");
         }
     }
-}
