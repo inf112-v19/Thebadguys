@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
-import map.IGameMap;
 
-
-import java.util.regex.*;
 
 public class Robot {
     private CardHandler cardHandler;
@@ -39,11 +36,11 @@ public class Robot {
         this.sprite = sprite;
     }
 
-    public Robot(Sprite sprite, int[] checkpoint, int flagsPassed){
+    public Robot(Sprite sprite, int[] checkpoint){
         this.sprite=sprite;
-        this.checkpoint[0]=posX;
-        this.checkpoint[1]=posY;
-        this.flagsPassed = flagsPassed;
+        this.checkpoint = checkpoint;
+        this.posX = checkpoint[0];
+        this.posY = checkpoint[1];
     }
 
     public int getPosX(){
@@ -113,6 +110,14 @@ public class Robot {
         this.posY = newY;
     }
 
+    public void setDamage(int newDamage) {
+        this.damage = newDamage;
+    }
+
+    public void setLives(int newLives) {
+        this.lives = newLives;
+    }
+
     public void rotate_right() {
         if(this.getDirection() == Direction.WEST){
             this.dir = Direction.NORTH;
@@ -148,23 +153,19 @@ public class Robot {
     public void moveForward(int amount){
         Direction current_direction = this.getDirection();
         if (current_direction == Direction.NORTH) {
-            int newY = this.getPosY() + amount;
-            this.setPosY(newY);
+            this.setPosY(this.getPosY() + amount);
             this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + (amount * (this.tilePixelWidth / 6))); // temp moving sprite
         }
         else if (current_direction == Direction.EAST) {
-            int newX = this.getPosX() + amount;
-            this.setPosX(newX);
+            this.setPosX(this.getPosX() + amount);
             this.sprite.setPosition(this.sprite.getX() + (amount * (this.tilePixelWidth / 6)), this.sprite.getY());
         }
         else if (current_direction == Direction.SOUTH) {
-            int newY = this.getPosY() - amount;
-            this.setPosY(newY);
+            this.setPosY(this.getPosY() - amount);
             this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - (amount * (this.tilePixelWidth / 6)));
         }
         else if (current_direction == Direction.WEST) {
-            int newX = this.getPosX() - amount;
-            this.setPosX(newX);
+            this.setPosX(this.getPosX() - amount);
             this.sprite.setPosition(this.sprite.getX() - (amount * (this.tilePixelWidth / 6)), this.sprite.getY());
         }
         else {
@@ -176,22 +177,48 @@ public class Robot {
         String command = card.getCardSprite().getTexture().toString();
         switch (command){
             case "Models/AlleBevegelseKortUtenPrioritet/BackUp.png":
-                this.moveForward(-1);
+                for (int i = 0; i < 1; i++){
+                    if (checkNext()) {
+                        this.moveForward(-1);
+                    }
+                    else {
+                        this.died();
+                        break;
+                    }
+                }
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-1.png":
-                this.moveForward(1);
+                for (int i = 0; i < 1; i++){
+                    if (checkNext()) {
+                        this.moveForward(1);
+                    }
+                    else {
+                        this.died();
+                        break;
+                    }
+                }
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
-                this.moveForward(1); // added twice so we can incrementally check for collisions
-                this.isOnMap();
-                this.moveForward(1); // along the robots move-path
+                for (int i = 0; i < 2; i++){
+                    if (checkNext()) {
+                        this.moveForward(1);
+                    }
+                    else {
+                        this.died();
+                        break;
+                    }
+                }
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
-                this.moveForward(1);
-                this.isOnMap();
-                this.moveForward(1);
-                this.isOnMap();
-                this.moveForward(1);
+                for (int i = 0; i < 3; i++){
+                    if (checkNext()) {
+                        this.moveForward(1);
+                    }
+                    else {
+                        this.died();
+                        break;
+                    }
+                }
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
                 this.rotate_right();
@@ -212,59 +239,15 @@ public class Robot {
             System.out.println("You made it to backup number " + this.flagsPassed);
         }
         if (gameMap.isLaser(this.getPosX(),this.getPosY())){
-            //this.takeDamage();
-        }
-        this.isOnMap();
-    }
-
-    public void move(String command){ // added for use with conveyor belts etc
-        switch (command){
-            case "BackUp":
-                this.moveForward(-1);
-                break;
-            case "Move-1":
-                this.moveForward(1);
-                break;
-            case "Move-2":
-                this.moveForward(1); // added twice so we can incrementally check for collisions
-                this.moveForward(1); // along the robots move-path
-                break;
-            case "Move-3":
-                this.moveForward(1);
-                this.moveForward(1);
-                this.moveForward(1);
-                break;
-            case "Rotate-90":
-                this.rotate_right();
-                break;
-            case "Rotate-180":
-                this.rotate_right();
-                this.rotate_right();
-                break;
-            case "Rotate-C90":
-                this.rotate_left();
-                break;
-            default:
-                System.out.println("Something went wrong");
-            }
-        if (gameMap.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
-            this.flagsPassed += 1;
-            this.setCheckpoint(this.getPosX(), this.getPosY());
-            System.out.println("You made it to backup number " + this.flagsPassed);
-        }
-        if (gameMap.isLaser(this.getPosX(),this.getPosY())){
             this.takeDamage();
         }
-        this.isOnMap();
-
+        if(gameMap.isHole(this.getPosX(), this.getPosY())){
+            System.out.println("You fell into a hole!");
+            died();
         }
-
-    public void isOnMap() {
-        if(this.getPosX() >= 0 && this.getPosX() <= 11 && this.getPosY() >= 0  && this.getPosY() <= 11) {
-            System.out.println("You are on the map");
-        }
-        else {
-            this.died();
+        if(gameMap.isSpinLeft(this.getPosX(), this.getPosY())){
+            System.out.println("SPIN!");
+            this.rotate_left();
         }
     }
 
@@ -272,8 +255,12 @@ public class Robot {
         this.lives -= 1; // loose an option card of the players choice
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
+            System.out.println("You lost the game");
+            System.exit(0);
         }
-        else { // moves the sprite the appropriate amount in both x and y direction to the robots backup
+        else {
+            System.out.println("you died");
+            // moves the sprite the appropriate amount in both x and y direction to the robots backup
             if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
                 this.sprite.setPosition(this.sprite.getX() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX())), this.sprite.getY() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY())));
             }
@@ -296,7 +283,33 @@ public class Robot {
     }
 
     public void takeDamage() {
-        this.damage += 1;
-        cardHandler.lockDown();
+        if (this.damage < 10) {
+            this.damage += 1;
+            cardHandler = RoboRallyDemo.getCardHandler();
+            cardHandler.lockDown();
+            System.out.println(this.damage);
+        }
+        else {
+            this.damage = 0;
+            this.died();
+        }
+    }
+
+    public Boolean checkNext() {
+        if (this.dir == Direction.NORTH && this.getPosY() + 1 == 12) {
+            return false;
+        }
+        else if (this.dir == Direction.EAST && this.getPosX() + 1 == 12) {
+            return false;
+        }
+        else if (this.dir == Direction.SOUTH && this.getPosY() -1 == -1) {
+            return false;
+        }
+        else if (this.dir == Direction.WEST && this.getPosX() -1 == -1) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }
