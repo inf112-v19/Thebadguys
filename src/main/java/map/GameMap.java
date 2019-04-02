@@ -51,6 +51,14 @@ public class GameMap implements IGameMap {
         }
         return false;
     }
+
+    public Boolean isSpinRight(int x, int y) {
+        if (tiles.get(x, y) == MapTile.SPINRIGHT) {
+            return true;
+        }
+        return false;
+    }
+
     public Boolean isCheckpoint(int x, int y, int flagspassed) {
         if (tiles.get(x, y) == MapTile.CHECKPOINT1 && flagspassed == 0) {
             return true;

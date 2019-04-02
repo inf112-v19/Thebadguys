@@ -257,6 +257,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(3, 4, MapTile.LASER);
 
         grid.set(1,3, MapTile.SPINLEFT);
+        grid.set(1,6, MapTile.SPINLEFT);
+        grid.set(7,10,MapTile.SPINLEFT);
+        grid.set(8,2, MapTile.SPINRIGHT);
+        grid.set(8,6 ,MapTile.SPINRIGHT);
+        grid.set(8,10,MapTile.SPINRIGHT);
         grid.set(3, 0, MapTile.LASER);
         grid.set(3, 1, MapTile.LASER);
         grid.set(3, 2, MapTile.LASER);

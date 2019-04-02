@@ -13,6 +13,7 @@ import map.GameMap;
 public class Robot {
     private CardHandler cardHandler;
     private Sprite sprite;
+    private int turn;
     private int posX = 0;
     private int posY = 0;
     private int[] checkpoint = {posX, posY};
@@ -34,6 +35,12 @@ public class Robot {
 
     public Robot(Sprite sprite){
         this.sprite = sprite;
+    }
+
+    public Robot(int[] checkpoint) {
+        this.checkpoint = checkpoint;
+        this.posX = checkpoint[0];
+        this.posY = checkpoint[1];
     }
 
     public Robot(Sprite sprite, int[] checkpoint){
@@ -178,44 +185,56 @@ public class Robot {
         switch (command){
             case "Models/AlleBevegelseKortUtenPrioritet/BackUp.png":
                 for (int i = 0; i < 1; i++){
-                    if (checkNext()) {
+                    if (this.checkNext() == 1) {
                         this.moveForward(-1);
                     }
-                    else {
+                    else if (this.checkNext() == -1) {
                         this.died();
+                        break;
+                    }
+                    else {
                         break;
                     }
                 }
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-1.png":
                 for (int i = 0; i < 1; i++){
-                    if (checkNext()) {
+                    if (this.checkNext() == 1) {
                         this.moveForward(1);
                     }
-                    else {
+                    else if (this.checkNext() == -1) {
                         this.died();
+                        break;
+                    }
+                    else {
                         break;
                     }
                 }
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
                 for (int i = 0; i < 2; i++){
-                    if (checkNext()) {
+                    if (this.checkNext() == 1) {
                         this.moveForward(1);
                     }
-                    else {
+                    else if (this.checkNext() == -1) {
                         this.died();
+                        break;
+                    }
+                    else {
                         break;
                     }
                 }
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
                 for (int i = 0; i < 3; i++){
-                    if (checkNext()) {
+                    if (this.checkNext() == 1) {
                         this.moveForward(1);
                     }
-                    else {
+                    else if (this.checkNext() == -1) {
                         this.died();
+                        break;
+                    }
+                    else {
                         break;
                     }
                 }
@@ -249,10 +268,14 @@ public class Robot {
             System.out.println("SPIN!");
             this.rotate_left();
         }
+        if (gameMap.isSpinRight(this.getPosX(), this.getPosY())) {
+            this.rotate_right();
+        }
     }
 
     public void died() {
         this.lives -= 1; // loose an option card of the players choice
+        this.damage = 2;
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
             System.out.println("You lost the game");
@@ -276,7 +299,17 @@ public class Robot {
             else {
                 System.out.println("Should definitely not be possible");
             }
-
+            if (this.dir == Direction.EAST) {
+                this.rotate_left();
+            }
+            else if (this.dir == Direction.SOUTH) {
+                this.rotate_right();
+                this.rotate_right();
+            }
+            else if (this.dir == Direction.WEST) {
+                this.rotate_right();
+            }
+            this.dir = Direction.NORTH;
             this.setPosX(this.getCheckpoint()[0]); //update internal numbers of robot location
             this.setPosY(this.getCheckpoint()[1]);
         }
@@ -290,26 +323,28 @@ public class Robot {
             System.out.println(this.damage);
         }
         else {
-            this.damage = 0;
             this.died();
         }
     }
 
-    public Boolean checkNext() {
+    public int checkNext() {
         if (this.dir == Direction.NORTH && this.getPosY() + 1 == 12) {
-            return false;
+            return -1;
         }
         else if (this.dir == Direction.EAST && this.getPosX() + 1 == 12) {
-            return false;
+            return -1;
         }
         else if (this.dir == Direction.SOUTH && this.getPosY() -1 == -1) {
-            return false;
+            return -1;
         }
         else if (this.dir == Direction.WEST && this.getPosX() -1 == -1) {
-            return false;
+            return -1;
+        }
+        else if (this.dir == Direction.NORTH){
+            return 0;
         }
         else {
-            return true;
+            return 1;
         }
     }
 }
