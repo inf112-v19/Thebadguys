@@ -2,8 +2,122 @@
 
 title __MVN-APP's Class Diagram__\n
 
+  package inf112.skeleton.app {
+    class CardHandler {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class CardSlots {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class CardSlots {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class CardSlots {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    enum CardValues {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    enum CardValues {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    enum CardValues {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Cards {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Cards {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Cards {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Deck {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Deck {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Deck {
+    }
+  }
+  
+
   package Grid {
     enum Direction {
+    }
+  }
+  
+
+  package Grid {
+    enum Direction {
+    }
+  }
+  
+
+  package Grid {
+    enum Direction {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class GameEvent {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class GameEvent {
+    }
+  }
+  
+
+  package map {
+    class GameMap {
+    }
+  }
+  
+
+  package map {
+    class GameMap {
     }
   }
   
@@ -26,6 +140,66 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
+  package inf112.skeleton.app {
+    class HelloWorld {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface ICard {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface ICard {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface ICard {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface ICardSlot {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IDeck {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IDeck {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IDeck {
+    }
+  }
+  
+
+  package map {
+    interface IGameMap {
+    }
+  }
+  
+
+  package map {
+    interface IGameMap {
+    }
+  }
+  
+
   package map {
     interface IGameMap {
     }
@@ -34,6 +208,54 @@ title __MVN-APP's Class Diagram__\n
 
   package Grid {
     interface IGrid {
+    }
+  }
+  
+
+  package Grid {
+    interface IGrid {
+    }
+  }
+  
+
+  package Grid {
+    interface IGrid {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IItem {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IRobot {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IRobot {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IRobot {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Main {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Main {
     }
   }
   
@@ -57,7 +279,43 @@ title __MVN-APP's Class Diagram__\n
   
 
   package map {
+    enum MapTile {
+    }
+  }
+  
+
+  package map {
+    enum MapTile {
+    }
+  }
+  
+
+  package map {
     class MovePlayerException {
+    }
+  }
+  
+
+  package map {
+    class MovePlayerException {
+    }
+  }
+  
+
+  package map {
+    class MovePlayerException {
+    }
+  }
+  
+
+  package Grid {
+    class MyGrid {
+    }
+  }
+  
+
+  package Grid {
+    class MyGrid {
     }
   }
   
@@ -81,6 +339,18 @@ title __MVN-APP's Class Diagram__\n
   
 
   package inf112.skeleton.app {
+    class RoboRallyDemo {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class RoboRallyDemo {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
     class Robot {
     }
   }
@@ -92,16 +362,61 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
+  package inf112.skeleton.app {
+    class Robot {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Robot {
+    }
+  }
+  
+
+  CardHandler o-- Deck : Deck
+  CardHandler o-- Cards : clickedCard
+  CardHandler o-- Cards : listCard
+  CardHandler o-- CardSlots : temp
+  CardHandler o-- Robot : robot
+  CardHandler o-- IGameMap : map
+  CardSlots -up-|> ICardSlot
+  Cards -up-|> ICard
+  Cards o-- Cards : Dummycard0
+  Cards -up-|> ICard
+  Cards o-- Cards : Dummycard0
+  Cards -up-|> ICard
+  Deck -up-|> IDeck
+  Deck -up-|> IDeck
+  Deck -up-|> IDeck
   GameMap -up-|> IGameMap
+  GameMap -up-|> IGameMap
+  GameMap -up-|> IGameMap
+  GameMap o-- Direction : dir
+  HelloWorld -up-|> ApplicationListener
+  HelloWorld -up-|> InputProcessor
   HelloWorld -up-|> ApplicationListener
   HelloWorld -up-|> InputProcessor
   HelloWorld -up-|> ApplicationListener
   HelloWorld -up-|> InputProcessor
   MyGrid -up-|> IGrid
+  MyGrid -up-|> IGrid
+  MyGrid -up-|> IGrid
   RoboRallyDemo -up-|> ApplicationListener
   RoboRallyDemo -up-|> InputProcessor
   RoboRallyDemo -up-|> ApplicationListener
   RoboRallyDemo -up-|> InputProcessor
+  RoboRallyDemo -up-|> ApplicationListener
+  RoboRallyDemo -up-|> InputProcessor
+  RoboRallyDemo o-- Cards : CardButton
+  RoboRallyDemo o-- Robot : robot
+  RoboRallyDemo o-- CardHandler : cardHandler
+  RoboRallyDemo o-- IGrid : grid
+  RoboRallyDemo -up-|> ApplicationListener
+  RoboRallyDemo -up-|> InputProcessor
+  Robot o-- CardHandler : cardHandler
+  Robot o-- Direction : dir
+  Robot o-- GameMap : gameMap
 
 
 right footer

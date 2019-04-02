@@ -4,11 +4,14 @@ title __MAP's Class Diagram__\n
 
   package map {
     class GameMap {
-        # tiles : IGrid<MapTile>
-        # x : int
-        # y : int
+        - tiles : IGrid<MapTile>
+        - x : int
+        - y : int
         + GameMap()
+        + isCheckpoint()
+        + isLaser()
         + getCell()
+        + setCell()
         + getHeight()
         + getPlayerGold()
         + getPlayerHitPoints()
@@ -17,6 +20,15 @@ title __MAP's Class Diagram__\n
         + movePlayer()
         + playerCanGo()
         + isValidPosition()
+        + getPosX()
+        + getPosY()
+        + setPosX()
+        + setPosY()
+        + getDirection()
+        + rotate_right()
+        + rotate_left()
+        + moveForward()
+        + move()
     }
   }
   
@@ -31,6 +43,7 @@ title __MAP's Class Diagram__\n
         {abstract} + isPlaying()
         {abstract} + movePlayer()
         {abstract} + playerCanGo()
+        {abstract} + move()
     }
   }
   
@@ -46,7 +59,10 @@ title __MAP's Class Diagram__\n
       CONVEYERBELT
       EXPRESSCONVEYERBELT
       GEAR
-      CHECKPOINT
+      CHECKPOINT1
+      CHECKPOINT2
+      CHECKPOINT3
+      CHECKPOINT4
       REPAIRSITE
     }
   }
@@ -61,6 +77,7 @@ title __MAP's Class Diagram__\n
   
 
   GameMap -up-|> IGameMap
+  GameMap o-- Direction : dir
 
 
 right footer
