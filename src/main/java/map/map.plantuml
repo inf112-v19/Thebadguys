@@ -8,6 +8,8 @@ title __MAP's Class Diagram__\n
         - x : int
         - y : int
         + GameMap()
+        + isHole()
+        + isSpinLeft()
         + isCheckpoint()
         + isLaser()
         + getCell()
@@ -20,6 +22,7 @@ title __MAP's Class Diagram__\n
         + movePlayer()
         + playerCanGo()
         + isValidPosition()
+        + isOutsideMap()
         + getPosX()
         + getPosY()
         + setPosX()
@@ -29,6 +32,7 @@ title __MAP's Class Diagram__\n
         + rotate_left()
         + moveForward()
         + move()
+        + isConveyer()
     }
   }
   
@@ -64,6 +68,13 @@ title __MAP's Class Diagram__\n
       CHECKPOINT3
       CHECKPOINT4
       REPAIRSITE
+      HOLE
+      SPINRIGHT
+      SPINLEFT
+      CONVEYERBELTNORTH
+      CONVEYERBELTSOUTH
+      CONVEYERBELTEAST
+      CONVEYERBELTWEST
     }
   }
   

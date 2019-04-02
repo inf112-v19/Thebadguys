@@ -179,6 +179,7 @@ title __APP's Class Diagram__\n
         - camera : OrthographicCamera
         - i : int
         - viewPort : FitViewport
+        {static} - cardHandler : CardHandler
         - batch : SpriteBatch
         - texture : Texture
         - sprite : Sprite
@@ -207,6 +208,7 @@ title __APP's Class Diagram__\n
         + setCamera()
         + buttonCreation()
         + doTurn()
+        {static} + getCardHandler()
     }
   }
   
@@ -246,14 +248,15 @@ title __APP's Class Diagram__\n
         + setFlagsPassed()
         + setPosX()
         + setPosY()
+        + setDamage()
+        + setLives()
         + rotate_right()
         + rotate_left()
         + moveForward()
         + move()
-        + move()
-        + isOnMap()
         + died()
         + takeDamage()
+        + checkNext()
     }
   }
   
@@ -271,7 +274,6 @@ title __APP's Class Diagram__\n
   RoboRallyDemo -up-|> InputProcessor
   RoboRallyDemo o-- Cards : CardButton
   RoboRallyDemo o-- Robot : robot
-  RoboRallyDemo o-- CardHandler : cardHandler
   RoboRallyDemo o-- IGrid : grid
   Robot o-- CardHandler : cardHandler
   Robot o-- Direction : dir

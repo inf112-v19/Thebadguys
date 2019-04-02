@@ -146,7 +146,7 @@ public class CardHandler {
     //method to set the position of sprites, if it is the first turn then just set the position of the sprites,
     //if it is not the first turn then I use this method to change the sprites of the cards to get 9 new random cards
     protected void setCardSprites() {
-        int x=0;
+        int x = 0;
         randomSpriteList.clear();
         addSprites();
         if(notFirst){

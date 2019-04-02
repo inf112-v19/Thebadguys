@@ -47,6 +47,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static GameMap map;
     private IGrid grid;
 
+
     //create the initial state of the game
     @Override
     public void create() {
@@ -86,6 +87,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         //create the end turn button
         buttonCreation(700, 500);
+
+
+        powerdownButtonCreation(100, 100);
 
         font = new BitmapFont();
 
@@ -313,6 +317,21 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         Sprite buttonSprite = new Sprite(buttonTexture);
         buttonSprite.setPosition(x, y);
         CardButton = new Cards(x, y, "", 0, buttonSprite);
+    }
+
+    public void powerdownButtonCreation(float x, float y) {
+        if (!robot.getPowerdown()) {
+            Texture buttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.png"));
+            Sprite buttonSprite = new Sprite(buttonTexture);
+            buttonSprite.setPosition(x, y);
+            CardButton = new Cards(x, y, "", 0, buttonSprite);
+        }
+        else {
+            Texture buttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.png"));
+            Sprite buttonSprite = new Sprite(buttonTexture);
+            buttonSprite.setPosition(x, y);
+            CardButton = new Cards(x, y, "", 0, buttonSprite);
+        }
     }
 
     public void doTurn () {

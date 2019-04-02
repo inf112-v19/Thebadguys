@@ -31,6 +31,7 @@ public class Robot {
     private int tilePixelHeight = prop.get("tileheight", Integer.class);
     private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
     private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
+    private boolean powerdown = false;
 
     public Robot(Sprite sprite){
         this.sprite = sprite;
@@ -311,5 +312,9 @@ public class Robot {
         else {
             return true;
         }
+    }
+
+    public Boolean getPowerdown() {
+        return powerdown;
     }
 }
