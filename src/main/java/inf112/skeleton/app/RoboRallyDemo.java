@@ -33,7 +33,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Robot robot;
     private FitViewport viewPort;
 
-    private CardHandler cardHandler;
+    private static CardHandler cardHandler;
 
     private int tick = 0;
     private int turn = 0;
@@ -69,7 +69,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         posX = 0;
         posY = 0;
         int[] startpos = {Math.round(posX), Math.round(posY)};
-        robot = new Robot(sprite, startpos, 0);
+        robot = new Robot(sprite, startpos);
 
         grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
 
@@ -229,32 +229,66 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private void createGrid() {
         grid = new MyGrid(12, 12, MapTile.OPEN);
         //sets conveyerbelt element on map
-        grid.set(0, 6, MapTile.CONVEYERBELT);
-        grid.set(0, 7, MapTile.CONVEYERBELT);
-        grid.set(0, 8, MapTile.CONVEYERBELT);
-        grid.set(0, 9, MapTile.CONVEYERBELT);
-        grid.set(1, 6, MapTile.CONVEYERBELT);
-        grid.set(2, 6, MapTile.CONVEYERBELT);
-        grid.set(2, 7, MapTile.CONVEYERBELT);
-        grid.set(2, 8, MapTile.CONVEYERBELT);
-        grid.set(2, 9, MapTile.CONVEYERBELT);
-        grid.set(1, 9, MapTile.CONVEYERBELT);
+        grid.set(6, 11, MapTile.CONVEYERBELTEAST);
+        grid.set(7, 11, MapTile.CONVEYERBELTEAST);
+        grid.set(8, 11, MapTile.CONVEYERBELTEAST);
+        grid.set(9, 11, MapTile.CONVEYERBELTSOUTH);
+        grid.set(9, 10, MapTile.CONVEYERBELTSOUTH);
+        grid.set(9, 9, MapTile.CONVEYERBELTWEST);
+        grid.set(8, 9, MapTile.CONVEYERBELTWEST);
+        grid.set(7, 9, MapTile.CONVEYERBELTWEST);
+        grid.set(6, 9, MapTile.CONVEYERBELTNORTH);
+        grid.set(6, 10, MapTile.CONVEYERBELTNORTH);
+
+        grid.set(2, 5, MapTile.CONVEYERBELTEAST);
+        grid.set(3, 5, MapTile.CONVEYERBELTEAST);
+        grid.set(4, 5, MapTile.CONVEYERBELTNORTH);
+
+        grid.set(4, 6, MapTile.CONVEYERBELTNORTH);
+        grid.set(4, 7, MapTile.CONVEYERBELTWEST);
+        grid.set(3, 7, MapTile.CONVEYERBELTSOUTH);
+        grid.set(3, 6, MapTile.CONVEYERBELTEAST);
 
         //setting repairsite elements on map
-        grid.set(1, 2, MapTile.REPAIRSITE);
-        grid.set(6, 6, MapTile.REPAIRSITE);
+        grid.set(11, 0, MapTile.REPAIRSITE);
+        grid.set(2, 10, MapTile.REPAIRSITE);
         //setting lasers on elements on map
-        grid.set(2, 0, MapTile.LASER);
-        grid.set(2, 1, MapTile.LASER);
-        grid.set(2, 2, MapTile.LASER);
-        grid.set(2, 3, MapTile.LASER);
-        grid.set(2, 4, MapTile.LASER);
+        grid.set(3, 0, MapTile.LASER);
+        grid.set(3, 1, MapTile.LASER);
+        grid.set(3, 2, MapTile.LASER);
+        grid.set(3, 3, MapTile.LASER);
+        grid.set(3, 4, MapTile.LASER);
 
         grid.set(1, 3, MapTile.SPINLEFT);
+        grid.set(3, 0, MapTile.LASER);
+        grid.set(3, 1, MapTile.LASER);
+        grid.set(3, 2, MapTile.LASER);
+        grid.set(3, 3, MapTile.LASER);
+        grid.set(3, 4, MapTile.LASER);
+
+        grid.set(9, 0, MapTile.LASER);
+        grid.set(9, 1, MapTile.LASER);
+        grid.set(9, 2, MapTile.LASER);
+
+        grid.set(10, 5, MapTile.LASER);
+        grid.set(10, 6, MapTile.LASER);
+        grid.set(10, 7, MapTile.LASER);
+        grid.set(10, 8, MapTile.LASER);
+
+        grid.set(7, 5, MapTile.LASER);
+        grid.set(10, 6, MapTile.LASER);
+        grid.set(10, 7, MapTile.LASER);
+
+        grid.set(0, 9, MapTile.LASER);
+        grid.set(1, 9, MapTile.LASER);
+        grid.set(2, 9, MapTile.LASER);
+        grid.set(3, 9, MapTile.LASER);
+        grid.set(4, 9, MapTile.LASER);
+
 
         grid.set(1, 1, MapTile.CHECKPOINT1);
         grid.set(1, 8, MapTile.CHECKPOINT2);
-        grid.set(7, 7, MapTile.CHECKPOINT3);
+        grid.set(6, 7, MapTile.CHECKPOINT3);
         grid.set(10, 3, MapTile.CHECKPOINT4);
 
         grid.set(2, 2, MapTile.HOLE);
@@ -286,7 +320,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public void doTurn() {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
-
             if (tick % 40 == 0) {
                 System.out.println(tick);
                 robot.move(selectedCards[turn]);
@@ -298,19 +331,23 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if (turn == 4) {
                 if (!cardHandler.getNotFirst()) {
                     for (int h = 0; h < 5; h++) {
-                            //cardHandler.lockDown();
+                        //cardHandler.lockDown();
+                        for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
+                            cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
+                        }
+                        cardHandler.setNotFirst(true);
+                        cardHandler.nullyFy();
+                        cardHandler.setisDone(false);
+                        cardHandler.setCardSprites();
+                        turn = 0;
                         }
                     }
-                    for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
-                        cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
-                    }
-                    cardHandler.setNotFirst(true);
-                    cardHandler.nullyFy();
-                    cardHandler.setisDone(false);
-                    cardHandler.setCardSprites();
-                    turn = 0;
-                }
+                    System.out.println("\n");
             }
-            System.out.println("\n");
         }
     }
+    public static CardHandler getCardHandler(){
+        System.out.println(cardHandler);
+        return cardHandler;
+    }
+}
