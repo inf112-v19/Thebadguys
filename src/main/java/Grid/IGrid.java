@@ -25,6 +25,8 @@ public interface IGrid<T>{
      */
     void set(int x, int y, T element);
 
+    void set(double x, double y, T element);
+
     /**
      *
      * Get the contents of the cell in the given x,y location.
@@ -36,6 +38,7 @@ public interface IGrid<T>{
      * @param y The row of the cell to get contents of.
      */
     T get(int x, int y);
+    T get(double x , double y);
 
     /**
      * Make a copy

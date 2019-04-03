@@ -87,6 +87,24 @@ public class GameMap implements IGameMap {
         }
     }
 
+    public Boolean wallNearby(Direction dir, int x, int y) {
+        if (dir == Direction.NORTH && tiles.get((double) x , y + 0.5) == MapTile.WALL) {
+            return true;
+        }
+        else if(dir == Direction.EAST && tiles.get(x + 0.5, (double) y) == MapTile.WALL) {
+            return true;
+        }
+        else if(dir == Direction.SOUTH && tiles.get((double) x, y - 0.5) == MapTile.WALL) {
+            return true;
+        }
+        else if(dir == Direction.WEST && tiles.get(x - 0.5 , (double) y) == MapTile.WALL) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public MapTile getCell(int x, int y) {
         if(x < 0 || x >= tiles.getWidth())
             throw new IndexOutOfBoundsException();

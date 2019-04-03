@@ -9,11 +9,10 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
 
-
 public class Robot {
     private CardHandler cardHandler;
     private Sprite sprite;
-    private int turn;
+    private int turn = 0;
     private int posX = 0;
     private int posY = 0;
     private int[] checkpoint = {posX, posY};
@@ -33,6 +32,7 @@ public class Robot {
     private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
     private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
 
+
     public Robot(Sprite sprite){
         this.sprite = sprite;
     }
@@ -48,6 +48,10 @@ public class Robot {
         this.checkpoint = checkpoint;
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
+    }
+
+    public int getTurn() {
+        return this.turn;
     }
 
     public int getPosX(){
@@ -99,6 +103,11 @@ public class Robot {
     }
 
     // a bunch of set functions
+
+
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
 
     public void setCheckpoint(int x, int y){
         this.checkpoint[0] = x;
@@ -184,60 +193,16 @@ public class Robot {
         String command = card.getCardSprite().getTexture().toString();
         switch (command){
             case "Models/AlleBevegelseKortUtenPrioritet/BackUp.png":
-                for (int i = 0; i < 1; i++){
-                    if (this.checkNext() == 1) {
-                        this.moveForward(-1);
-                    }
-                    else if (this.checkNext() == -1) {
-                        this.died();
-                        break;
-                    }
-                    else {
-                        break;
-                    }
-                }
+                canMove(1,-1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-1.png":
-                for (int i = 0; i < 1; i++){
-                    if (this.checkNext() == 1) {
-                        this.moveForward(1);
-                    }
-                    else if (this.checkNext() == -1) {
-                        this.died();
-                        break;
-                    }
-                    else {
-                        break;
-                    }
-                }
+                canMove(1,1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
-                for (int i = 0; i < 2; i++){
-                    if (this.checkNext() == 1) {
-                        this.moveForward(1);
-                    }
-                    else if (this.checkNext() == -1) {
-                        this.died();
-                        break;
-                    }
-                    else {
-                        break;
-                    }
-                }
+                canMove(2,1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
-                for (int i = 0; i < 3; i++){
-                    if (this.checkNext() == 1) {
-                        this.moveForward(1);
-                    }
-                    else if (this.checkNext() == -1) {
-                        this.died();
-                        break;
-                    }
-                    else {
-                        break;
-                    }
-                }
+                canMove(3,1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
                 this.rotate_right();
@@ -275,7 +240,9 @@ public class Robot {
 
     public void died() {
         this.lives -= 1; // loose an option card of the players choice
-        this.damage = 2;
+        this.takeDamage();
+        this.takeDamage();
+        this.turn = 4;
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
             System.out.println("You lost the game");
@@ -340,11 +307,30 @@ public class Robot {
         else if (this.dir == Direction.WEST && this.getPosX() -1 == -1) {
             return -1;
         }
-        else if (this.dir == Direction.NORTH){
+        else if (gameMap.wallNearby(this.dir, this.posX, this.posY)){
             return 0;
         }
         else {
             return 1;
+        }
+    }
+
+    public void canMove(int loops, int amount) {
+        for (int i = 0; i < loops; i++){
+            if (this.checkNext() == 1) {
+                this.moveForward(amount);
+            }
+            else if (this.checkNext() == -1) {
+                this.died();
+                break;
+            }
+            else if (this.checkNext() == 0) {
+                System.out.println("You hit a wall!");
+                break;
+            }
+            else {
+                break;
+            }
         }
     }
 }
