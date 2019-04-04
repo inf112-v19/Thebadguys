@@ -280,36 +280,36 @@ public class Robot {
                 canMoveConveyer(Direction.WEST);
                 break;
             case "northRight":
-                canMoveConveyer(Direction.NORTH);
-                this.rotate_right();
+                if (canMoveConveyer(Direction.NORTH) == 1)
+                {this.rotate_right();}
                 break;
             case "northLeft":
-                canMoveConveyer(Direction.NORTH);
-                this.rotate_left();
+                if (canMoveConveyer(Direction.NORTH) == 1)
+                {this.rotate_left();}
                 break;
             case "eastRight":
-                canMoveConveyer(Direction.EAST);
-                this.rotate_right();
+                if (canMoveConveyer(Direction.EAST) == 1)
+                {this.rotate_right();}
                 break;
             case "eastLeft":
-                canMoveConveyer(Direction.EAST);
-                this.rotate_left();
+                if (canMoveConveyer(Direction.EAST) == 1)
+                {this.rotate_left();}
                 break;
             case "southRight":
-                canMoveConveyer(Direction.SOUTH);
-                this.rotate_right();
+                if (canMoveConveyer(Direction.SOUTH) == 1)
+                {this.rotate_right();}
                 break;
             case "southLeft":
-                canMoveConveyer(Direction.SOUTH);
-                this.rotate_left();
+                if (canMoveConveyer(Direction.SOUTH) == 1)
+                {this.rotate_left();}
                 break;
             case "westRight":
-                canMoveConveyer(Direction.WEST);
-                this.rotate_right();
+                if (canMoveConveyer(Direction.WEST) == 1)
+                {this.rotate_right();}
                 break;
             case "westLeft":
-                canMoveConveyer(Direction.WEST);
-                this.rotate_left();
+                if (canMoveConveyer(Direction.WEST) == 1)
+                {this.rotate_left();}
                 break;
             case "noBelt":
                 break;
