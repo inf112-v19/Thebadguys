@@ -4,6 +4,7 @@ import Grid.Direction;
 import Grid.IGrid;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import inf112.skeleton.app.Cards;
+import inf112.skeleton.app.Robot;
 
 import java.util.Map;
 
@@ -268,6 +269,69 @@ public class GameMap implements IGameMap {
         }
         else{
             return false;
+        }
+    }
+
+    public void fireLasers(Robot robot) {
+        for(int i = 0; i < tiles.getWidth(); i++) {
+            for(int j = 0; j < tiles.getHeight(); j++) {
+                if(tiles.get(i, j) == MapTile.LASERNORTH) {
+                    int targetHit = 0;
+                    int tempY1 = j;
+                    while(targetHit == 0 && tempY1 != 12) {
+                        if(robot.getPosX() == i && robot.getPosY() == tempY1)  {
+                            robot.takeDamage();
+                            targetHit = 1;
+                        }
+                        else if(tiles.get(i, tempY1 + 0.5) == MapTile.WALL) {
+                            targetHit = 1;
+                        }
+                        tempY1++;
+                    }
+                }
+                else if(tiles.get(i, j) == MapTile.LASEREAST) {
+                    int targetHit = 0;
+                    int tempX1 = i;
+                    while(targetHit == 0 && tempX1 != 12) {
+                        if(robot.getPosX() == tempX1 && robot.getPosY() == j)  {
+                            robot.takeDamage();
+                            targetHit = 1;
+                        }
+                        else if(tiles.get(tempX1 + 0.5, j) == MapTile.WALL) {
+                            targetHit = 1;
+                        }
+                        tempX1++;
+                    }
+                }
+                else if(tiles.get(i, j) == MapTile.LASERSOUTH) {
+                    int targetHit = 0;
+                    int tempY1 = j;
+                    while(targetHit == 0 && tempY1 != -1) {
+                        if(robot.getPosX() == i && robot.getPosY() == tempY1)  {
+                            robot.takeDamage();
+                            targetHit = 1;
+                        }
+                        else if(tiles.get(i, tempY1 - 0.5) == MapTile.WALL) {
+                            targetHit = 1;
+                        }
+                        tempY1--;
+                    }
+                }
+                else if(tiles.get(i, j) == MapTile.LASERWEST) {
+                    int targetHit = 0;
+                    int tempX1 = i;
+                    while(targetHit == 0 && tempX1 != -1) {
+                        if(robot.getPosX() == tempX1 && robot.getPosY() == j)  {
+                            robot.takeDamage();
+                            targetHit = 1;
+                        }
+                        else if(tiles.get(tempX1 - 0.5, j) == MapTile.WALL) {
+                            targetHit = 1;
+                        }
+                        tempX1--;
+                    }
+                }
+            }
         }
     }
 

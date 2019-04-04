@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
+import map.MapTile;
 
 public class Robot {
     private CardHandler cardHandler;
@@ -321,9 +322,8 @@ public class Robot {
         if (gameMap.isSpinRight(this.posX, this.posY)) {
             this.rotate_right();
         }
-        if (gameMap.isLaser(this.posX,this.posY)){
-            this.takeDamage();
-        }
+        gameMap.fireLasers(this);
+        //add method to fire my laser
         if (gameMap.isCheckpoint(this.posX, this.posY, this.flagsPassed)) {
             this.flagsPassed += 1;
             this.setCheckpoint(this.getPosX(), this.getPosY());

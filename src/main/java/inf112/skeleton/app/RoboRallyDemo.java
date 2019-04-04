@@ -270,31 +270,15 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(8,2,  MapTile.SPINRIGHT);
         grid.set(8,6 , MapTile.SPINRIGHT);
         grid.set(8,10, MapTile.SPINRIGHT);
-        grid.set(3, 0, MapTile.LASER);
-        grid.set(3, 1, MapTile.LASER);
-        grid.set(3, 2, MapTile.LASER);
-        grid.set(3, 3, MapTile.LASER);
-        grid.set(3, 4, MapTile.LASER);
+        grid.set(3, 0, MapTile.LASERNORTH);
 
-        grid.set(9,0,  MapTile.LASER);
-        grid.set(9,1,  MapTile.LASER);
-        grid.set(9,2,  MapTile.LASER);
+        grid.set(9,0,  MapTile.LASERNORTH);
 
-        grid.set(10, 5,MapTile.LASER);
-        grid.set(10, 6,MapTile.LASER);
-        grid.set(10, 7,MapTile.LASER);
-        grid.set(10, 8,MapTile.LASER);
+        grid.set(10, 5,MapTile.LASERNORTH);
 
-        grid.set(7, 5, MapTile.LASER);
-        grid.set(10, 6,MapTile.LASER);
-        grid.set(10, 7,MapTile.LASER);
+        grid.set(7, 5, MapTile.LASERNORTH);
 
-        grid.set(0, 9, MapTile.LASER);
-        grid.set(1, 9, MapTile.LASER);
-        grid.set(2, 9, MapTile.LASER);
-        grid.set(3, 9, MapTile.LASER);
-        grid.set(4, 9, MapTile.LASER);
-
+        grid.set(0, 9, MapTile.LASEREAST);
 
         grid.set(1, 1, MapTile.CHECKPOINT1);
         grid.set(1, 8, MapTile.CHECKPOINT2);
