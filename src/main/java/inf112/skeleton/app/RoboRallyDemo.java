@@ -229,25 +229,30 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private void createGrid() {
         grid = new MyGrid(12, 12, MapTile.OPEN);
         //sets conveyerbelt element on map
-        grid.set(6, 11,MapTile.CONVEYERBELTEAST);
-        grid.set(7, 11,MapTile.CONVEYERBELTEAST);
-        grid.set(8, 11,MapTile.CONVEYERBELTEAST);
-        grid.set(9, 11,MapTile.CONVEYERBELTSOUTH);
-        grid.set(9, 10,MapTile.CONVEYERBELTSOUTH);
-        grid.set(9, 9, MapTile.CONVEYERBELTWEST);
-        grid.set(8, 9, MapTile.CONVEYERBELTWEST);
-        grid.set(7, 9, MapTile.CONVEYERBELTWEST);
-        grid.set(6, 9, MapTile.CONVEYERBELTNORTH);
-        grid.set(6, 10,MapTile.CONVEYERBELTNORTH);
+        grid.set(6, 11,MapTile.EXPRESSCONVEYERBELTNORTHTOEAST);
+        grid.set(7, 11,MapTile.EXPRESSCONVEYERBELTEAST);
+        grid.set(8, 11,MapTile.EXPRESSCONVEYERBELTEAST);
+        grid.set(9, 11,MapTile.EXPRESSCONVEYERBELTEASTTOSOUTH);
+        grid.set(9, 10,MapTile.EXPRESSCONVEYERBELTSOUTH);
+        grid.set(9, 9, MapTile.EXPRESSCONVEYERBELTSOUTHTOWEST);
+        grid.set(8, 9, MapTile.EXPRESSCONVEYERBELTWEST);
+        grid.set(7, 9, MapTile.EXPRESSCONVEYERBELTWEST);
+        grid.set(6, 9, MapTile.EXPRESSCONVEYERBELTWESTTONORTH);
+        grid.set(6, 10,MapTile.EXPRESSCONVEYERBELTNORTH);
 
-        grid.set(2, 5, MapTile.CONVEYERBELTEAST);
-        grid.set(3, 5, MapTile.CONVEYERBELTEAST);
-        grid.set(4, 5, MapTile.CONVEYERBELTNORTH);
+        grid.set(2, 5, MapTile.EXPRESSCONVEYERBELTEAST);
+        grid.set(3, 5, MapTile.EXPRESSCONVEYERBELTEAST);
+        grid.set(4, 5, MapTile.EXPRESSCONVEYERBELTEASTTONORTH);
 
-        grid.set(4, 6, MapTile.CONVEYERBELTNORTH);
-        grid.set(4, 7, MapTile.CONVEYERBELTWEST);
-        grid.set(3, 7, MapTile.CONVEYERBELTSOUTH);
-        grid.set(3, 6, MapTile.CONVEYERBELTEAST);
+        grid.set(4, 6, MapTile.EXPRESSCONVEYERBELTEASTTONORTH);
+        grid.set(4, 7, MapTile.EXPRESSCONVEYERBELTNORTHTOWEST);
+        grid.set(3, 7, MapTile.EXPRESSCONVEYERBELTWESTTOSOUTH);
+        grid.set(3, 6, MapTile.EXPRESSCONVEYERBELTSOUTHTOEAST);
+
+        grid.set(8, 4, MapTile.CONVEYERBELTNORTHTOEAST);
+        grid.set(8, 3, MapTile.CONVEYERBELTWESTTONORTH);
+        grid.set(9, 4, MapTile.CONVEYERBELTEASTTOSOUTH);
+        grid.set(9, 3, MapTile.CONVEYERBELTSOUTHTOWEST);
 
         //setting repairsite elements on map
         grid.set(11, 0,MapTile.REPAIRSITE);

@@ -37,6 +37,174 @@ public class GameMap implements IGameMap {
         }
     }
 
+    public String isExpressConveyerBelt(int x, int y) {
+        if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTNORTH) {
+            return "north"+nextConveyerBelt(x, y + 1, Direction.NORTH);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTEAST) {
+            return "east"+nextConveyerBelt(x + 1, y, Direction.EAST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTH) {
+            return "south"+nextConveyerBelt(x, y - 1, Direction.SOUTH);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWEST) {
+            return "west"+nextConveyerBelt(x - 1, y, Direction.WEST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTNORTHTOEAST) {
+            return "east"+nextConveyerBelt(x + 1, y, Direction.EAST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTNORTHTOWEST) {
+            return "west"+nextConveyerBelt(x - 1, y, Direction.WEST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTEASTTONORTH) {
+            return "north"+nextConveyerBelt(x, y + 1, Direction.NORTH);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTEASTTOSOUTH) {
+            return "south"+nextConveyerBelt(x, y - 1, Direction.SOUTH);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTHTOEAST) {
+            return "east"+nextConveyerBelt(x + 1, y, Direction.EAST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTHTOWEST) {
+            return "west"+nextConveyerBelt(x - 1, y, Direction.WEST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWESTTONORTH) {
+            return "north"+nextConveyerBelt(x, y + 1, Direction.NORTH);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWESTTOSOUTH) {
+            return "south"+nextConveyerBelt(x, y - 1, Direction.SOUTH);
+        }
+        return "noBelt";
+    }
+
+    public String isConveyerBelt(int x, int y) {
+        if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTNORTH) {
+            return "north"+nextConveyerBelt(x, y + 1, Direction.NORTH);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTEAST) {
+            return "east"+nextConveyerBelt(x + 1, y, Direction.EAST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTH) {
+            return "south"+nextConveyerBelt(x, y - 1, Direction.SOUTH);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWEST) {
+            return "west"+nextConveyerBelt(x - 1, y, Direction.WEST);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTNORTH) {
+            return "north"+nextConveyerBelt(x, y + 1, Direction.NORTH);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTEAST) {
+            return "east"+nextConveyerBelt(x + 1, y, Direction.EAST);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTSOUTH) {
+            return "south"+nextConveyerBelt(x, y - 1, Direction.SOUTH);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTWEST) {
+            return "west"+nextConveyerBelt(x - 1, y, Direction.WEST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTNORTHTOEAST) {
+            return "east"+nextConveyerBelt(x + 1, y, Direction.EAST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTNORTHTOWEST) {
+            return "west"+nextConveyerBelt(x - 1, y, Direction.WEST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTEASTTONORTH) {
+            return "north"+nextConveyerBelt(x, y + 1, Direction.NORTH);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTEASTTOSOUTH) {
+            return "south"+nextConveyerBelt(x, y - 1, Direction.SOUTH);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTHTOEAST) {
+            return "east"+nextConveyerBelt(x + 1, y, Direction.EAST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTHTOWEST) {
+            return "west"+nextConveyerBelt(x - 1, y, Direction.WEST);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWESTTONORTH) {
+            return "north"+nextConveyerBelt(x, y + 1, Direction.NORTH);
+        }
+        else if (tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWESTTOSOUTH) {
+            return "south"+nextConveyerBelt(x, y - 1, Direction.SOUTH);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTNORTHTOEAST) {
+            return "east"+nextConveyerBelt(x + 1, y, Direction.EAST);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTNORTHTOWEST) {
+            return "west"+nextConveyerBelt(x - 1, y, Direction.WEST);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTEASTTONORTH) {
+            return "north"+nextConveyerBelt(x, y + 1, Direction.NORTH);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTEASTTOSOUTH) {
+            return "south"+nextConveyerBelt(x, y - 1, Direction.SOUTH);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTSOUTHTOEAST) {
+            return "east"+nextConveyerBelt(x + 1, y, Direction.EAST);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTSOUTHTOWEST) {
+            return "west"+nextConveyerBelt(x - 1, y, Direction.WEST);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTWESTTONORTH) {
+            return "north"+nextConveyerBelt(x, y + 1, Direction.NORTH);
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTWESTTOSOUTH) {
+            return "south"+nextConveyerBelt(x, y - 1, Direction.SOUTH);
+        }
+        return "noBelt";
+    }
+
+    public String nextConveyerBelt(int x, int y, Direction dir) {
+        if (dir == Direction.NORTH && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTNORTHTOWEST) {
+            return "Left";
+        }
+        else if(dir == Direction.NORTH && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTNORTHTOEAST) {
+            return "Right";
+        }
+        else if (dir == Direction.EAST && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTEASTTONORTH) {
+            return "Left";
+        }
+        else if (dir == Direction.EAST && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTEASTTOSOUTH) {
+            return "Right";
+        }
+        else if (dir == Direction.SOUTH && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTHTOEAST) {
+            return "Left";
+        }
+        else if (dir == Direction.SOUTH && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTHTOWEST) {
+            return "Right";
+        }
+        else if (dir == Direction.WEST && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWESTTOSOUTH) {
+            return "Left";
+        }
+        else if (dir == Direction.WEST && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWESTTONORTH) {
+            return "Right";
+        }
+        else if (dir == Direction.NORTH && tiles.get(x, y) == MapTile.CONVEYERBELTNORTHTOWEST) {
+            return "Left";
+        }
+        else if (dir == Direction.NORTH && tiles.get(x, y) == MapTile.CONVEYERBELTNORTHTOEAST) {
+            return "Right";
+        }
+        else if (dir == Direction.EAST && tiles.get(x, y) == MapTile.CONVEYERBELTEASTTONORTH) {
+            return "Left";
+        }
+        else if (dir == Direction.EAST && tiles.get(x, y) == MapTile.CONVEYERBELTEASTTOSOUTH) {
+            return "Right";
+        }
+        else if (dir == Direction.SOUTH && tiles.get(x, y) == MapTile.CONVEYERBELTSOUTHTOEAST) {
+            return "Left";
+        }
+        else if (dir == Direction.SOUTH && tiles.get(x, y) == MapTile.CONVEYERBELTSOUTHTOWEST) {
+            return "Right";
+        }
+        else if (dir == Direction.WEST && tiles.get(x, y) == MapTile.CONVEYERBELTWESTTOSOUTH) {
+            return "Left";
+        }
+        else if (dir == Direction.WEST && tiles.get(x, y) == MapTile.CONVEYERBELTWESTTONORTH) {
+            return "Right";
+        }
+        return "NoTurn";
+    }
+
     public boolean isHole(int x, int y){
         if(tiles.get(x,y) == MapTile.HOLE){
             return true;
@@ -76,6 +244,22 @@ public class GameMap implements IGameMap {
         else{
             return false;
         }
+    }
+
+    public int isRepairSite(int x, int y, int turn) {
+        if(tiles.get(x, y) == MapTile.REPAIRSITE && turn != 4) {
+            return 1;
+        }
+        else if (tiles.get(x, y) == MapTile.REPAIRSITE && turn == 4) {
+            return 2;
+        }
+        else if (tiles.get(x, y) == MapTile.REPAIRSITE2 && turn == 4) {
+            return 3;
+        }
+        else if (tiles.get(x, y) == MapTile.REPAIRSITE2 && turn != 4) {
+            return 1;
+        }
+        return 0;
     }
 
     public Boolean isLaser(int x, int y){
