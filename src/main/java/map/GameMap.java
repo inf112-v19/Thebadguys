@@ -238,7 +238,7 @@ public class GameMap implements IGameMap {
             return true;
         }
         else if (tiles.get(x, y) == MapTile.CHECKPOINT4 && flagspassed == 3) {
-            System.out.println("GRATULERA DU VANT SPILET!");
+            System.out.println("GRATULERER DU VANT SPILET!");
             return true;
         }
         else{

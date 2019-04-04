@@ -102,9 +102,6 @@ public class Robot {
         return this.y1;
     }
 
-    // a bunch of set functions
-
-
     public void setTurn(int turn) {
         this.turn = turn;
     }
@@ -235,36 +232,36 @@ public class Robot {
                 canMoveConveyer(Direction.WEST);
                 break;
             case "northRight":
-                canMoveConveyer(Direction.NORTH);
-                this.rotate_right();
+                if (canMoveConveyer(Direction.NORTH) == 1)
+                {this.rotate_right();}
                 break;
             case "northLeft":
-                canMoveConveyer(Direction.NORTH);
-                this.rotate_left();
+                if (canMoveConveyer(Direction.NORTH) == 1)
+                {this.rotate_left();}
                 break;
             case "eastRight":
-                canMoveConveyer(Direction.EAST);
-                this.rotate_right();
+                if (canMoveConveyer(Direction.EAST) == 1)
+                {this.rotate_right();}
                 break;
             case "eastLeft":
-                canMoveConveyer(Direction.EAST);
-                this.rotate_left();
+                if (canMoveConveyer(Direction.EAST) == 1)
+                {this.rotate_left();}
                 break;
             case "southRight":
-                canMoveConveyer(Direction.SOUTH);
-                this.rotate_right();
+                if (canMoveConveyer(Direction.SOUTH) == 1)
+                {this.rotate_right();}
                 break;
             case "southLeft":
-                canMoveConveyer(Direction.SOUTH);
-                this.rotate_left();
+                if (canMoveConveyer(Direction.SOUTH) == 1)
+                {this.rotate_left();}
                 break;
             case "westRight":
-                canMoveConveyer(Direction.WEST);
-                this.rotate_right();
+                if (canMoveConveyer(Direction.WEST) == 1)
+                {this.rotate_right();}
                 break;
             case "westLeft":
-                canMoveConveyer(Direction.WEST);
-                this.rotate_left();
+                if (canMoveConveyer(Direction.WEST) == 1)
+                {this.rotate_left();}
                 break;
             case "noBelt":
                 break;
@@ -466,16 +463,22 @@ public class Robot {
         }
     }
 
-    public void canMoveConveyer(Direction dir) {
+    public int canMoveConveyer(Direction dir) {
             if (this.checkConveyer(dir) == 1) {
                 this.moveConveyer(dir);
+                return 1;
             }
             else if (this.checkConveyer(dir) == -1) {
                 this.died();
                 System.out.println("Moved off the map");
+                return 0;
             }
             else if (this.checkConveyer(dir) == 0) {
                 System.out.println("You hit a wall!");
+                return 0;
+            }
+            else {
+                return 0;
             }
     }
 
