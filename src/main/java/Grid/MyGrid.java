@@ -87,6 +87,24 @@ public class MyGrid<T> implements IGrid<T> {
         return tiles.get(index);
     }
 
+    public T getSpecial(int x, int y) {
+        if(x < 0 || x >= 2*width)
+            throw new IndexOutOfBoundsException();
+        if(y < 0 || y >= 2*height)
+            throw new IndexOutOfBoundsException();
+        int index = x + width*(y);
+        return tiles.get(index);
+    }
+
+    public T getSpecial(double x, double y) {
+        if(x < 0 || x >= 2*width)
+            throw new IndexOutOfBoundsException();
+        if(y < 0 || y >= 2*height)
+            throw new IndexOutOfBoundsException();
+        int index = (int)(x) + (int)(width*(y));
+        return tiles.get(index);
+    }
+
     @Override
     public IGrid<T> copy() {
         MyGrid<T> newGrid = new MyGrid<T>(getWidth(), getHeight(), null);

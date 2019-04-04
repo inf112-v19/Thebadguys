@@ -39,6 +39,8 @@ public interface IGrid<T>{
      */
     T get(int x, int y);
     T get(double x , double y);
+    T getSpecial(int x, int y);
+    T getSpecial(double x, double y);
 
     /**
      * Make a copy
