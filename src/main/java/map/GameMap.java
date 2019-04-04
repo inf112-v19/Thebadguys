@@ -276,6 +276,8 @@ public class GameMap implements IGameMap {
         for(int i = 0; i < tiles.getWidth(); i++) {
             for(int j = 0; j < tiles.getHeight(); j++) {
                 if(tiles.get(i, j) == MapTile.LASERNORTH) {
+                    System.out.println(i);
+                    System.out.println(j);
                     int targetHit = 0;
                     int tempY1 = j;
                     while(targetHit == 0 && tempY1 != 12) {
