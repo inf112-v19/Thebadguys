@@ -32,7 +32,7 @@ public class CardHandler {
     private Robot robot;
     private IGameMap map;
     private int cardDelt=9;
-    private int cardSlotLock=5;;
+    private int cardSlotLock=0;;
 
     public CardHandler(SpriteBatch batch, Robot robot, IGameMap map){
         //creation of all arrays containing positions or cards
@@ -154,10 +154,14 @@ public class CardHandler {
             for (int i = 0; i < cardDelt; i++) {
                 spritePos.add(getRandomSprite());
                 spritePos.get(i).setPosition(x, 250);
-                Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
-                Deck.getDeckList().get(i).setCardName(CardValues.values()[i].getName());
-                Deck.getDeckList().get(i).setPriority(CardValues.values()[i].getPriority());
                 x+=105;
+            }
+
+            for(int z=0; z<cardDelt; z++){
+                Deck.getDeckList().get(z).setCardSprite(spritePos.get(z));
+               // Deck.getDeckList().get(z).setCardName(CardValues.values()[z].getName());
+               // Deck.getDeckList().get(z).setPriority(CardValues.values()[z].getPriority());
+                //System.out.println(spritePos.get(z).getTexture().toString() + " " + CardValues.values()[z].getName());
             }
         }else{
             for (int i = 0; i < cardDelt; i++) {
@@ -167,6 +171,17 @@ public class CardHandler {
                 x+=105;
             }
         }
+        System.out.println(spritePos.size());
+
+        for(int i=0; i<spritePos.size(); i++){
+            spritePos.get(i).getTexture().toString();
+        }
+
+        for(int i=0; i<Deck.getDeckList().size(); i++){
+            System.out.println(Deck.getDeckList().get(i).getCardSprite().getTexture().toString());
+        }
+
+
     }
 
     //method to create the card-Objects
@@ -208,6 +223,7 @@ public class CardHandler {
     //returns a random sprite form the spritesList , uses the rng method
     private Sprite getRandomSprite(){
         int v= rng();
+        //System.out.println(randomSpriteList.size());
         Sprite random = randomSpriteList.get(v);
         randomSpriteList.remove(v);
         return random;
@@ -221,13 +237,28 @@ public class CardHandler {
     //add all the sprites into the sprite list, burde finne ein bedre løsning på dette
     private void addSprites(){
         for(int i=0; i<CardValues.values().length;i++){
-            randomSpriteList.add(CardValues.values()[i].getSprite());
+            boolean locked=false;
+            for(int z=0; z<selectedCards.length; z++){
+                if(selectedCards[z]!=null){
+                    //System.out.println(CardValues.values()[i].getSprite().getTexture().toString() + " " + selectedCards[z].getCardSprite().getTexture().toString());
+                    if(CardValues.values()[i].getSprite()==selectedCards[z].getCardSprite()){
+                        locked=true;
+                        //System.out.println("locked!");
+                        break;
+                    }
+                }
+            }
+            if(!locked){
+                randomSpriteList.add(CardValues.values()[i].getSprite());
+                //System.out.println("ADDED");
+            }
         }
+        //System.out.println(randomSpriteList.size());
     }
 
     //method that empties the selectedCards array, that is used when an turn is over
     protected void nullyFy(){
-        for(int i=0; i<selectedCards.length; i++){
+        for(int i=0; i<selectedCards.length-cardSlotLock; i++){
             selectedCards[i]=null;
         }
         selectedCards[0]=null;
@@ -237,35 +268,15 @@ public class CardHandler {
         if(cardDelt>5){
             cardDelt--;
         }else{
-            cardSlotLock--;
+            if(cardSlotLock<5){
+                cardSlotLock++;
+            }
         }
     }
 
     public int getCardSlotLock(){
         return cardSlotLock;
     }
-
-    /*
-    public void doTurn(){
-        if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && isDone) {
-            for (int i = 0; i < selectedCards.length; i++) {
-                robot.move(selectedCards[i]);
-                map.move(selectedCards[i]);
-                // lockDown(4);
-                if (i == selectedCards.length - 1) {
-                    for(int v=0; v<spritePos.size(); v++){
-                        spritePos.get(v).setPosition(10000, 10000);
-                    }
-                    isDone = false;
-                    notFirst=true;
-                    setCardSprites();
-                    nullyFy();
-
-                }
-            }
-            System.out.println("\n");
-        }
-    }*/
 
     public Cards[] getSelectedCards(){
         return selectedCards;
