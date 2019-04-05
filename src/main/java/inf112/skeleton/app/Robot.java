@@ -317,4 +317,8 @@ public class Robot {
     public Boolean getPowerdown() {
         return powerdown;
     }
+
+    public void setPowerdown(boolean Powerdown) {
+        this.powerdown = Powerdown;
+    }
 }

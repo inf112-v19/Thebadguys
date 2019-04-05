@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sun.istack.internal.Nullable;
 import map.IGameMap;
 import java.util.ArrayList;
 
@@ -56,10 +57,14 @@ public class CardHandler {
         clickedCard.getCardSprite().setPosition(screenX - clickedCard.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - clickedCard.getCardSprite().getHeight() / 2);
     }
 
-    public void letGo(int screenX, int screenY, Cards CardButton){
+    public void letGo(int screenX, int screenY, Cards endTurnBtn, Cards powerDownBtn){
         boolean isInside=false;
 
-        if(insideCard(screenX, screenY, CardButton)){
+        if (insideCard(screenX, screenY, powerDownBtn)){
+            robot.setPowerdown(true);
+        }
+
+        if(insideCard(screenX, screenY, endTurnBtn)){
             isDone=true;
         }
         //if a card is inside a cardslot and it is released move it into the middle of the slot
