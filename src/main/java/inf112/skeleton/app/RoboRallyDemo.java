@@ -337,6 +337,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public void doTurn() {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
+            robot.setTurn(0);
             if (turn >= 5) {
                     System.out.println("Ferdig med ein heil runde!");
                     for (int h = 0; h < 5; h++) {
@@ -354,10 +355,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 System.out.println("\n");
             }
             if (tick % 40 == 0) {
+                if (robot.getTurn() < 4) {
                 robot.move(selectedCards[turn]);
                 map.move(selectedCards[turn]);
                 System.out.println("DidTURN "+(turn+1));
                 robot.getSprite().draw(batch);
+                }
                 turn++;
             }
         }
@@ -366,4 +369,5 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         System.out.println(cardHandler);
         return cardHandler;
     }
+
 }
