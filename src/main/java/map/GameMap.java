@@ -14,6 +14,9 @@ public class GameMap implements IGameMap {
     private int y;
     private Direction dir = Direction.NORTH;
 
+    // An intermediate tile variable that holds the value of the tile the player just moved into
+    private MapTile intermediateTile = MapTile.OPEN;
+
     public GameMap(IGrid<MapTile> tiles) {
         tiles.copy();
         this.tiles = tiles;
@@ -401,23 +404,25 @@ public class GameMap implements IGameMap {
             throw new MovePlayerException("The new position is illegal");
         }
         else if(dir == Direction.NORTH) {
-            setCell(x, y++, MapTile.OPEN);
-            setCell(x, y, MapTile.PLAYER);
+            setCell(this.x, this.y++, intermediateTile);
+            intermediateTile = getCell(this.x, this.y);
+            setCell(this.x, this.y, MapTile.PLAYER);
         }
         else if(dir == Direction.WEST) {
-            setCell(x--, y, MapTile.OPEN);
-            setCell(x, y, MapTile.PLAYER);
+            setCell(this.x--, this.y, intermediateTile);
+            intermediateTile = getCell(this.x, this.y);
+            setCell(this.x, this.y, MapTile.PLAYER);
         }
         else if(dir == Direction.SOUTH) {
-            setCell(x, y--, MapTile.OPEN);
-            setCell(x, y, MapTile.PLAYER);
+            setCell(this.x, this.y--, intermediateTile);
+            intermediateTile = getCell(this.x, this.y);
+            setCell(this.x, this.y, MapTile.PLAYER);
         }
         else if(dir == Direction.EAST) {
-            setCell(x++, y, MapTile.OPEN);
-            setCell(x, y, MapTile.PLAYER);
+            setCell(this.x++, this.y, intermediateTile);
+            intermediateTile = getCell(this.x, this.y);
+            setCell(this.x, this.y, MapTile.PLAYER);
         }
-
-
     }
 
 
@@ -457,7 +462,7 @@ public class GameMap implements IGameMap {
 
 
     public boolean isValidPosition(int x, int y) {
-        if(tiles.get(x,y) == MapTile.WALL){
+        if(tiles.get(x,y) == MapTile.WALL || isOutsideMap(x, y)){
             return false;
         }
         return true;
@@ -523,8 +528,17 @@ public class GameMap implements IGameMap {
         //this.sprite.rotate(-90);
     }
 
-    public void moveForward(int amount){
-        Direction current_direction = this.getDirection();
+    public void moveForward(int amount) {
+        try {
+            if (amount == -1){
+                movePlayer(Direction.OppositeDirection(dir));
+            }else {
+                movePlayer(dir);
+            }
+        } catch (MovePlayerException e){
+
+        }
+        /*Direction current_direction = this.getDirection();
         if (current_direction == Direction.NORTH) {
             int newY = this.getPosY() + amount;
             this.setPosY(newY);
@@ -543,7 +557,7 @@ public class GameMap implements IGameMap {
         }
         else {
             System.out.println("Something went terribly wrong");
-        }
+        }*/
     }
 
     public void move(Cards card){ // gets the command from a card and figures out which command to execute
