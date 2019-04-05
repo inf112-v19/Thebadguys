@@ -114,14 +114,14 @@ public class GridTest {
             Direction dir = Direction.getRandomDir();
             map.movePlayer(dir);
 
-             if(dir == Direction.NORTH) {
+            if(dir == Direction.NORTH) {
                 y++;
             }
             else if(dir == Direction.WEST) {
                 x--;
             }
             else if(dir == Direction.SOUTH) {
-               y--;
+                y--;
             }
             else if(dir == Direction.EAST) {
                 x++;
