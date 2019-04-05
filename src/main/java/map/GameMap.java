@@ -280,12 +280,12 @@ public class GameMap implements IGameMap {
                     System.out.println(j);
                     int targetHit = 0;
                     int tempY1 = j;
-                    while(targetHit == 0 && tempY1 != 12) {
+                    while(targetHit == 0 && tempY1 < 12) {
                         if(robot.getPosX() == i && robot.getPosY() == tempY1)  {
                             robot.takeDamage();
                             targetHit = 1;
                         }
-                        else if(tiles.get(i, tempY1 + 0.5) == MapTile.WALL) {
+                        else if(tiles.get((double) i, tempY1 + 0.5) == MapTile.WALL) {
                             targetHit = 1;
                         }
                         tempY1++;

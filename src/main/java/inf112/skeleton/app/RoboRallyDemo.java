@@ -257,12 +257,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //setting repairsite elements on map
         grid.set(11, 0,MapTile.REPAIRSITE);
         grid.set(2, 10,MapTile.REPAIRSITE);
-        //setting lasers on elements on map
-        grid.set(3, 0, MapTile.LASER);
-        grid.set(3, 1, MapTile.LASER);
-        grid.set(3, 2, MapTile.LASER);
-        grid.set(3, 3, MapTile.LASER);
-        grid.set(3, 4, MapTile.LASER);
 
         grid.set(1,3,  MapTile.SPINLEFT);
         grid.set(1,6,  MapTile.SPINLEFT);
@@ -270,6 +264,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(8,2,  MapTile.SPINRIGHT);
         grid.set(8,6 , MapTile.SPINRIGHT);
         grid.set(8,10, MapTile.SPINRIGHT);
+
         grid.set(3, 0, MapTile.LASERNORTH);
 
         grid.set(9,0,  MapTile.LASERNORTH);
@@ -287,8 +282,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         grid.set(2, 2, MapTile.HOLE);
 
-        grid.set(3.0, -0.5, MapTile.WALL);
-        grid.set(9.0, -0.5, MapTile.WALL);
+        /*grid.set(3.0, -0.5, MapTile.WALL);
+        grid.set(9.0, -0.5, MapTile.WALL);*/
         grid.set(-0.5, 9.0, MapTile.WALL);
 
         grid.set(4.5,2.0,MapTile.WALL);
