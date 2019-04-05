@@ -35,6 +35,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     private static CardHandler cardHandler;
 
+    private int tick = 0;
+    private int turn = 0;
 
 
     private SpriteBatch batch;
@@ -83,7 +85,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //loads map with elements and robot
 
 
-
         //create the end turn button
         buttonCreation(700, 500);
 
@@ -124,7 +125,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         //check how mutch damage a robot has taken
 
-          //check how mutch damage a robot has taken
+        //check how mutch damage a robot has taken
         //rotation of sprite, rotate 90 degrees every 100th gametick
         if (i % 100 == 0) {
             for (int i = 0; i < selectedCards.length; i++) {
@@ -144,6 +145,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         cardHandler.drawCards();
 
         i++;
+        tick++;
         batch.end();
     }
 
@@ -223,32 +225,38 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
+
     private void createGrid() {
         grid = new MyGrid(12, 12, MapTile.OPEN);
         //sets conveyerbelt element on map
-        grid.set(6, 11, MapTile.CONVEYERBELTEAST);
-        grid.set(7, 11, MapTile.CONVEYERBELTEAST);
-        grid.set(8, 11, MapTile.CONVEYERBELTEAST);
-        grid.set(9, 11, MapTile.CONVEYERBELTSOUTH);
-        grid.set(9, 10, MapTile.CONVEYERBELTSOUTH);
-        grid.set(9, 9, MapTile.CONVEYERBELTWEST);
-        grid.set(8, 9, MapTile.CONVEYERBELTWEST);
-        grid.set(7, 9, MapTile.CONVEYERBELTWEST);
-        grid.set(6, 9, MapTile.CONVEYERBELTNORTH);
-        grid.set(6, 10, MapTile.CONVEYERBELTNORTH);
+        grid.set(6, 11,MapTile.EXPRESSCONVEYERBELTNORTHTOEAST);
+        grid.set(7, 11,MapTile.EXPRESSCONVEYERBELTEAST);
+        grid.set(8, 11,MapTile.EXPRESSCONVEYERBELTEAST);
+        grid.set(9, 11,MapTile.EXPRESSCONVEYERBELTEASTTOSOUTH);
+        grid.set(9, 10,MapTile.EXPRESSCONVEYERBELTSOUTH);
+        grid.set(9, 9, MapTile.EXPRESSCONVEYERBELTSOUTHTOWEST);
+        grid.set(8, 9, MapTile.EXPRESSCONVEYERBELTWEST);
+        grid.set(7, 9, MapTile.EXPRESSCONVEYERBELTWEST);
+        grid.set(6, 9, MapTile.EXPRESSCONVEYERBELTWESTTONORTH);
+        grid.set(6, 10,MapTile.EXPRESSCONVEYERBELTNORTH);
 
-        grid.set(2, 5, MapTile.CONVEYERBELTEAST);
-        grid.set(3, 5, MapTile.CONVEYERBELTEAST);
-        grid.set(4, 5, MapTile.CONVEYERBELTNORTH);
+        grid.set(2, 5, MapTile.EXPRESSCONVEYERBELTEAST);
+        grid.set(3, 5, MapTile.EXPRESSCONVEYERBELTEAST);
+        grid.set(4, 5, MapTile.EXPRESSCONVEYERBELTEASTTONORTH);
 
-        grid.set(4, 6, MapTile.CONVEYERBELTNORTH);
-        grid.set(4, 7, MapTile.CONVEYERBELTWEST);
-        grid.set(3, 7, MapTile.CONVEYERBELTSOUTH);
-        grid.set(3, 6, MapTile.CONVEYERBELTEAST);
+        grid.set(4, 6, MapTile.EXPRESSCONVEYERBELTEASTTONORTH);
+        grid.set(4, 7, MapTile.EXPRESSCONVEYERBELTNORTHTOWEST);
+        grid.set(3, 7, MapTile.EXPRESSCONVEYERBELTWESTTOSOUTH);
+        grid.set(3, 6, MapTile.EXPRESSCONVEYERBELTSOUTHTOEAST);
+
+        grid.set(8, 4, MapTile.CONVEYERBELTNORTHTOEAST);
+        grid.set(8, 3, MapTile.CONVEYERBELTWESTTONORTH);
+        grid.set(9, 4, MapTile.CONVEYERBELTEASTTOSOUTH);
+        grid.set(9, 3, MapTile.CONVEYERBELTSOUTHTOWEST);
 
         //setting repairsite elements on map
-        grid.set(11, 0, MapTile.REPAIRSITE);
-        grid.set(2, 10, MapTile.REPAIRSITE);
+        grid.set(11, 0,MapTile.REPAIRSITE);
+        grid.set(2, 10,MapTile.REPAIRSITE);
         //setting lasers on elements on map
         grid.set(3, 0, MapTile.LASER);
         grid.set(3, 1, MapTile.LASER);
@@ -256,40 +264,56 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(3, 3, MapTile.LASER);
         grid.set(3, 4, MapTile.LASER);
 
-        grid.set(1,3, MapTile.SPINLEFT);
-        grid.set(3, 0, MapTile.LASER);
-        grid.set(3, 1, MapTile.LASER);
-        grid.set(3, 2, MapTile.LASER);
-        grid.set(3, 3, MapTile.LASER);
-        grid.set(3, 4, MapTile.LASER);
+        grid.set(1,3,  MapTile.SPINLEFT);
+        grid.set(1,6,  MapTile.SPINLEFT);
+        grid.set(7,10, MapTile.SPINLEFT);
+        grid.set(8,2,  MapTile.SPINRIGHT);
+        grid.set(8,6 , MapTile.SPINRIGHT);
+        grid.set(8,10, MapTile.SPINRIGHT);
+        grid.set(3, 0, MapTile.LASERNORTH);
 
-        grid.set(9,0, MapTile.LASER);
-        grid.set(9,1, MapTile.LASER);
-        grid.set(9,2, MapTile.LASER);
+        grid.set(9,0,  MapTile.LASERNORTH);
 
-        grid.set(10,5,MapTile.LASER);
-        grid.set(10,6,MapTile.LASER);
-        grid.set(10,7,MapTile.LASER);
-        grid.set(10,8,MapTile.LASER);
+        grid.set(10, 5,MapTile.LASERNORTH);
 
-        grid.set(7,5,MapTile.LASER);
-        grid.set(10,6,MapTile.LASER);
-        grid.set(10,7,MapTile.LASER);
+        grid.set(7, 5, MapTile.LASERNORTH);
 
-        grid.set(0,9,MapTile.LASER);
-        grid.set(1,9,MapTile.LASER);
-        grid.set(2,9,MapTile.LASER);
-        grid.set(3,9,MapTile.LASER);
-        grid.set(4,9,MapTile.LASER);
-
-
+        grid.set(0, 9, MapTile.LASEREAST);
 
         grid.set(1, 1, MapTile.CHECKPOINT1);
         grid.set(1, 8, MapTile.CHECKPOINT2);
         grid.set(6, 7, MapTile.CHECKPOINT3);
-        grid.set(10, 3, MapTile.CHECKPOINT4);
+        grid.set(10, 3,MapTile.CHECKPOINT4);
 
-        grid.set(2,2 ,MapTile.HOLE);
+        grid.set(2, 2, MapTile.HOLE);
+
+        grid.set(3.0, -0.5, MapTile.WALL);
+        grid.set(9.0, -0.5, MapTile.WALL);
+        grid.set(-0.5, 9.0, MapTile.WALL);
+
+        grid.set(4.5,2.0,MapTile.WALL);
+        grid.set(4.5,3.0,MapTile.WALL);
+        grid.set(4.5,4.0,MapTile.WALL);
+        grid.set(4.5,5.0,MapTile.WALL);
+        grid.set(4.5,6.0,MapTile.WALL);
+        grid.set(4.5,7.0,MapTile.WALL);
+        grid.set(4.5,8.0,MapTile.WALL);
+        grid.set(4.5,9.0,MapTile.WALL);
+
+        grid.set(0.0,4.5,MapTile.WALL);
+        grid.set(1.0,4.5,MapTile.WALL);
+        grid.set(2.0,4.5,MapTile.WALL);
+        grid.set(3.0,4.5,MapTile.WALL);
+        grid.set(4.0,4.5,MapTile.WALL);
+        grid.set(5.0,4.5,MapTile.WALL);
+        grid.set(6.0,4.5,MapTile.WALL);
+        grid.set(7.0,4.5,MapTile.WALL);
+        grid.set(8.0,4.5,MapTile.WALL);
+        grid.set(9.0,4.5,MapTile.WALL);
+        grid.set(10.0,4.5,MapTile.WALL);
+
+
+
     }
 
     public static TiledMap getTiledMap() {
@@ -315,33 +339,38 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         CardButton = new Cards(x, y, "", 0, buttonSprite);
     }
 
-    public void doTurn () {
+    public void doTurn() {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
-            for (int i = 0; i < selectedCards.length; i++) {
-                robot.move(selectedCards[i]);
-                map.move(selectedCards[i]);
-                //robot.getSprite().draw(batch);
-                if (i == selectedCards.length - 1) {
-                    if (!cardHandler.getNotFirst()) {
-                        for (int h = 0; h < 8; h++) {
-                           // cardHandler.lockDown();
+            if (tick % 40 == 0) {
+                System.out.println(tick);
+                robot.move(selectedCards[turn]);
+                map.move(selectedCards[turn]);
+                robot.getSprite().draw(batch);
+                turn++;
+
+            }
+            if (robot.getTurn() == 4) {
+                if (!cardHandler.getNotFirst()) {
+                    for (int h = 0; h < 5; h++) {
+                        //cardHandler.lockDown();
+                        for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
+                            cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
+                        }
+                        cardHandler.setNotFirst(true);
+                        cardHandler.nullyFy();
+                        cardHandler.setisDone(false);
+                        cardHandler.setCardSprites();
                         }
                     }
-                    for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
-                        cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
-                    }
-                    cardHandler.setNotFirst(true);
-                    cardHandler.nullyFy();
-                    cardHandler.setisDone(false);
-                    cardHandler.setCardSprites();
-                }
+                turn = 0;
+                robot.setTurn(0);
+                System.out.println("\n");
             }
-            System.out.println("\n");
         }
     }
-
     public static CardHandler getCardHandler(){
         System.out.println(cardHandler);
-        return cardHandler;}
+        return cardHandler;
+    }
 }

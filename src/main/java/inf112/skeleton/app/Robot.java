@@ -8,11 +8,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
-
+import map.MapTile;
 
 public class Robot {
     private CardHandler cardHandler;
     private Sprite sprite;
+    private int turn = 0;
     private int posX = 0;
     private int posY = 0;
     private int[] checkpoint = {posX, posY};
@@ -32,8 +33,15 @@ public class Robot {
     private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
     private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
 
+
     public Robot(Sprite sprite){
         this.sprite = sprite;
+    }
+
+    public Robot(int[] checkpoint) {
+        this.checkpoint = checkpoint;
+        this.posX = checkpoint[0];
+        this.posY = checkpoint[1];
     }
 
     public Robot(Sprite sprite, int[] checkpoint){
@@ -43,16 +51,8 @@ public class Robot {
         this.posY = checkpoint[1];
     }
 
-    public Robot(int[] checkpoint){
-
-        this.checkpoint = checkpoint;
-        this.posX = checkpoint[0];
-        this.posY = checkpoint[1];
-    }
-
-    public Robot(){
-        this.posX = checkpoint[0];
-        this.posY = checkpoint[1];
+    public int getTurn() {
+        return this.turn;
     }
 
     public int getPosX(){
@@ -103,7 +103,9 @@ public class Robot {
         return this.y1;
     }
 
-    // a bunch of set functions
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
 
     public void setCheckpoint(int x, int y){
         this.checkpoint[0] = x;
@@ -183,54 +185,26 @@ public class Robot {
         else {
             System.out.println("Something went terribly wrong");
         }
+        if (gameMap.isHole(this.posX, this.posY)) {
+            System.out.println("You fell into a hole!");
+            this.died();
+        }
     }
 
     public void move(Cards card){ // gets the command from a card and figures out which command to execute
         String command = card.getCardSprite().getTexture().toString();
         switch (command){
             case "Models/AlleBevegelseKortUtenPrioritet/BackUp.png":
-                for (int i = 0; i < 1; i++){
-                    if (checkNext()) {
-                        this.moveForward(-1);
-                    }
-                    else {
-                        this.died();
-                        break;
-                    }
-                }
+                canMove(1,-1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-1.png":
-                for (int i = 0; i < 1; i++){
-                    if (checkNext()) {
-                        this.moveForward(1);
-                    }
-                    else {
-                        this.died();
-                        break;
-                    }
-                }
+                canMove(1,1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
-                for (int i = 0; i < 2; i++){
-                    if (checkNext()) {
-                        this.moveForward(1);
-                    }
-                    else {
-                        this.died();
-                        break;
-                    }
-                }
+                canMove(2,1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
-                for (int i = 0; i < 3; i++){
-                    if (checkNext()) {
-                        this.moveForward(1);
-                    }
-                    else {
-                        this.died();
-                        break;
-                    }
-                }
+                canMove(3,1);
                 break;
             case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
                 this.rotate_right();
@@ -245,26 +219,138 @@ public class Robot {
             default:
                 System.out.println("Something went wrong");
         }
-        if (gameMap.isCheckpoint(this.getPosX(), this.getPosY(), this.flagsPassed)) {
+        switch(gameMap.isExpressConveyerBelt(this.posX, this.posY)) {
+            case "northNoTurn":
+                canMoveConveyer(Direction.NORTH);
+                break;
+            case "eastNoTurn":
+                canMoveConveyer(Direction.EAST);
+                break;
+            case "southNoTurn":
+                canMoveConveyer(Direction.SOUTH);
+                break;
+            case "westNoTurn":
+                canMoveConveyer(Direction.WEST);
+                break;
+            case "northRight":
+                if (canMoveConveyer(Direction.NORTH) == 1)
+                {this.rotate_right();}
+                break;
+            case "northLeft":
+                if (canMoveConveyer(Direction.NORTH) == 1)
+                {this.rotate_left();}
+                break;
+            case "eastRight":
+                if (canMoveConveyer(Direction.EAST) == 1)
+                {this.rotate_right();}
+                break;
+            case "eastLeft":
+                if (canMoveConveyer(Direction.EAST) == 1)
+                {this.rotate_left();}
+                break;
+            case "southRight":
+                if (canMoveConveyer(Direction.SOUTH) == 1)
+                {this.rotate_right();}
+                break;
+            case "southLeft":
+                if (canMoveConveyer(Direction.SOUTH) == 1)
+                {this.rotate_left();}
+                break;
+            case "westRight":
+                if (canMoveConveyer(Direction.WEST) == 1)
+                {this.rotate_right();}
+                break;
+            case "westLeft":
+                if (canMoveConveyer(Direction.WEST) == 1)
+                {this.rotate_left();}
+                break;
+            case "noBelt":
+                break;
+        }
+        switch(gameMap.isConveyerBelt(this.posX, this.posY)) {
+            case "northNoTurn":
+                canMoveConveyer(Direction.NORTH);
+                break;
+            case "eastNoTurn":
+                canMoveConveyer(Direction.EAST);
+                break;
+            case "southNoTurn":
+                canMoveConveyer(Direction.SOUTH);
+                break;
+            case "westNoTurn":
+                canMoveConveyer(Direction.WEST);
+                break;
+            case "northRight":
+                if (canMoveConveyer(Direction.NORTH) == 1)
+                {this.rotate_right();}
+                break;
+            case "northLeft":
+                if (canMoveConveyer(Direction.NORTH) == 1)
+                {this.rotate_left();}
+                break;
+            case "eastRight":
+                if (canMoveConveyer(Direction.EAST) == 1)
+                {this.rotate_right();}
+                break;
+            case "eastLeft":
+                if (canMoveConveyer(Direction.EAST) == 1)
+                {this.rotate_left();}
+                break;
+            case "southRight":
+                if (canMoveConveyer(Direction.SOUTH) == 1)
+                {this.rotate_right();}
+                break;
+            case "southLeft":
+                if (canMoveConveyer(Direction.SOUTH) == 1)
+                {this.rotate_left();}
+                break;
+            case "westRight":
+                if (canMoveConveyer(Direction.WEST) == 1)
+                {this.rotate_right();}
+                break;
+            case "westLeft":
+                if (canMoveConveyer(Direction.WEST) == 1)
+                {this.rotate_left();}
+                break;
+            case "noBelt":
+                break;
+        }
+        if(gameMap.isSpinLeft(this.posX, this.posY)){
+            System.out.println("SPIN!");
+            this.rotate_left();
+        }
+        if (gameMap.isSpinRight(this.posX, this.posY)) {
+            this.rotate_right();
+        }
+        gameMap.fireLasers(this);
+        //add method to fire my laser
+        if (gameMap.isCheckpoint(this.posX, this.posY, this.flagsPassed)) {
             this.flagsPassed += 1;
             this.setCheckpoint(this.getPosX(), this.getPosY());
             System.out.println("You made it to backup number " + this.flagsPassed);
         }
-        if (gameMap.isLaser(this.getPosX(),this.getPosY())){
-            this.takeDamage();
+        if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 1) {
+            this.setCheckpoint(this.posX, this.posY);
+            System.out.println("Backup on repairsite!");
         }
-        if(gameMap.isHole(this.getPosX(), this.getPosY())){
-            System.out.println("You fell into a hole!");
-            died();
+        else if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 2) {
+            this.setCheckpoint(this.posX, this.posY);
+            if(this.damage != 0) {this.damage -=1;}
         }
-        if(gameMap.isSpinLeft(this.getPosX(), this.getPosY())){
-            System.out.println("SPIN!");
-            this.rotate_left();
+        else if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 3) {
+            this.setCheckpoint(this.posX, this.posY);
+            if(this.damage > 1) {
+                this.damage -= 2; // put in choice for option cards.
+            }
+            else if(this.damage == 1) {this.damage = 0;}
         }
     }
 
     public void died() {
         this.lives -= 1; // loose an option card of the players choice
+        this.takeDamage();
+        this.takeDamage();
+        this.turn = 4;
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
             System.out.println("You lost the game");
@@ -288,7 +374,17 @@ public class Robot {
             else {
                 System.out.println("Should definitely not be possible");
             }
-
+            if (this.dir == Direction.EAST) {
+                this.rotate_left();
+            }
+            else if (this.dir == Direction.SOUTH) {
+                this.rotate_right();
+                this.rotate_right();
+            }
+            else if (this.dir == Direction.WEST) {
+                this.rotate_right();
+            }
+            this.dir = Direction.NORTH;
             this.setPosX(this.getCheckpoint()[0]); //update internal numbers of robot location
             this.setPosY(this.getCheckpoint()[1]);
         }
@@ -302,26 +398,110 @@ public class Robot {
             System.out.println(this.damage);
         }
         else {
-            this.damage = 0;
             this.died();
         }
     }
 
-    public Boolean checkNext() {
-        if (this.dir == Direction.NORTH && this.getPosY() + 1 == 12) {
-            return false;
+    public int checkNext(int amount) {
+        if (this.dir == Direction.NORTH && (this.posY + amount == 12 || this.posY + amount == -1)) {
+            return -1;
         }
-        else if (this.dir == Direction.EAST && this.getPosX() + 1 == 12) {
-            return false;
+        else if (this.dir == Direction.EAST && (this.posX + amount == 12 || this.posX + amount == -1)) {
+            return -1;
         }
-        else if (this.dir == Direction.SOUTH && this.getPosY() -1 == -1) {
-            return false;
+        else if (this.dir == Direction.SOUTH && (this.posY - amount == -1 || this.posY - amount == 12)) {
+            return -1;
         }
-        else if (this.dir == Direction.WEST && this.getPosX() -1 == -1) {
-            return false;
+        else if (this.dir == Direction.WEST && (this.posX - amount == -1 || this.posX - amount == 12)) {
+            return -1;
+        }
+        else if (gameMap.wallNearby(this.dir, this.posX, this.posY)) {
+            return 0;
         }
         else {
-            return true;
+            return 1;
+        }
+    }
+
+    public int checkConveyer(Direction dir) {
+        if (dir == Direction.NORTH && this.posY + 1 == 12) {
+            return -1;
+        }
+        else if (dir == Direction.EAST && this.posX + 1 == 12) {
+            return -1;
+        }
+        else if (dir == Direction.SOUTH && this.posY - 1 == -1) {
+            return -1;
+        }
+        else if (dir == Direction.WEST && this.posX - 1 == -1) {
+            return -1;
+        }
+        else if (gameMap.wallNearby(dir, this.posX, this.posY)) {
+            return 0;
+        }
+        else {
+            return 1;
+        } // add check for a second robot on the same conveyer target, if so move them both to original possition
+    }
+
+    public void canMove(int loops, int amount) {
+        for (int i = 0; i < loops; i++){
+            if (this.checkNext(amount) == 1) {
+                this.moveForward(amount);
+            }
+            else if (this.checkNext(amount) == -1) {
+                this.died();
+                break;
+            }
+            else if (this.checkNext(amount) == 0) {
+                System.out.println("You hit a wall!");
+                break;
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+    public int canMoveConveyer(Direction dir) {
+            if (this.checkConveyer(dir) == 1) {
+                this.moveConveyer(dir);
+                return 1;
+            }
+            else if (this.checkConveyer(dir) == -1) {
+                this.died();
+                System.out.println("Moved off the map");
+                return 0;
+            }
+            else if (this.checkConveyer(dir) == 0) {
+                System.out.println("You hit a wall!");
+                return 0;
+            }
+            else {
+                return 0;
+            }
+    }
+
+    public void moveConveyer(Direction dir) {
+        if (dir == Direction.NORTH) {
+            this.posY += 1;
+            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + (1 * (this.tilePixelWidth / 6)));
+        }
+        else if (dir == Direction.EAST) {
+            this.posX += 1;
+            this.sprite.setPosition(this.sprite.getX() + (1 * (this.tilePixelWidth / 6)), this.sprite.getY());
+        }
+        else if (dir == Direction.SOUTH) {
+            this.posY -= 1;
+            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - (1 * (this.tilePixelWidth / 6)));
+        }
+        else if (dir == Direction.WEST) {
+            this.posX -= 1;
+            this.sprite.setPosition(this.sprite.getX() - (1 * (this.tilePixelWidth / 6)), this.sprite.getY());
+        }
+        if (gameMap.isHole(this.posX, this.posY)) {
+            System.out.println("You fell into a hole!");
+            this.died();
         }
     }
 }
