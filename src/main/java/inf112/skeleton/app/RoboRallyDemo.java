@@ -22,7 +22,6 @@ import map.GameMap;
 import map.IGameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
 import java.util.ArrayList;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
@@ -92,7 +91,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         cardHandler.setCardSprites();
 
         //create the 9 cards cards
-        cardHandler.createDecklist();
+        cardHandler.createInitialDecklist();
 
         //creation of the 5 cardSlots
         cardHandler.createCardSlots();
@@ -131,6 +130,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         doTurn();
         //draw the cardslots
         cardHandler.drawCardSlots();
+
+        cardHandler.getLockedList();
 
         //draw button
         CardButton.getCardSprite().draw(batch);
@@ -336,7 +337,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
             if (turn >= 5) {
                 System.out.println("Ferdig med ein heil runde!");
-                for (int h = 0; h < 7; h++) {
+                for (int h = 0; h < 5; h++) {
                     cardHandler.lockDown();
                 }
                 turn = 0;
@@ -361,6 +362,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return cardHandler;
     }
 
+    //cleans up the screen, by removing sprites no longer in use, and adding the sprites that should be locked to the spriteslocked list
     public void checkLock(Cards[] selectedCards){
         for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
             boolean locked=false;
@@ -368,14 +370,15 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 if(selectedCards[i]!=null){
                     //System.out.println(cardHandler.getSpritePos().get(v).getTexture().toString() + " " + selectedCards[i].getCardSprite().getTexture().toString());
                     if(cardHandler.getSpritePos().get(v)==selectedCards[i].getCardSprite()){
-                        System.out.println("LOCKED");
+                        //System.out.println("LOCKED");
                         locked=true;
                         break;
                     }
+                    cardHandler.setSpritesLocked(i, selectedCards[i].getCardSprite());
                 }
             }
             if(!locked){
-               // System.out.println("GONE!");
+                //System.out.println("GONE!");
                 cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
             }
         }

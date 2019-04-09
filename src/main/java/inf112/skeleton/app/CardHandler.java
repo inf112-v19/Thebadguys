@@ -33,6 +33,8 @@ public class CardHandler {
     private IGameMap map;
     private int cardDelt=9;
     private int cardSlotLock=0;;
+    private Sprite spritesLocked[];
+    private ArrayList<Sprite> lockedList;
 
     public CardHandler(SpriteBatch batch, Robot robot, IGameMap map){
         //creation of all arrays containing positions or cards
@@ -40,7 +42,9 @@ public class CardHandler {
         cardSlotPos= new ArrayList<>();
         randomSpriteList=new ArrayList<>();
         Deck = new Deck();
+        lockedList = new ArrayList<>();
         selectedCards = new Cards[5];
+        spritesLocked = new Sprite[5];
         this.batch=batch;
         this.robot=robot;
         this.map=map;
@@ -147,21 +151,45 @@ public class CardHandler {
     //if it is not the first turn then I use this method to change the sprites of the cards to get 9 new random cards
     protected void setCardSprites() {
         int x=0;
+        System.out.println(Deck.getDeckList().size());
         randomSpriteList.clear();
         addSprites();
         if(notFirst){
             spritePos.clear();
+            Deck.getDeckList().clear();
+
             for (int i = 0; i < cardDelt; i++) {
                 spritePos.add(getRandomSprite());
                 spritePos.get(i).setPosition(x, 250);
+                listCard=new Cards(x, 250, "Dummy", 10,spritePos.get(i));
+                Deck.getDeckList().add(listCard);
+
+                //maa fikse ddette i framtida
+                //Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
+                // Deck.getDeckList().get(z).setCardName(CardValues.values()[z].getName());
+                // Deck.getDeckList().get(z).setPriority(CardValues.values()[z].getPriority());
+                // System.out.println(spritePos.get(z).getTexture().toString() + " " + CardValues.values()[z].getName());
+
                 x+=105;
             }
 
+            //extraxt the locked card
+            for(int i=0; i<5; i++){
+                if(selectedCards[i]!=null){
+                    Cards temp=selectedCards[i];
+                    Sprite stemp=temp.getCardSprite();
+                    lockedList.add(stemp);
+                    System.out.println(lockedList.size());
+                }
+            }
+            for(int i=0; i<spritesLocked.length; i++){
+                if(selectedCards[i]!=null){
+                    System.out.println(spritesLocked[i].getTexture().toString());
+                }
+
+            }
+
             for(int z=0; z<cardDelt; z++){
-                Deck.getDeckList().get(z).setCardSprite(spritePos.get(z));
-               // Deck.getDeckList().get(z).setCardName(CardValues.values()[z].getName());
-               // Deck.getDeckList().get(z).setPriority(CardValues.values()[z].getPriority());
-                //System.out.println(spritePos.get(z).getTexture().toString() + " " + CardValues.values()[z].getName());
             }
         }else{
             for (int i = 0; i < cardDelt; i++) {
@@ -171,21 +199,11 @@ public class CardHandler {
                 x+=105;
             }
         }
-        System.out.println(spritePos.size());
-
-        for(int i=0; i<spritePos.size(); i++){
-            spritePos.get(i).getTexture().toString();
-        }
-
-        for(int i=0; i<Deck.getDeckList().size(); i++){
-            System.out.println(Deck.getDeckList().get(i).getCardSprite().getTexture().toString());
-        }
-
-
+        System.out.println(Deck.getDeckList().size());
     }
 
     //method to create the card-Objects
-    protected void createDecklist(){
+    protected void createInitialDecklist(){
         int x=0;
         for(int i=0; i<cardDelt; i++){
             listCard=new Cards(x, 250, CardValues.values()[i].getName(), CardValues.values()[i].getPriority(),spritePos.get(i));
@@ -234,7 +252,7 @@ public class CardHandler {
         return (int)(Math.random() * randomSpriteList.size()-1 + 1);
     }
 
-    //add all the sprites into the sprite list, burde finne ein bedre løsning på dette
+    //add all the sprites into the sprite list, and check if the sprite added is one of the sprites that are locked
     private void addSprites(){
         for(int i=0; i<CardValues.values().length;i++){
             boolean locked=false;
@@ -243,14 +261,14 @@ public class CardHandler {
                     //System.out.println(CardValues.values()[i].getSprite().getTexture().toString() + " " + selectedCards[z].getCardSprite().getTexture().toString());
                     if(CardValues.values()[i].getSprite()==selectedCards[z].getCardSprite()){
                         locked=true;
-                        //System.out.println("locked!");
+                       //System.out.println("locked!");
                         break;
                     }
                 }
             }
             if(!locked){
                 randomSpriteList.add(CardValues.values()[i].getSprite());
-                //System.out.println("ADDED");
+               // System.out.println("ADDED: " + CardValues.values()[i].getSprite().getTexture().toString());
             }
         }
         //System.out.println(randomSpriteList.size());
@@ -290,6 +308,10 @@ public class CardHandler {
         this.notFirst = notFirst;
     }
 
+    public void setSpritesLocked(int index, Sprite sprite){
+        spritesLocked[index]=sprite;
+    }
+
     public boolean getNotFirst(){
         return notFirst;
     }
@@ -300,6 +322,11 @@ public class CardHandler {
 
     public boolean getisDone(){
         return isDone;
+    }
+    public void getLockedList(){
+        for (int i=0; i<lockedList.size(); i++){
+            lockedList.get(i).draw(batch);
+        }
     }
 }
 
