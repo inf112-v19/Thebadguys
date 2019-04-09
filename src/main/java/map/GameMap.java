@@ -612,5 +612,23 @@ public class GameMap implements IGameMap {
         }
     }
 
+    // Useful in testing and generally visuallising the map.
+    public void printMap(){
+        for (int j = this.getHeight() - 1; j >= 0; j--){
+            for (int i = 0; i < this.getWidth(); i++){
+                System.out.print(this.getCell(i, j));
+            }
+            System.out.println();
+        }
+    }
+
+    // Creates a map with entirely random MapTile elements. Useful for testing.
+    public void randomizeMap(){
+        for(int i = 0; i < this.getHeight(); i++){
+            for(int j = 0; j < this.getWidth(); j++){
+                this.setCell(i, j, MapTile.getRandomCard());
+            }
+        }
+    }
 }
 

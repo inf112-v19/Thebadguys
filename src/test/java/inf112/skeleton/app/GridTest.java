@@ -13,6 +13,8 @@ import static org.junit.Assert.*;
 
 public class GridTest {
 
+
+
     //creating a grid, and sets an element to a location on that grid, checks if the get method returns same element
     @Test
     public void gridSetGetTest(){
@@ -129,5 +131,28 @@ public class GridTest {
 
             assertEquals(MapTile.PLAYER, map.getCell(x, y));
         }
+    }
+
+    @Test
+    public void mapGoodMoveTest3() throws MovePlayerException {
+
+        //sets up map
+        IGrid grid = new MyGrid(5,5, MapTile.OPEN);
+        IGameMap map = new GameMap(grid);
+        ((GameMap) map).randomizeMap();
+
+        // sets player on map
+        ((GameMap) map).setCell(2, 0, MapTile.PLAYER);
+
+        ((GameMap) map).printMap();
+
+        for (int k = 0; k < 2; k++){
+
+            System.out.println();
+            map.movePlayer(Direction.NORTH);
+
+            ((GameMap) map).printMap();
+        }
+
     }
 }
