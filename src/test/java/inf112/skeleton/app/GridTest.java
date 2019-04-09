@@ -128,7 +128,6 @@ public class GridTest {
             }
 
             assertEquals(MapTile.PLAYER, map.getCell(x, y));
-
         }
     }
 }
