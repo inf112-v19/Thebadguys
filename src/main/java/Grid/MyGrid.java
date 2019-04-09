@@ -79,9 +79,9 @@ public class MyGrid<T> implements IGrid<T> {
     public T get(double x, double y) {
         x = 2*x +1;
         y = 2*y +1;
-        if(x < 0 || x >= 2*width)
+        if(x < 0 || x > 2*width)
             throw new IndexOutOfBoundsException();
-        if(y < 0 || y >= 2*height)
+        if(y < 0 || y > 2*height)
             throw new IndexOutOfBoundsException();
         int index = (int)(x) + (int)(width*(y));
         return tiles.get(index);

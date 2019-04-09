@@ -257,12 +257,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         //setting repairsite elements on map
         grid.set(11, 0,MapTile.REPAIRSITE);
         grid.set(2, 10,MapTile.REPAIRSITE);
-        //setting lasers on elements on map
-        grid.set(3, 0, MapTile.LASER);
-        grid.set(3, 1, MapTile.LASER);
-        grid.set(3, 2, MapTile.LASER);
-        grid.set(3, 3, MapTile.LASER);
-        grid.set(3, 4, MapTile.LASER);
 
         grid.set(1,3,  MapTile.SPINLEFT);
         grid.set(1,6,  MapTile.SPINLEFT);
@@ -270,6 +264,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(8,2,  MapTile.SPINRIGHT);
         grid.set(8,6 , MapTile.SPINRIGHT);
         grid.set(8,10, MapTile.SPINRIGHT);
+
         grid.set(3, 0, MapTile.LASERNORTH);
 
         grid.set(9,0,  MapTile.LASERNORTH);
@@ -287,8 +282,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         grid.set(2, 2, MapTile.HOLE);
 
-        grid.set(3.0, -0.5, MapTile.WALL);
-        grid.set(9.0, -0.5, MapTile.WALL);
+        /*grid.set(3.0, -0.5, MapTile.WALL);
+        grid.set(9.0, -0.5, MapTile.WALL);*/
         grid.set(-0.5, 9.0, MapTile.WALL);
 
         grid.set(4.5,2.0,MapTile.WALL);
@@ -342,30 +337,31 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public void doTurn() {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
-            if (tick % 40 == 0) {
-                System.out.println(tick);
-                robot.move(selectedCards[turn]);
-                map.move(selectedCards[turn]);
-                robot.getSprite().draw(batch);
-                turn++;
-
-            }
-            if (robot.getTurn() == 4) {
-                if (!cardHandler.getNotFirst()) {
+            robot.setTurn(0);
+            if (turn >= 5) {
+                    System.out.println("Ferdig med ein heil runde!");
                     for (int h = 0; h < 5; h++) {
                         //cardHandler.lockDown();
+                    }
                         for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
                             cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
                         }
+                        turn = 0;
                         cardHandler.setNotFirst(true);
                         cardHandler.nullyFy();
                         cardHandler.setisDone(false);
                         cardHandler.setCardSprites();
-                        }
-                    }
-                turn = 0;
-                robot.setTurn(0);
+
                 System.out.println("\n");
+            }
+            if (tick % 40 == 0) {
+                if (robot.getTurn() < 4) {
+                robot.move(selectedCards[turn]);
+                map.move(selectedCards[turn]);
+                System.out.println("DidTURN "+(turn+1));
+                robot.getSprite().draw(batch);
+                }
+                turn++;
             }
         }
     }
@@ -373,4 +369,5 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         System.out.println(cardHandler);
         return cardHandler;
     }
+
 }

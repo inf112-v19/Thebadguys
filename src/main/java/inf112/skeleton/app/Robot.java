@@ -348,6 +348,7 @@ public class Robot {
 
     public void died() {
         this.lives -= 1; // loose an option card of the players choice
+        this.damage = 0;
         this.takeDamage();
         this.takeDamage();
         this.turn = 4;
@@ -393,6 +394,7 @@ public class Robot {
     public void takeDamage() {
         if (this.damage < 10) {
             this.damage += 1;
+            System.out.println("You now have" + this.damage);
             cardHandler = RoboRallyDemo.getCardHandler();
             cardHandler.lockDown();
             System.out.println(this.damage);
