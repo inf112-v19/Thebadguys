@@ -4,25 +4,19 @@ import Grid.IGrid;
 import Grid.MyGrid;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.utils.Pools;
 import map.GameMap;
-import map.IGameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import java.util.ArrayList;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static TiledMap tiledMap;
@@ -31,24 +25,16 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Cards CardButton;
     private Robot robot;
     private FitViewport viewPort;
-
     private static CardHandler cardHandler;
-
     private Cards statBoard0;
-
     private int tick = 0;
     private int turn = 0;
-
-
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
     private float posX, posY;
-    private TiledMapTileSet mapSet;
     private BitmapFont font;
-
     private Sprite statBoardSprite;
-
     private static GameMap map;
     private IGrid grid;
 
@@ -119,13 +105,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         batch.begin();
         sprite.draw(batch);
 
-        //rotation of sprite, rotate 90 degrees every 100th gametick
-        if (tick % 100 == 0) {
-            for (int i = 0; i < selectedCards.length; i++) {
-               // System.out.println(selectedCards[i]);
-            }
-           // System.out.println("\n");
-        }
 
         doTurn();
         //draw the cardslots
@@ -162,22 +141,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public void resume() {
     }
 
-    //method for general movment. Keyboard at the moment, but will be cards in the future
     @Override
     public boolean keyDown(int keycode) {
-        float moveAmount = 75.0f;
-        if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
-            moveAmount = 150.0f;
-
-        if (keycode == Keys.LEFT)
-            posX -= moveAmount;
-        if (keycode == Keys.RIGHT)
-            posX += moveAmount;
-        if (keycode == Keys.UP)
-            posY += moveAmount;
-        if (keycode == Keys.DOWN)
-            posY -= moveAmount;
-        return true;
+        return false;
     }
 
     @Override
@@ -363,7 +329,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return cardHandler;
     }
 
-    //cleans up the screen, by removing sprites no longer in use, and adding the sprites that should be locked to the spriteslocked list
+    //cleans up the screen, by removing sprites no longer in use
     public void checkLock(Cards[] selectedCards){
         for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
             boolean locked=false;
@@ -375,7 +341,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                         locked=true;
                         break;
                     }
-                    cardHandler.setSpritesLocked(i, selectedCards[i].getCardSprite());
                 }
             }
             if(!locked){
