@@ -25,9 +25,9 @@ public enum CardValues {
     ,ROTATE180pri10(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png")), 10, "ROTATE180")
     ,ROTATE180pri20(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png")), 20, "ROTATE180")
     ,ROTATE180pri30(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png")), 30, "ROTATE180")
-    ,ROTATEC90pri10(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png")), 200, "ROTATEC90")
-    ,ROTATEC90pri20(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png")), 200, "ROTATEC90")
-    ,ROTATEC90pri30(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png")), 200, "ROTATEC90");
+    ,ROTATEC90pri10(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png")), 10, "ROTATEC90")
+    ,ROTATEC90pri20(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png")), 20, "ROTATEC90")
+    ,ROTATEC90pri30(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png")), 30, "ROTATEC90");
 
 
     private final Sprite spr;
