@@ -379,5 +379,7 @@ public class CardHandler {
         }
     }
     public int getCardDelt(){return cardDelt;}
+
+    public void setCardDelt(int cardDelt) {this.cardDelt = cardDelt;}
 }
 
