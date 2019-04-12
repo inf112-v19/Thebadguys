@@ -116,7 +116,7 @@ public class CardHandler {
             }
         }
     }
-    
+
 
     //the x cordinate at the centre of a card
     protected Float getCardCenterX(Cards card){

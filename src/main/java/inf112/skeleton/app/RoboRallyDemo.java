@@ -305,7 +305,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if (turn >= 5) {
                 System.out.println("Ferdig med ein heil runde!");
                 for (int h = 0; h < 5; h++) {
-                    //cardHandler.lockDown();
+                    cardHandler.lockDown();
                 }
                 turn = 0;
                 cardHandler.setNotFirst(true);
