@@ -237,8 +237,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(8,6 , MapTile.SPINRIGHT);
         grid.set(8,10, MapTile.SPINRIGHT);
 
-        grid.set(3, 0, MapTile.LASERNORTH);
-
         grid.set(9,0,  MapTile.LASERNORTH);
 
         grid.set(10, 5,MapTile.LASERNORTH);
@@ -254,7 +252,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         grid.set(2, 2, MapTile.HOLE);
 
-        grid.set(3.0, -0.5, MapTile.WALL);
         grid.set(9.0, -0.5, MapTile.WALL);
         grid.set(-0.5, 9.0, MapTile.WALL);
 
