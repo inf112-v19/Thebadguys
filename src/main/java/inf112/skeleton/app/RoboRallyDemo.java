@@ -4,7 +4,6 @@ import Grid.IGrid;
 import Grid.MyGrid;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -305,18 +304,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
         }
     }
-    /*
-    public void doTurn() {
-        isEndOfTurn = false;
-        //creation og the stat-board
-        public void statBoardCreation ( float x, float y){
-            Texture statTexture = new Texture(Gdx.files.internal("Models/stats.PNG"));
-            statBoardSprite = new Sprite(statTexture);
-            statBoardSprite.setPosition(x, y);
-            statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
-        }
+
+
+    //creation og the stat-board
+    public void statBoardCreation ( float x, float y){
+        Texture statTexture = new Texture(Gdx.files.internal("Models/stats.PNG"));
+        statBoardSprite = new Sprite(statTexture);
+        statBoardSprite.setPosition(x, y);
+        statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
     }
-    */
+
+
 
     //draw the stat font on top of the board
     public void drawStats() {
