@@ -13,7 +13,7 @@ import map.MapTile;
 public class Robot {
     private CardHandler cardHandler;
     private Sprite sprite;
-    private int turn = 0;
+    private Boolean alive = true;
     private int posX = 0;
     private int posY = 0;
     private int[] checkpoint = {posX, posY};
@@ -32,6 +32,7 @@ public class Robot {
     private int tilePixelHeight = prop.get("tileheight", Integer.class);
     private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
     private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
+    private int turn = RoboRallyDemo.getTurn();
 
 
     public Robot(Sprite sprite){
@@ -51,8 +52,8 @@ public class Robot {
         this.posY = checkpoint[1];
     }
 
-    public int getTurn() {
-        return this.turn;
+    public Boolean getAlive() {
+        return this.alive;
     }
 
     public int getPosX(){
@@ -103,8 +104,8 @@ public class Robot {
         return this.y1;
     }
 
-    public void setTurn(int turn) {
-        this.turn = turn;
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public void setCheckpoint(int x, int y){
@@ -351,7 +352,7 @@ public class Robot {
         this.damage = 0;
         this.takeDamage();
         this.takeDamage();
-        this.turn = 4;
+        this.alive = false;
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
             System.out.println("You lost the game");

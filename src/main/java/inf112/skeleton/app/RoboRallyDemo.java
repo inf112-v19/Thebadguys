@@ -36,7 +36,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static CardHandler cardHandler;
 
     private int tick = 0;
-    private int turn = 0;
+    private static int turn = 0;
 
 
     private SpriteBatch batch;
@@ -282,8 +282,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         grid.set(2, 2, MapTile.HOLE);
 
-        /*grid.set(3.0, -0.5, MapTile.WALL);
-        grid.set(9.0, -0.5, MapTile.WALL);*/
+        grid.set(3.0, -0.5, MapTile.WALL);
+        grid.set(9.0, -0.5, MapTile.WALL);
         grid.set(-0.5, 9.0, MapTile.WALL);
 
         grid.set(4.5,2.0,MapTile.WALL);
@@ -334,8 +334,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public void doTurn() {
         Cards selectedCards[] = cardHandler.getSelectedCards();
+        robot.setAlive(true);
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
-            robot.setTurn(0);
             if (turn >= 5) {
                     System.out.println("Ferdig med ein heil runde!");
                     for (int h = 0; h < 5; h++) {
@@ -353,19 +353,22 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 System.out.println("\n");
             }
             if (tick % 40 == 0) {
-                if (robot.getTurn() < 4) {
+                if (robot.getAlive()) {
                 robot.move(selectedCards[turn]);
-                map.move(selectedCards[turn]);
-                System.out.println("DidTURN "+(turn+1));
-                robot.getSprite().draw(batch);
                 }
                 turn++;
+                System.out.println("DidTURN "+(turn));
+                robot.getSprite().draw(batch);
             }
         }
     }
     public static CardHandler getCardHandler(){
         System.out.println(cardHandler);
         return cardHandler;
+    }
+
+    public static int getTurn() {
+        return turn;
     }
 
 }
