@@ -8,7 +8,6 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
 
-
 public class Robot {
     private CardHandler cardHandler;
     private Sprite sprite;
@@ -33,6 +32,7 @@ public class Robot {
     private boolean InitiatePowerdown = false;
     private boolean ExecutePowerdown = false;
     private boolean game = RoboRallyDemo.getEndOfTurn();
+
 
     public Robot(Sprite sprite){
         this.sprite = sprite;

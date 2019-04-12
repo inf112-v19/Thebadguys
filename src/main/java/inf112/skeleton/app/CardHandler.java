@@ -18,7 +18,10 @@ public class CardHandler {
     private ArrayList<CardSlots> cardSlotPos;
     private ArrayList<Sprite> randomSpriteList;
     private ArrayList<Sprite> spritePos;
+
     private Deck Deck;
+    private Deck lockedDeck;
+
     private Cards[] selectedCards;
     private Cards clickedCard;
     private Cards listCard;
@@ -31,12 +34,12 @@ public class CardHandler {
     private boolean isClicked=false;
     private Robot robot;
     private IGameMap map;
-    private int cardDelt = 9;
-    private int cardSlotLock=5;
-
-    public int getCardDelt() {return cardDelt;}
-
-    public void setCardDelt(int cardDelt) {this.cardDelt = cardDelt; }
+    private int cardDelt=9;
+    private int cardSlotLock=0;;
+    private ArrayList<Sprite> lockedList;
+    private int pri;
+    private String name;
+    private int x;
 
     public CardHandler(SpriteBatch batch, Robot robot, IGameMap map){
         //creation of all arrays containing positions or cards
@@ -44,11 +47,16 @@ public class CardHandler {
         cardSlotPos= new ArrayList<>();
         randomSpriteList=new ArrayList<>();
         Deck = new Deck();
+        lockedDeck=new Deck();
+        lockedList = new ArrayList<>();
         selectedCards = new Cards[5];
         this.batch=batch;
         this.robot=robot;
         this.map=map;
         counter=0;
+        int x=0;
+        String name="";
+        int pri=0;
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
@@ -154,21 +162,17 @@ public class CardHandler {
     }
 
     //method to set the position of sprites, if it is the first turn then just set the position of the sprites,
-    //if it is not the first turn then I use this method to change the sprites of the cards to get 9 new random cards
+    //if it is not the first turn then I use this method to change the sprites of the cards to get new random cards
     protected void setCardSprites() {
-        int x = 0;
+        int x=0;
+        System.out.println(Deck.getDeckList().size());
         randomSpriteList.clear();
         addSprites();
         if(notFirst){
             spritePos.clear();
-            for (int i = 0; i < getCardDelt(); i++) {
-                spritePos.add(getRandomSprite());
-                spritePos.get(i).setPosition(x, 250);
-                Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
-                Deck.getDeckList().get(i).setCardName(CardValues.values()[i].getName());
-                Deck.getDeckList().get(i).setPriority(CardValues.values()[i].getPriority());
-                x+=105;
-            }
+            Deck.getDeckList().clear();
+            updateDeckList();
+            extraxtLockedCards();
         }else{
             for (int i = 0; i < getCardDelt(); i++) {
                 spritePos.add(getRandomSprite());
@@ -179,13 +183,63 @@ public class CardHandler {
         }
     }
 
+    //insert a sprite and get the right priority back
+    private int spriteToPri(Sprite sprite){
+        for(CardValues card: CardValues.values()){
+            if(card.getSprite()==sprite){
+                return card.getPriority();
+            }
+        }
+        return 0;
+    }
+
+    //insert a sprite and get the right name back
+    private String spriteToName(Sprite sprite){
+        for(CardValues card: CardValues.values()){
+            if(card.getSprite()==sprite){
+                return card.getName();
+            }
+        }
+        return null;
+    }
+
     //method to create the card-Objects
-    protected void createDecklist(){
-        int x=0;
-        for(int i=0; i<getCardDelt(); i++){
-            listCard=new Cards(x, 250, CardValues.values()[i].getName(), CardValues.values()[i].getPriority(),spritePos.get(i));
+    protected void createInitialDecklist(){
+        for(Sprite sprite: spritePos){
+            name=spriteToName(sprite);
+            pri=spriteToPri(sprite);
+            System.out.println(name+" "+pri);
+            listCard=new Cards(x, 250, name, pri, sprite);
+            Deck.getDeckList().add(listCard);
+        }
+    }
+
+    //update the Decklist after a turn
+    private void updateDeckList(){
+        x=0;
+        for (int i = 0; i < cardDelt; i++) {
+            spritePos.add(getRandomSprite());
+            spritePos.get(i).setPosition(x, 250);
+            name=spriteToName(spritePos.get(i));
+            pri=spriteToPri(spritePos.get(i));
+            listCard=new Cards(x, 250, name, pri,spritePos.get(i));
             Deck.getDeckList().add(listCard);
             x+=105;
+            System.out.println(name + " " +pri);
+        }
+    }
+
+    //extraxt the locked card
+    public void extraxtLockedCards(){
+        for (Cards card : selectedCards){
+            if(card!=null){
+                Sprite temp=card.getCardSprite();
+                lockedList.add(temp);
+                name=spriteToName(card.getCardSprite());
+                pri=spriteToPri(card.getCardSprite());
+                listCard=new Cards(x, 250, name, pri,temp);
+                lockedDeck.getDeckList().add(listCard);
+            }
         }
     }
 
@@ -193,7 +247,7 @@ public class CardHandler {
     protected void drawCards(){
         for(Cards card: Deck.getDeckList()){
             card.getCardSprite().draw(batch);
-            //font.draw(batch,""+card.getPriority(),card.getCardSprite().getX()+card.getCardSprite().getWidth()-30,card.getCardSprite().getY()+card.getCardSprite().getHeight()-10);
+            font.draw(batch,""+card.getPriority(),card.getCardSprite().getX()+card.getCardSprite().getWidth()-30,card.getCardSprite().getY()+card.getCardSprite().getHeight()-10);
         }
     }
 
@@ -228,29 +282,44 @@ public class CardHandler {
         return (int)(Math.random() * randomSpriteList.size()-1 + 1);
     }
 
-    //add all the sprites into the sprite list, burde finne ein bedre løsning på dette
+    //add all the sprites into the sprite list, and check if the sprite added is one of the sprites that are locked
     private void addSprites(){
-        for(int i=0; i<CardValues.values().length;i++){
-            randomSpriteList.add(CardValues.values()[i].getSprite());
+        for(CardValues card: CardValues.values()){
+            boolean locked=false;
+            for(Cards selected: selectedCards){
+                if(selected!=null){
+                    if(card.getSprite()==selected.getCardSprite()){
+                        locked=true;
+                       //System.out.println("locked!");
+                        break;
+                    }
+                }
+            }
+            if(!locked){
+                randomSpriteList.add(card.getSprite());
+               // System.out.println("ADDED: " + CardValues.values()[i].getSprite().getTexture().toString());
+            }
         }
     }
 
     //method that empties the selectedCards array, that is used when an turn is over
     protected void nullyFy(){
-        for(int i=0; i<selectedCards.length; i++){
+        for(int i=0; i<selectedCards.length-cardSlotLock; i++){
             selectedCards[i]=null;
         }
         selectedCards[0]=null;
     }
-/*
+
     public void lockDown(){
-        if(getCardDelt()>5){
-            getCardDelt()--;
+        if(cardDelt>5){
+            cardDelt--;
         }else{
-            cardSlotLock--;
+            if(cardSlotLock<5){
+                cardSlotLock++;
+            }
         }
     }
-*/
+
     public int getCardSlotLock(){
         return cardSlotLock;
     }
@@ -303,5 +372,12 @@ public class CardHandler {
     public boolean newTurn(){
         return isDone;
     }
+
+    public void drawLockedList(){
+        for(Sprite sprite:lockedList){
+            sprite.draw(batch);
+        }
+    }
+    public int getCardDelt(){return cardDelt;}
 }
 
