@@ -4,7 +4,6 @@ import Grid.IGrid;
 import Grid.MyGrid;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,22 +12,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.utils.Pools;
 import map.GameMap;
-import map.IGameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import java.util.ArrayList;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera;
     private int i = 0;
+    private int tick = 0;
+    private int turn = 0;
+    private static Boolean isEndOfTurn = false;
+
     private Cards CardButton;
     private Cards PowerdownButton;
     private Robot robot;
@@ -151,6 +149,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         cardHandler.drawCards();
 
         i++;
+        tick++;
         batch.end();
     }
 
@@ -323,7 +322,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     public void powerdownButtonCreation(float x, float y) {
-        if (!robot.getPowerdown()) {
+        if (!robot.getInitiatePowerdown()) {
             Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
             Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
             powerdownbuttonSprite.setPosition(x, y);
@@ -337,33 +336,80 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
     }
 
-    public void doTurn () {
+    public void doTurn() {
+        isEndOfTurn = false;
         Cards selectedCards[] = cardHandler.getSelectedCards();
-        if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
-            for (int i = 0; i < selectedCards.length; i++) {
-                robot.move(selectedCards[i]);
-                map.move(selectedCards[i]);
-                //robot.getSprite().draw(batch);
-                if (i == selectedCards.length - 1) {
-                    if (!cardHandler.getNotFirst()) {
-                        for (int h = 0; h < 8; h++) {
-                           // cardHandler.lockDown();
-                        }
+        if (!robot.getExecutePowerdown()){
+            if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
+                if (turn >= 5) {
+                    System.out.println("Ferdig med ein heil runde!");
+                    isEndOfTurn = true;
+                    for (int h = 0; h < 7; h++) {
+                        //cardHandler.lockDown();
                     }
-                    for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
-                        cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
-                    }
+                    turn = 0;
                     cardHandler.setNotFirst(true);
                     cardHandler.nullyFy();
+                    checkLock(selectedCards);
                     cardHandler.setisDone(false);
                     cardHandler.setCardSprites();
+
+                    System.out.println("\n");
+                    if (robot.getInitiatePowerdown()) {
+                        robot.setExecutePowerdown(true);
+                    }
+                }
+                if (tick % 40 == 0) {
+                    robot.move(selectedCards[turn]);
+                    map.move(selectedCards[turn]);
+                    System.out.println("DidTURN "+(turn+1));
+                    robot.getSprite().draw(batch);
+
+
+
+
+                    turn++;
                 }
             }
-            System.out.println("\n");
+        }
+        else {
+            System.out.println("hello");
+            robot.doPowerdown();
+            turn ++;
+            if (turn >= 5) {
+                robot.setExecutePowerdown(false);
+                robot.setInitiatePowerdown(false);
+            }
         }
     }
 
+    public void checkLock(Cards[] selectedCards){
+        for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
+            boolean locked=false;
+            for(int i=0; i<selectedCards.length; i++){
+                if(selectedCards[i]!=null){
+                    //System.out.println(cardHandler.getSpritePos().get(v).getTexture().toString() + " " + selectedCards[i].getCardSprite().getTexture().toString());
+                    if(cardHandler.getSpritePos().get(v)==selectedCards[i].getCardSprite()){
+                        System.out.println("LOCKED");
+                        locked=true;
+                        break;
+                    }
+                }
+            }
+            if(!locked){
+                // System.out.println("GONE!");
+                cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
+            }
+        }
+    }
     public static CardHandler getCardHandler(){
         System.out.println(cardHandler);
-        return cardHandler;}
+        return cardHandler;
+    }
+    public void setEndOfTurn(boolean isItOver){
+        this.isEndOfTurn = isItOver;
+    }
+    public static boolean getEndOfTurn(){
+        return isEndOfTurn;
+    }
 }

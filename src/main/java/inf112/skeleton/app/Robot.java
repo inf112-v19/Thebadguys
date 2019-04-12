@@ -4,7 +4,6 @@ package inf112.skeleton.app;
 import Grid.Direction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
@@ -31,7 +30,9 @@ public class Robot {
     private int tilePixelHeight = prop.get("tileheight", Integer.class);
     private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
     private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
-    private boolean powerdown = false;
+    private boolean InitiatePowerdown = false;
+    private boolean ExecutePowerdown = false;
+    private boolean game = RoboRallyDemo.getEndOfTurn();
 
     public Robot(Sprite sprite){
         this.sprite = sprite;
@@ -287,7 +288,7 @@ public class Robot {
         if (this.damage < 10) {
             this.damage += 1;
             cardHandler = RoboRallyDemo.getCardHandler();
-            cardHandler.lockDown();
+            cardHandler.setCardDelt(9-getDamage());
             System.out.println(this.damage);
         }
         else {
@@ -314,11 +315,25 @@ public class Robot {
         }
     }
 
-    public Boolean getPowerdown() {
-        return powerdown;
+    public Boolean getInitiatePowerdown() {
+        return InitiatePowerdown;
     }
 
-    public void setPowerdown(boolean Powerdown) {
-        this.powerdown = Powerdown;
+    public void setInitiatePowerdown(boolean InitiatePowerdown) {
+        this.InitiatePowerdown = InitiatePowerdown;
+    }
+
+    public Boolean getExecutePowerdown() { return ExecutePowerdown; }
+
+    public void setExecutePowerdown(boolean ExecutePowerdown) { this.ExecutePowerdown = ExecutePowerdown; }
+
+
+
+    public void doPowerdown() {
+        damage = 0;
+        cardHandler.setCardDelt(9-getDamage());
+        System.out.println("Powerdowning");
+        System.out.println("Current damage: " +getDamage());
+        System.out.println(cardHandler.getCardDelt());
     }
 }

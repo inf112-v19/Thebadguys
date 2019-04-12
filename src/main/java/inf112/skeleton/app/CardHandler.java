@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sun.istack.internal.Nullable;
 import map.IGameMap;
 import java.util.ArrayList;
 
@@ -32,8 +31,12 @@ public class CardHandler {
     private boolean isClicked=false;
     private Robot robot;
     private IGameMap map;
-    private int cardDelt=9;
-    private int cardSlotLock=5;;
+    private int cardDelt = 9;
+    private int cardSlotLock=5;
+
+    public int getCardDelt() {return cardDelt;}
+
+    public void setCardDelt(int cardDelt) {this.cardDelt = cardDelt; }
 
     public CardHandler(SpriteBatch batch, Robot robot, IGameMap map){
         //creation of all arrays containing positions or cards
@@ -61,11 +64,13 @@ public class CardHandler {
         boolean isInside=false;
 
         if (insideCard(screenX, screenY, powerDownBtn)){
-            robot.setPowerdown(true);
+            robot.setInitiatePowerdown(true);
+            selectedCards[0]=null;
         }
 
         if(insideCard(screenX, screenY, endTurnBtn)){
             isDone=true;
+            selectedCards[0]=null;
         }
         //if a card is inside a cardslot and it is released move it into the middle of the slot
         for(int i=0; i<5; i++){
@@ -93,9 +98,9 @@ public class CardHandler {
         clickedCard=new Cards(0,0, "",0, cardSprite10);
     }
 
-    public void click(int button, int screenX, int screenY, Cards CardButton){
+    public void click(int button, int screenX, int screenY, Cards endTurnBtn){
         counter=0;
-        for(int i=0; i<cardDelt; i++){
+        for(int i=0; i<getCardDelt(); i++){
             if(insideCard(screenX, screenY,Deck.getDeckList().get(i)) && button == Input.Buttons.LEFT){
                 clickedCard=Deck.getDeckList().get(i);
                 for(int j=0; j<5; j++){
@@ -156,7 +161,7 @@ public class CardHandler {
         addSprites();
         if(notFirst){
             spritePos.clear();
-            for (int i = 0; i < cardDelt; i++) {
+            for (int i = 0; i < getCardDelt(); i++) {
                 spritePos.add(getRandomSprite());
                 spritePos.get(i).setPosition(x, 250);
                 Deck.getDeckList().get(i).setCardSprite(spritePos.get(i));
@@ -165,7 +170,7 @@ public class CardHandler {
                 x+=105;
             }
         }else{
-            for (int i = 0; i < cardDelt; i++) {
+            for (int i = 0; i < getCardDelt(); i++) {
                 spritePos.add(getRandomSprite());
                 spritePos.get(i).setPosition(x, 250);
 
@@ -177,7 +182,7 @@ public class CardHandler {
     //method to create the card-Objects
     protected void createDecklist(){
         int x=0;
-        for(int i=0; i<cardDelt; i++){
+        for(int i=0; i<getCardDelt(); i++){
             listCard=new Cards(x, 250, CardValues.values()[i].getName(), CardValues.values()[i].getPriority(),spritePos.get(i));
             Deck.getDeckList().add(listCard);
             x+=105;
@@ -237,15 +242,15 @@ public class CardHandler {
         }
         selectedCards[0]=null;
     }
-
+/*
     public void lockDown(){
-        if(cardDelt>5){
-            cardDelt--;
+        if(getCardDelt()>5){
+            getCardDelt()--;
         }else{
             cardSlotLock--;
         }
     }
-
+*/
     public int getCardSlotLock(){
         return cardSlotLock;
     }
@@ -293,6 +298,9 @@ public class CardHandler {
     }
 
     public boolean getisDone(){
+        return isDone;
+    }
+    public boolean newTurn(){
         return isDone;
     }
 }
