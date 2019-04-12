@@ -3,24 +3,164 @@
 title __APP's Class Diagram__\n
 
   package inf112.skeleton.app {
-    class HelloWorld {
+    class CardHandler {
         - batch : SpriteBatch
+        - cardSprite10 : Sprite
         - font : BitmapFont
-        - i : int
-        + create()
-        + dispose()
-        + render()
-        + resize()
-        + pause()
-        + resume()
-        + keyDown()
-        + keyUp()
-        + keyTyped()
-        + touchDown()
-        + touchUp()
-        + touchDragged()
-        + mouseMoved()
-        + scrolled()
+        - cardSlotPos : ArrayList<CardSlots>
+        - randomSpriteList : ArrayList<Sprite>
+        - spritePos : ArrayList<Sprite>
+        - selectedCards : Cards[]
+        - counter : int
+        - isDone : boolean
+        - notFirst : boolean
+        - isClicked : boolean
+        - cardDelt : int
+        - cardSlotLock : int
+        + CardHandler()
+        + dragged()
+        + letGo()
+        + click()
+        + printCardSlots()
+        # getCardCenterX()
+        # getCardCenterY()
+        # getCardSlotCenterX()
+        # getCardSlotCenterY()
+        # insideCardSlot()
+        + insideCard()
+        # setCardSprites()
+        # createDecklist()
+        # drawCards()
+        # createCardSlots()
+        # drawCardSlots()
+        - getRandomSprite()
+        - rng()
+        - addSprites()
+        # nullyFy()
+        + lockDown()
+        + getCardSlotLock()
+        + getSelectedCards()
+        + getSpritePos()
+        + setNotFirst()
+        + getNotFirst()
+        + setisDone()
+        + getisDone()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class CardSlots {
+        - cardSlotSprite1 : Sprite
+        - posX : float
+        - posY : float
+        + CardSlots()
+        + CardSlots()
+        + getCardSlotSprite()
+        + getPosX()
+        + getPosY()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    enum CardValues {
+      BACKUP1
+      MOVE12
+      BACKUP
+      MOVE1
+      MOVE2
+      MOVE3
+      ROTATE90
+      ROTATE180
+      ROTATEC90
+      spr
+      priority
+      name
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Cards {
+        - cardSprite : Sprite
+        - defaultPosX : float
+        - defaultPosY : float
+        - posX : float
+        - posY : float
+        - name : String
+        - priority : int
+        + Cards()
+        + Cards()
+        + getName()
+        + getPriority()
+        + getCardSprite()
+        + getPosX()
+        + getPosY()
+        + getDefaultPosX()
+        + getDefaultPosY()
+        + setCardSprite()
+        + setCardName()
+        + setPriority()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Deck {
+        {static} - DeckList : ArrayList<Cards>
+        + Deck()
+        + getDeckList()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface ICard {
+        {abstract} + getCardSprite()
+        {abstract} + getPosX()
+        {abstract} + getPosY()
+        {abstract} + getDefaultPosX()
+        {abstract} + getDefaultPosY()
+        {abstract} + setCardSprite()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface ICardSlot {
+        {abstract} + getCardSlotSprite()
+        {abstract} + getPosX()
+        {abstract} + getPosY()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IDeck {
+        {abstract} + getDeckList()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IItem {
+        {abstract} + getDamage()
+        {abstract} + getSize()
+        {abstract} + getName()
+        {abstract} + getSymbol()
+        {abstract} + handleDamage()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IRobot {
+        {abstract} + getPosX()
+        {abstract} + getPosY()
+        {abstract} + getTextureStr()
+        {abstract} + getTexture()
+        {abstract} + getSprite()
     }
   }
   
@@ -34,14 +174,20 @@ title __APP's Class Diagram__\n
 
   package inf112.skeleton.app {
     class RoboRallyDemo {
-        ~ tiledMap : TiledMap
-        ~ tiledMapRenderer : TiledMapRenderer
-        ~ camera : OrthographicCamera
+        {static} - tiledMap : TiledMap
+        - tiledMapRenderer : TiledMapRenderer
+        - camera : OrthographicCamera
+        - i : int
+        - viewPort : FitViewport
+        {static} - cardHandler : CardHandler
         - batch : SpriteBatch
         - texture : Texture
         - sprite : Sprite
         - posX : float
         - posY : float
+        - mapSet : TiledMapTileSet
+        - font : BitmapFont
+        {static} - map : GameMap
         + create()
         + dispose()
         + render()
@@ -56,27 +202,82 @@ title __APP's Class Diagram__\n
         + touchDragged()
         + mouseMoved()
         + scrolled()
+        - createGrid()
+        {static} + getTiledMap()
+        {static} + getIGameMap()
+        + setCamera()
+        + buttonCreation()
+        + doTurn()
+        {static} + getCardHandler()
     }
   }
   
 
   package inf112.skeleton.app {
     class Robot {
-        - sprite : String
-        - posX : float
-        - posY : float
+        - sprite : Sprite
+        - posX : int
+        - posY : int
+        - checkpoint : int[]
+        - flagsPassed : int
+        - lives : int
+        - damage : int
+        - w : float
+        - h : float
+        - tiledMap : TiledMap
+        - prop : MapProperties
+        - mapWidth : int
+        - mapHeight : int
+        - tilePixelWidth : int
+        - tilePixelHeight : int
+        - x1 : int
+        - y1 : int
+        + Robot()
         + Robot()
         + getPosX()
         + getPosY()
         + getSprite()
+        + getCheckpoint()
+        + getFlagsPassed()
+        + getDirection()
+        + getLives()
+        + getDamage()
+        + getX1()
+        + getY1()
+        + setCheckpoint()
+        + setFlagsPassed()
+        + setPosX()
+        + setPosY()
+        + setDamage()
+        + setLives()
+        + rotate_right()
+        + rotate_left()
+        + moveForward()
+        + move()
+        + died()
+        + takeDamage()
+        + checkNext()
     }
   }
   
 
-  HelloWorld -up-|> ApplicationListener
-  HelloWorld -up-|> InputProcessor
+  CardHandler o-- Deck : Deck
+  CardHandler o-- Cards : clickedCard
+  CardHandler o-- Cards : listCard
+  CardHandler o-- CardSlots : temp
+  CardHandler o-- Robot : robot
+  CardHandler o-- IGameMap : map
+  CardSlots -up-|> ICardSlot
+  Cards -up-|> ICard
+  Deck -up-|> IDeck
   RoboRallyDemo -up-|> ApplicationListener
   RoboRallyDemo -up-|> InputProcessor
+  RoboRallyDemo o-- Cards : CardButton
+  RoboRallyDemo o-- Robot : robot
+  RoboRallyDemo o-- IGrid : grid
+  Robot o-- CardHandler : cardHandler
+  Robot o-- Direction : dir
+  Robot o-- GameMap : gameMap
 
 
 right footer

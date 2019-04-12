@@ -23,6 +23,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private TiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera;
     private Cards CardButton;
+    private Cards PowerdownButton;
     private Robot robot;
     private FitViewport viewPort;
     private static CardHandler cardHandler;
@@ -39,6 +40,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Sprite statBoardSprite;
     private static GameMap map;
     private IGrid grid;
+
 
     //create the initial state of the game
     @Override
@@ -106,6 +108,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         batch.begin();
         sprite.draw(batch);
+        powerdownButtonCreation(700, 800);
 
 
         doTurn();
@@ -120,6 +123,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         statBoard0.getCardSprite().draw(batch);
 
         drawStats();
+
+        PowerdownButton.getCardSprite().draw(batch);
+
 
         //draw Cards
         cardHandler.drawCards();
@@ -159,7 +165,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     //this method is used to click and move a card around on the screen. if you click a card, the clickedCard, will get the right card from the Deck
-    //if tou click a card and it is inside a cardSlot a boolean will change (isClicked=true), this I will use in the touchUp method
+    //if you click a card and it is inside a cardSlot a boolean will change (isClicked=true), this I will use in the touchUp method
     // And if you click the Execute button the it will change a boolean value
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -171,7 +177,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //if it is outside then move it back to its default pos
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        cardHandler.letGo(screenX, screenY, CardButton);
+        cardHandler.letGo(screenX, screenY, CardButton, PowerdownButton);
         return false;
     }
 
@@ -316,7 +322,22 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         font.draw(batch, ""+robot.getFlagsPassed(), statBoard0.getCardSprite().getX()+250,  statBoard0.getCardSprite().getY()+statBoard0.getCardSprite().getHeight()-30);
     }
 
-    public void doTurn() {
+    public void powerdownButtonCreation(float x, float y) {
+        if (!robot.getPowerdown()) {
+            Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
+            Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+            powerdownbuttonSprite.setPosition(x, y);
+            PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
+        }
+        else {
+            Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
+            Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+            powerdownbuttonSprite.setPosition(x, y);
+            PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
+        }
+    }
+
+    public void doTurn () {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         robot.setAlive(true);
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
