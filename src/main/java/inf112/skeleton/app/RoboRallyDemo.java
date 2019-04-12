@@ -307,8 +307,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(9.0,4.5,MapTile.WALL);
         grid.set(10.0,4.5,MapTile.WALL);
 
-
-
     }
 
     public static TiledMap getTiledMap() {
