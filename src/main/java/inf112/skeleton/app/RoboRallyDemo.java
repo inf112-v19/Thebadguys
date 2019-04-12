@@ -4,7 +4,6 @@ import Grid.IGrid;
 import Grid.MyGrid;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,28 +12,22 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.utils.Pools;
 import map.GameMap;
-import map.IGameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import java.util.ArrayList;
 
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera;
-    private int i = 0;
     private Cards CardButton;
+    private Cards PowerdownButton;
     private Robot robot;
     private FitViewport viewPort;
-
     private static CardHandler cardHandler;
-
+    private Cards statBoard0;
     private int tick = 0;
     private static int turn = 0;
 
@@ -43,11 +36,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Texture texture;
     private Sprite sprite;
     private float posX, posY;
-    private TiledMapTileSet mapSet;
     private BitmapFont font;
-
+    private Sprite statBoardSprite;
     private static GameMap map;
     private IGrid grid;
+
 
     //create the initial state of the game
     @Override
@@ -72,29 +65,23 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         robot = new Robot(sprite, startpos);
 
         grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
-
-        //creation of the robot
-
-
         sprite.setPosition(robot.getX1(), robot.getY1());
 
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardHandler = new CardHandler(batch, robot, map);
 
-        //loads map with elements and robot
-
+        font = new BitmapFont();
 
         //create the end turn button
         buttonCreation(700, 500);
-
-        font = new BitmapFont();
+        statBoardCreation(700,930);
 
         //set the position of all the cardsprites
         cardHandler.setCardSprites();
 
         //create the 9 cards cards
-        cardHandler.createDecklist();
+        cardHandler.createInitialDecklist();
 
         //creation of the 5 cardSlots
         cardHandler.createCardSlots();
@@ -121,30 +108,28 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         batch.begin();
         sprite.draw(batch);
+        powerdownButtonCreation(700, 800);
 
-
-        //check how mutch damage a robot has taken
-
-        //check how mutch damage a robot has taken
-        //rotation of sprite, rotate 90 degrees every 100th gametick
-        if (i % 100 == 0) {
-            for (int i = 0; i < selectedCards.length; i++) {
-                System.out.println(selectedCards[i]);
-            }
-            System.out.println("\n");
-        }
 
         doTurn();
         //draw the cardslots
         cardHandler.drawCardSlots();
 
+        cardHandler.drawLockedList();
+
         //draw button
         CardButton.getCardSprite().draw(batch);
+
+        statBoard0.getCardSprite().draw(batch);
+
+        drawStats();
+
+        PowerdownButton.getCardSprite().draw(batch);
+
 
         //draw Cards
         cardHandler.drawCards();
 
-        i++;
         tick++;
         batch.end();
     }
@@ -164,22 +149,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public void resume() {
     }
 
-    //method for general movment. Keyboard at the moment, but will be cards in the future
     @Override
     public boolean keyDown(int keycode) {
-        float moveAmount = 75.0f;
-        if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
-            moveAmount = 150.0f;
-
-        if (keycode == Keys.LEFT)
-            posX -= moveAmount;
-        if (keycode == Keys.RIGHT)
-            posX += moveAmount;
-        if (keycode == Keys.UP)
-            posY += moveAmount;
-        if (keycode == Keys.DOWN)
-            posY -= moveAmount;
-        return true;
+        return false;
     }
 
     @Override
@@ -193,7 +165,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     //this method is used to click and move a card around on the screen. if you click a card, the clickedCard, will get the right card from the Deck
-    //if tou click a card and it is inside a cardSlot a boolean will change (isClicked=true), this I will use in the touchUp method
+    //if you click a card and it is inside a cardSlot a boolean will change (isClicked=true), this I will use in the touchUp method
     // And if you click the Execute button the it will change a boolean value
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -205,7 +177,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //if it is outside then move it back to its default pos
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        cardHandler.letGo(screenX, screenY, CardButton);
+        cardHandler.letGo(screenX, screenY, CardButton, PowerdownButton);
         return false;
     }
 
@@ -332,23 +304,54 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         CardButton = new Cards(x, y, "", 0, buttonSprite);
     }
 
-    public void doTurn() {
+    //creation og the stat-board
+    public void statBoardCreation(float x, float y){
+        Texture statTexture = new Texture(Gdx.files.internal("Models/stats.PNG"));
+        statBoardSprite = new Sprite(statTexture);
+        statBoardSprite.setPosition(x,y);
+        statBoard0= new Cards(x,y, "statBoard",0, statBoardSprite);
+    }
+
+    //draw the stat font on top of the board
+    public void drawStats(){
+        int hp= 9-robot.getDamage();
+        font.setColor(0,0,0,1);
+        font.draw(batch, "Player1:", statBoard0.getCardSprite().getX()+10,  statBoard0.getCardSprite().getY()+statBoard0.getCardSprite().getHeight()-30);
+        font.draw(batch, ""+hp, statBoard0.getCardSprite().getX()+90,  statBoard0.getCardSprite().getY()+statBoard0.getCardSprite().getHeight()-30);
+        font.draw(batch, ""+robot.getLives(), statBoard0.getCardSprite().getX()+175,  statBoard0.getCardSprite().getY()+statBoard0.getCardSprite().getHeight()-30);
+        font.draw(batch, ""+robot.getFlagsPassed(), statBoard0.getCardSprite().getX()+250,  statBoard0.getCardSprite().getY()+statBoard0.getCardSprite().getHeight()-30);
+    }
+
+    public void powerdownButtonCreation(float x, float y) {
+        if (!robot.getPowerdown()) {
+            Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
+            Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+            powerdownbuttonSprite.setPosition(x, y);
+            PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
+        }
+        else {
+            Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
+            Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+            powerdownbuttonSprite.setPosition(x, y);
+            PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
+        }
+    }
+
+    public void doTurn () {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         robot.setAlive(true);
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
             if (turn >= 5) {
-                    System.out.println("Ferdig med ein heil runde!");
-                    for (int h = 0; h < 5; h++) {
-                        //cardHandler.lockDown();
-                    }
-                        for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
-                            cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
-                        }
-                        turn = 0;
-                        cardHandler.setNotFirst(true);
-                        cardHandler.nullyFy();
-                        cardHandler.setisDone(false);
-                        cardHandler.setCardSprites();
+                System.out.println("Ferdig med ein heil runde!");
+                for (int h = 0; h < 5; h++) {
+                    //cardHandler.lockDown();
+                }
+                turn = 0;
+                cardHandler.setNotFirst(true);
+                cardHandler.nullyFy();
+                checkLock(selectedCards);
+                cardHandler.setisDone(false);
+                cardHandler.setCardSprites();
 
                 System.out.println("\n");
             }
@@ -363,8 +366,28 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
     }
     public static CardHandler getCardHandler(){
-        System.out.println(cardHandler);
         return cardHandler;
+    }
+
+    //cleans up the screen, by removing sprites no longer in use
+    public void checkLock(Cards[] selectedCards){
+        for (int v = 0; v < cardHandler.getSpritePos().size(); v++) {
+            boolean locked=false;
+            for(int i=0; i<selectedCards.length; i++){
+                if(selectedCards[i]!=null){
+                    //System.out.println(cardHandler.getSpritePos().get(v).getTexture().toString() + " " + selectedCards[i].getCardSprite().getTexture().toString());
+                    if(cardHandler.getSpritePos().get(v)==selectedCards[i].getCardSprite()){
+                        //System.out.println("LOCKED");
+                        locked=true;
+                        break;
+                    }
+                }
+            }
+            if(!locked){
+                //System.out.println("GONE!");
+                cardHandler.getSpritePos().get(v).setPosition(10000, 10000);
+            }
+        }
     }
 
     public static int getTurn() {

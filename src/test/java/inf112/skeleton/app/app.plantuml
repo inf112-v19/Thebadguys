@@ -9,6 +9,31 @@ title __APP's Class Diagram__\n
   }
   
 
+  package inf112.skeleton.app {
+    class CardsTest {
+        ~ test : float
+        + createCardTest()
+        + createCardSlotTest()
+        + createDeckTest()
+        + addCardToDeckTest()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class GridTest {
+        + gridSetGetTest()
+        + mapGetCellTest()
+        + mapBadMoveTest()
+        + mapGoodMoveTest()
+        + mapGoodMoveTest2()
+    }
+  }
+  
+
+  CardsTest o-- Cards : testCard
+  CardsTest o-- CardSlots : testCardSlot
+  CardsTest o-- Deck : deck
 
 
 right footer

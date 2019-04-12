@@ -4,7 +4,19 @@ title __APP's Class Diagram__\n
 
   package inf112.skeleton.app {
     class AppTest {
+        ~ testCard : Cards
+        ~ testCardSlot : CardSlots
+        ~ deck : Deck
+        ~ test : float
         + shouldAnswerWithTrue()
+        + createCardTest()
+        + createCardSlotTest()
+        + createDeckTest()
+        + addCardToDeckTest()
+        + gridSetGetTest()
+        + mapGetCellTest()
+        + mapBadMoveTest()
+        + mapGoodMoveTest()
     }
   }
   
