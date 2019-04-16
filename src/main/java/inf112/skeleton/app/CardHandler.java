@@ -64,6 +64,7 @@ public class CardHandler {
         font = new BitmapFont();
     }
 
+    //merging
     public void dragged(int screenX, int screenY, Cards CardButton){
         clickedCard.getCardSprite().setPosition(screenX - clickedCard.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - clickedCard.getCardSprite().getHeight() / 2);
     }
