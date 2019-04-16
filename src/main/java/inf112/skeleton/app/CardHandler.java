@@ -170,6 +170,7 @@ public class CardHandler {
         }else{
             for (int i = 0; i < cardDelt; i++) {
                 spritePos.add(getRandomSprite());
+                System.out.println();
                 spritePos.get(i).setPosition(x, 250);
                 x+=105;
             }
@@ -198,12 +199,14 @@ public class CardHandler {
 
     //method to create the card-Objects
     protected void createInitialDecklist(){
+        int x=0;
         for(Sprite sprite: spritePos){
             name=spriteToName(sprite);
             pri=spriteToPri(sprite);
             System.out.println(name+" "+pri);
             listCard=new Cards(x, 250, name, pri, sprite);
             Deck.getDeckList().add(listCard);
+            x+=105;
         }
     }
 
