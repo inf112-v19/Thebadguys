@@ -34,6 +34,7 @@ public class Robot {
     private int y0 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
     private int turn = RoboRallyDemo.getTurn();
 
+    private boolean powerdown = false;
 
     public Robot(Sprite sprite){
         this.sprite = sprite;
@@ -514,5 +515,13 @@ public class Robot {
             System.out.println("You fell into a hole!");
             this.died();
         }
+    }
+
+    public Boolean getPowerdown() {
+        return powerdown;
+    }
+
+    public void setPowerdown(boolean Powerdown) {
+        this.powerdown = Powerdown;
     }
 }
