@@ -71,12 +71,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         int[] startpos = {Math.round(posX), Math.round(posY)};
         robot = new Robot(sprite, startpos);
 
-        grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
-
-        //creation of the robot
-
-
-        sprite.setPosition(robot.getX1(), robot.getY1());
+        sprite.setPosition(robot.getSpriteX(), robot.getSpriteY());
 
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));

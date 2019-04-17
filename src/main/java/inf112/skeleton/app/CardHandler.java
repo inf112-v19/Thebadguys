@@ -32,7 +32,7 @@ public class CardHandler {
     private Robot robot;
     private IGameMap map;
     private int cardDelt=9;
-    private int cardSlotLock=5;;
+    private int cardSlotLock=5;
 
     public CardHandler(SpriteBatch batch, Robot robot, IGameMap map){
         //creation of all arrays containing positions or cards
