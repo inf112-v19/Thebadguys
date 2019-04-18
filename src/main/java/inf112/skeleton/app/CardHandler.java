@@ -3,10 +3,13 @@ package inf112.skeleton.app;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import map.IGameMap;
+
+import javax.smartcardio.Card;
 import java.util.ArrayList;
 
 public class CardHandler {
@@ -41,7 +44,7 @@ public class CardHandler {
     private String name;
     private int x;
 
-    public CardHandler(SpriteBatch batch, Robot robot, IGameMap map){
+    public CardHandler(SpriteBatch batch, Robot robot, IGameMap map, mainMenu mainMenu){
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
         cardSlotPos= new ArrayList<>();
@@ -62,6 +65,11 @@ public class CardHandler {
         cardSprite10 = new Sprite(cardTexture);
         clickedCard=new Cards(0,0, "",0, cardSprite10);
         font = new BitmapFont();
+
+    }
+
+    public CardHandler(SpriteBatch batch, mainMenu mainMenu){
+        this.batch=batch;
     }
 
     //merging
@@ -69,40 +77,58 @@ public class CardHandler {
         clickedCard.getCardSprite().setPosition(screenX - clickedCard.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - clickedCard.getCardSprite().getHeight() / 2);
     }
 
-    public void letGo(int screenX, int screenY, Cards endTurnBtn, Cards powerDownBtn){
+    public void letGo(int screenX, int screenY, Cards endTurnBtn, Cards powerDownBtn, Cards client, Cards server, Cards start){
         boolean isInside=false;
-
-        if (insideCard(screenX, screenY, powerDownBtn)){
-            robot.setPowerdown(true);
+        System.out.println(screenX + " " + screenY);
+        /*
+        if(insideCard(screenX, screenY, client)){
+            System.out.println("DU TRYKKET PÅ CLIENT");
         }
 
-        if(insideCard(screenX, screenY, endTurnBtn)){
-            isDone=true;
+        if(insideCard(screenX, screenY, server)){
+            System.out.println("DU TRYKKET PÅ SERVER");
         }
-        //if a card is inside a cardslot and it is released move it into the middle of the slot
-        for(int i=0; i<5; i++){
-            if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
+
+        if(insideCard(screenX, screenY, start)){
+            System.out.println("DU TRYKKET PÅ START");
+            mainMenu.setMainRunning(false);
+            System.out.println(mainMenu.getMainRunning());
+        }*/
+
+        if (!mainMenu.getMainRunning()){
+            if (insideCard(screenX, screenY, powerDownBtn)){
+                robot.setPowerdown(true);
+            }
+
+            if(insideCard(screenX, screenY, endTurnBtn)){
+                isDone=true;
+            }
+
+            //if a card is inside a cardslot and it is released move it into the middle of the slot
+            for(int i=0; i<5; i++){
+                if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
+                    if(isClicked){
+                        selectedCards[counter]=null;
+                        isClicked=false;
+                    }
+                    selectedCards[i]=clickedCard;
+                    isInside=true;
+                    clickedCard.getCardSprite().setPosition(cardSlotPos.get(i).getCardSlotSprite().getX()+getCardSlotCenterX(cardSlotPos.get(i))-getCardCenterX(clickedCard), cardSlotPos.get(i).getCardSlotSprite().getY()+getCardSlotCenterY(cardSlotPos.get(i))-getCardCenterY(clickedCard));
+                    counter=i;
+                    break;
+                }
+            }
+            //if it is outside then move it back to its default pos
+            if(!isInside){
+                clickedCard.getCardSprite().setPosition(clickedCard.getDefaultPosX(), clickedCard.getDefaultPosY());
                 if(isClicked){
                     selectedCards[counter]=null;
                     isClicked=false;
                 }
-                selectedCards[i]=clickedCard;
-                isInside=true;
-                clickedCard.getCardSprite().setPosition(cardSlotPos.get(i).getCardSlotSprite().getX()+getCardSlotCenterX(cardSlotPos.get(i))-getCardCenterX(clickedCard), cardSlotPos.get(i).getCardSlotSprite().getY()+getCardSlotCenterY(cardSlotPos.get(i))-getCardCenterY(clickedCard));
-                counter=i;
-                break;
             }
+            //create a new clickedCard so that a card does not stick to the mouse when let go of
+            clickedCard=new Cards(0,0, "",0, cardSprite10);
         }
-        //if it is outside then move it back to its default pos
-        if(!isInside){
-            clickedCard.getCardSprite().setPosition(clickedCard.getDefaultPosX(), clickedCard.getDefaultPosY());
-            if(isClicked){
-                selectedCards[counter]=null;
-                isClicked=false;
-            }
-        }
-        //create a new clickedCard so that a card does not stick to the mouse when let go of
-        clickedCard=new Cards(0,0, "",0, cardSprite10);
     }
 
     public void click(int button, int screenX, int screenY, Cards CardButton){
