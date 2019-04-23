@@ -7,10 +7,9 @@ import inf112.skeleton.app.CardHandler;
 import inf112.skeleton.app.Robot;
 
 import java.io.*;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server implements Runnable{
     private static int clientCount = 0;
@@ -31,6 +30,8 @@ public class Server implements Runnable{
     private Thread run, manage, send, receive;
     private boolean running = false;
 
+    private List<ServerClient> clients = new ArrayList<ServerClient>();
+
     public Server(int port) {
         this.port = port;
         try{
@@ -38,11 +39,12 @@ public class Server implements Runnable{
         }
         catch (SocketException e) {
             e.printStackTrace();
+            return;
         }
         run = new Thread(this, "Server");
+        run.start();
     }
 
-    @Override
     public void run() {
         running = true;
         manageClients();
@@ -64,12 +66,57 @@ public class Server implements Runnable{
         receive = new Thread("Receive") {
             public void run() {
                 while(running) {
-
+                    byte[] data = new byte[1024];
+                    DatagramPacket packet = new DatagramPacket(data, data.length);
+                    try {
+                        socket.receive(packet);
+                    }catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    process(packet);
+                    clients.add(new ServerClient("Yan", packet.getAddress(), packet.getPort(), 50));
+                    System.out.println(clients.get(0).address.toString() + ":" + clients.get(0).port);
                 }
             }
         };
         receive.start();
     }
+
+    private void sendToAll(String message){
+        for (int i = 0; i < clients.size(); i++) {
+            ServerClient client = clients.get(i);
+            send(message.getBytes(), client.address, client.port);
+        }
+    }
+
+    private void send(final byte[] data, final InetAddress address, final int port) {
+        send = new Thread("Send") {
+            public void run() {
+                DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
+                try {
+                    socket.send(packet);
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        send.start();
+    }
+
+    private void process(DatagramPacket packet) {
+        String string = new String(packet.getData());
+        if (string.startsWith("/c/")) {
+            int id = Identifier.getIdentifier();
+            clients.add(new ServerClient(string.substring(3, string.length()), packet.getAddress(), packet.getPort(), id));
+        }
+        else if (string.startsWith("/m/")) {
+            sendToAll(string);
+        }
+        else {
+            System.out.println(string);
+        }
+    }
+}
     
     /*public static void main(String []args) {
         while (listening && !start) {
@@ -89,4 +136,3 @@ public class Server implements Runnable{
             }
         }
     }*/
-}

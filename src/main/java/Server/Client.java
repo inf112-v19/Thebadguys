@@ -27,7 +27,7 @@ public class Client {
 
     private boolean openConnection(String address, int port) {
         try {
-            socket = new DatagramSocket(port);
+            socket = new DatagramSocket();
             ip = InetAddress.getByName(address);
         }
         catch (UnknownHostException e) {
@@ -66,5 +66,12 @@ public class Client {
             }
         };
         send.start();
+    }
+
+    private void send(String message) {
+        if(message.equals("")) return;
+        message = name + ": " + message;
+        message = "/m/" + message;
+        send(message.getBytes());
     }
 }
