@@ -336,13 +336,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public void doTurn () {
         Cards selectedCards[] = cardHandler.getSelectedCards();
-        robot.setAlive(true);
+
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
             if (turn >= 5) {
                 System.out.println("Ferdig med ein heil runde!");
                 for (int h = 0; h < 5; h++) {
                     //cardHandler.lockDown();
                 }
+                robot.setAlive(true);
                 turn = 0;
                 cardHandler.setNotFirst(true);
                 cardHandler.nullyFy();
