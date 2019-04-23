@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class mainMenu {
 
@@ -12,10 +13,10 @@ public class mainMenu {
     Cards serverButton;
     Cards clientButton;
     Cards startButton;
-    Batch batch;
+    SpriteBatch batch;
     private BitmapFont font;
 
-    public mainMenu(Batch batch){
+    public mainMenu(SpriteBatch batch){
         mainRunning = true;
         this.batch=batch;
         font = new BitmapFont();
