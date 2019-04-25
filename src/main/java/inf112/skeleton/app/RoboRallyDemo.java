@@ -4,6 +4,7 @@ import Grid.IGrid;
 import Grid.MyGrid;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -26,12 +27,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private int turn = 0;
     private static Boolean isEndOfTurn = false;
 
-    private Cards CardButton;
-    private Cards PowerdownButton;
+    private Button endTurnButton;
+    //private Cards PowerdownButton;
+    private Button powerdownButton;
     private Robot robot;
     private FitViewport viewPort;
     private static CardHandler cardHandler;
     private Cards statBoard0;
+    private Cards card;
 
     private SpriteBatch batch;
     private Texture texture;
@@ -75,8 +78,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         font = new BitmapFont();
 
         //create the end turn button
-        buttonCreation(700, 500);
-        statBoardCreation(700, 930);
+        endTurnButtonCreation(700, 510);
+        statBoardCreation(700, 910);
 
         //set the position of all the cardsprites
         cardHandler.setCardSprites();
@@ -109,7 +112,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         Cards selectedCards[] = cardHandler.getSelectedCards();
         batch.begin();
         sprite.draw(batch);
-        powerdownButtonCreation(700, 800);
+        powerdownButtonCreation(700, 710);
 
 
         doTurn();
@@ -119,13 +122,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         cardHandler.drawLockedList();
 
         //draw button
-        CardButton.getCardSprite().draw(batch);
+        endTurnButton.getSprite().draw(batch);
 
         statBoard0.getCardSprite().draw(batch);
 
         drawStats();
 
-        PowerdownButton.getCardSprite().draw(batch);
+        powerdownButton.getSprite().draw(batch);
 
 
         //draw Cards
@@ -171,7 +174,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     // And if you click the Execute button the it will change a boolean value
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        cardHandler.click(button, screenX, screenY, CardButton);
+        endTurnButton.buttonClicked(screenX, screenY, endTurnButton);
+        powerdownButton.buttonClicked(screenX, screenY, powerdownButton);
+        cardHandler.click(Input.Buttons.LEFT, screenX, screenY);
         return false;
     }
 
@@ -179,14 +184,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //if it is outside then move it back to its default pos
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        cardHandler.letGo(screenX, screenY, CardButton, PowerdownButton);
+        cardHandler.letGo(screenX, screenY);
         return false;
     }
 
     @Override
     //if a card is clicked on and draged, then move that clicked card
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        cardHandler.dragged(screenX, screenY, CardButton);
+        cardHandler.dragged(screenX, screenY);
         return false;
     }
 
@@ -284,24 +289,28 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         viewPort = new FitViewport(w * 6, h * 6);
     }
 
-    public void buttonCreation(float x, float y) {
+    public void endTurnButtonCreation(int x, int y) {
         Texture buttonTexture = new Texture(Gdx.files.internal("Models/Button.png"));
         Sprite buttonSprite = new Sprite(buttonTexture);
         buttonSprite.setPosition(x, y);
-        CardButton = new Cards(x, y, "", 0, buttonSprite);
+        endTurnButton = new Button();
+        endTurnButton.initButton(x, y, "endRoundButton" ,buttonSprite, this, cardHandler, robot);
     }
 
-    public void powerdownButtonCreation(float x, float y) {
+    public void powerdownButtonCreation(int x, int y) {
         if (!robot.getInitiatePowerdown()) {
             Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
             Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
             powerdownbuttonSprite.setPosition(x, y);
-            PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
+            this.powerdownButton = new Button();
+            powerdownButton.initButton(x, y, "powerDown_inactive",powerdownbuttonSprite, this, cardHandler, robot);
+
         } else {
             Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
             Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
             powerdownbuttonSprite.setPosition(x, y);
-            PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
+            this.powerdownButton = new Button();
+            powerdownButton.initButton(x,y, "powerDown_active", powerdownbuttonSprite, this, cardHandler, robot);
         }
     }
 

@@ -14,6 +14,8 @@ public class CardHandler {
     private SpriteBatch batch;
     private Sprite cardSprite10;
     private BitmapFont font;
+    private Button powerdownButton;
+    private Button endTurnButton;
 
     private ArrayList<CardSlots> cardSlotPos;
     private ArrayList<Sprite> randomSpriteList;
@@ -25,7 +27,7 @@ public class CardHandler {
     private Cards[] selectedCards;
     private Cards clickedCard;
     private Cards listCard;
-    //private Cards CardButton;
+    private Cards CardButton;
     private CardSlots temp;
     private int counter;
 
@@ -64,22 +66,13 @@ public class CardHandler {
         font = new BitmapFont();
     }
 
-    public void dragged(int screenX, int screenY, Cards CardButton){
+    public void dragged(int screenX, int screenY){
         clickedCard.getCardSprite().setPosition(screenX - clickedCard.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - clickedCard.getCardSprite().getHeight() / 2);
     }
 
-    public void letGo(int screenX, int screenY, Cards endTurnBtn, Cards powerDownBtn){
+    public void letGo(int screenX, int screenY){
         boolean isInside=false;
 
-        if (insideCard(screenX, screenY, powerDownBtn)){
-            robot.setInitiatePowerdown(true);
-            selectedCards[0]=null;
-        }
-
-        if(insideCard(screenX, screenY, endTurnBtn)){
-            isDone=true;
-            selectedCards[0]=null;
-        }
         //if a card is inside a cardslot and it is released move it into the middle of the slot
         for(int i=0; i<5; i++){
             if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
@@ -106,10 +99,10 @@ public class CardHandler {
         clickedCard=new Cards(0,0, "",0, cardSprite10);
     }
 
-    public void click(int button, int screenX, int screenY, Cards endTurnBtn){
+    public void click(int button, int screenX, int screenY){
         counter=0;
         for(int i=0; i<getCardDelt(); i++){
-            if(insideCard(screenX, screenY,Deck.getDeckList().get(i)) && button == Input.Buttons.LEFT){
+            if(insideCard(screenX, screenY, Deck.getDeckList().get(i)) && button == Input.Buttons.LEFT){
                 clickedCard=Deck.getDeckList().get(i);
                 for(int j=0; j<5; j++){
                     if(insideCardSlot(clickedCard, cardSlotPos.get(j))){
@@ -381,5 +374,7 @@ public class CardHandler {
     public int getCardDelt(){return cardDelt;}
 
     public void setCardDelt(int cardDelt) {this.cardDelt = cardDelt;}
+
+    public void setIsDone(boolean isDone) {this.isDone = isDone;}
 }
 

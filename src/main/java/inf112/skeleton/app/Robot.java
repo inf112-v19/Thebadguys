@@ -39,7 +39,7 @@ public class Robot {
     }
 
     public Robot(Sprite sprite, int[] checkpoint){
-        this.sprite=sprite;
+        this.sprite = sprite;
         this.checkpoint = checkpoint;
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
