@@ -25,6 +25,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Cards CardButton;
     private Cards PowerdownButton;
     private Robot robot;
+    private AIRobot AIrobot;
     private FitViewport viewPort;
     private static CardHandler cardHandler;
     private Cards statBoard0;
@@ -72,7 +73,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             posX = 0;
             posY = 0;
             int[] startpos = {Math.round(posX), Math.round(posY)};
+            int[] startpos2 = {Math.round(1), Math.round(1)};
             robot = new Robot(sprite, startpos);
+            AIrobot = new AIRobot(sprite, startpos2);
 
             grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
             sprite.setPosition(robot.getX1(), robot.getY1());
@@ -389,6 +392,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 System.out.println("\n");
             }
             if (tick % 40 == 0) {
+                if(AIrobot.getAlive()) {
+                    AIrobot.doTurn1(turn);
+                }
                 if (robot.getAlive()) {
                 robot.move(selectedCards[turn]);
                 }

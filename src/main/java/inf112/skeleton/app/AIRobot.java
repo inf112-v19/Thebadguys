@@ -58,7 +58,13 @@ public class AIRobot{
     }
 
 
-    public void doTurn(Cards card){
+    public void doTurn1(int turn){
+        makeDeck();
+        fillDeck();
+        move(selectedCards[turn]);
+    }
+
+    public void doTurn(){
         makeDeck();
         fillDeck();
             if(getPosX() < gameMap.getCheckPointX(flagsPassed)) {
