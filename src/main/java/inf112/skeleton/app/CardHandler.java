@@ -79,7 +79,7 @@ public class CardHandler {
             }
 
             //method that ajusts a cards location on the screen if it is let go of. the position wil depend if it is inside or outside a cardslot
-            ajustCardLocation();
+            adjustCardLocation();
 
             //create a new clickedCard so that a card does not stick to the mouse when let go of
             clickedCard=new Cards(0,0, "",0, cardSprite10);
@@ -154,7 +154,7 @@ public class CardHandler {
         }
     }
 
-    public void ajustCardLocation(){
+    public void adjustCardLocation(){
         //if a card is inside a cardslot and it is released move it into the middle of the slot
         for(int i=0; i<5; i++){
             if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
