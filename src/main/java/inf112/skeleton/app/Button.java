@@ -10,16 +10,10 @@ import map.GameMap;
 import javax.smartcardio.Card;
 
 public class Button implements IButton {
-    private Sprite sprite;
+
     private RoboRallyDemo game;
-    private TiledMap tiledMap = game.getTiledMap();
     CardHandler cardHandler;
     Robot robot;
-    /*
-    private GameMap gameMap = game.getIGameMap();
-    private MapProperties prop = tiledMap.getProperties();
-    */
-
 
     private int posX;
     private int posY;
@@ -37,7 +31,6 @@ public class Button implements IButton {
         this.robot = robot;
         createButton(posX, posY);
     }
-
 
     public void createButton(int x, int y) {
         this.buttonSprite.setPosition(x, y);
@@ -75,6 +68,7 @@ public class Button implements IButton {
                 case "clientButton":
                     return true;
                 case "StartBtn":
+                    return true;
             }
         }
         return false;

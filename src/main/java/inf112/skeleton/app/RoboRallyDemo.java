@@ -369,12 +369,15 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             }
         } else {
             System.out.println("hello");
-            robot.doPowerdown();
+            if (turn == 0) {
+                robot.doPowerdown();
+            }
             turn++;
             if (turn >= 5) {
                 robot.setExecutePowerdown(false);
                 robot.setInitiatePowerdown(false);
             }
+            /*
             if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
                 if (turn >= 5) {
                     System.out.println("Ferdig med ein heil runde!");
@@ -398,6 +401,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     turn++;
                 }
             }
+            */
         }
     }
 
