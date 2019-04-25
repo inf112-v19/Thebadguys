@@ -7,14 +7,13 @@ import java.util.List;
 public class Identifier {
 
     private static List<Integer> ids = new ArrayList<Integer>();
-    private static final int range = 10000;
+    private static final int range = 8;
     private static int index = 0;
 
     static {
         for (int i = 0; i < range; i++) {
             ids.add(i);
         }
-        Collections.shuffle(ids);
     }
 
     private Identifier() {

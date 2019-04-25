@@ -19,13 +19,7 @@ public class Player extends Thread {
     private int[][] starts = {{0,0},{0,1},{0,2},{0,3},{0,4},{0,5},{0,6},{0,7}};
 
     public Player (int number, Socket clientSocket) {
-        try {
-            this.socket = clientSocket;
-            this.in = new ObjectInputStream(clientSocket.getInputStream());
-            this.out = new ObjectOutputStream(clientSocket.getOutputStream());
-        } catch(IOException e) {
-            System.out.println("error");
-        }
+
         texture = new Texture(Gdx.files.internal("Models/tank"+ (number)+".png"));
         sprite = new Sprite(texture);
         robot = new Robot(sprite, starts[number]);

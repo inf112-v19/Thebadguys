@@ -32,6 +32,8 @@ public class Server implements Runnable{
 
     private List<ServerClient> clients = new ArrayList<ServerClient>();
 
+    private int[][] positions;
+
     public Server(int port) {
         this.port = port;
         try{
@@ -109,18 +111,31 @@ public class Server implements Runnable{
 
     private void process(DatagramPacket packet) {
         String string = new String(packet.getData());
-        if (string.startsWith("/c/")) {
+        if (string.startsWith("/c/")) { // client connects
             int id = Identifier.getIdentifier();
-            clients.add(new ServerClient(string.substring(3, string.length()), packet.getAddress(), packet.getPort(), id));
+            clients.add(new ServerClient(string.split("/c/|/e/")[1], packet.getAddress(), packet.getPort(), id));
             String ID = "/c/" + id;
             send(ID.getBytes(), packet.getAddress(), packet.getPort());
         }
         else if (string.startsWith("/m/")) {
             sendToAll(string);
         }
+        else if(string.startsWith("/r/")) { // client asks to update player positions
+            positions = getPositions();
+            string = "/r/" + positions.toString() + "/e/";
+            sendToAll(string);
+        }
         else {
             System.out.println(string);
         }
+    }
+
+    public int[][] getPositions() {
+        for(int i = 0; i < clients.size(); i++) {
+            ServerClient client = clients.get(i);
+            positions[i] = client.getPos();
+        }
+        return positions;
     }
 }
     
