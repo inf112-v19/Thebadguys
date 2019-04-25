@@ -41,7 +41,7 @@ public class AIRobot{
     }
 
     public void makeDeck(){
-        Deck randomDeck = new Deck();
+        randomDeck = new Deck();
         for(CardValues value : CardValues.values()) {
             Cards testCard = new Cards(0, 0, value.getName(), value.getPriority(), value.getSprite());
             randomDeck.getDeckList().add(testCard);
@@ -49,8 +49,8 @@ public class AIRobot{
     }
 
     public void fillDeck(){
-        Cards selectedCards[] = new Cards[5];
-        for(int j = 0; j<randomDeck.getDeckList().size(); j++) {
+        selectedCards = new Cards[5];
+        for(int j = 0; j<selectedCards.length; j++) {
             int random = rng(randomDeck);
             selectedCards[j] = randomDeck.getDeckList().get(random);
             randomDeck.getDeckList().remove(random);

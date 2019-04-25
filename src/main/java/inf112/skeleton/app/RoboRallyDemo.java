@@ -76,7 +76,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             posX = 0;
             posY = 0;
             int[] startpos = {Math.round(posX), Math.round(posY)};
-            int[] startpos2 = {Math.round(1), Math.round(1)};
+            int[] startpos2 = {Math.round(4), Math.round(0)};
             robot = new Robot(sprite, startpos);
             AIrobot = new AIRobot(AIsprite, startpos2);
 
@@ -84,7 +84,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             sprite.setPosition(robot.getX1(), robot.getY1());
 
             grid.set(AIrobot.getPosX(), AIrobot.getPosY(), MapTile.PLAYER);
-            sprite.setPosition(AIrobot.getX1(), AIrobot.getY1());
+            AIsprite.setPosition(AIrobot.getX1()+200, AIrobot.getY1());
 
             //create the card that Is clicked
             Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
@@ -137,6 +137,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             cardHandler.drawLockedList();
             //draw button
             CardButton.getCardSprite().draw(batch);
+
+            AIsprite.draw(batch);
 
             statBoard0.getCardSprite().draw(batch);
 
