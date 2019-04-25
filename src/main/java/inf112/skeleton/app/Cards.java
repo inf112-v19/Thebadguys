@@ -2,7 +2,9 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public class Cards implements ICard {
+import java.io.Serializable;
+
+public class Cards implements ICard, Serializable {
 
     private Sprite cardSprite;
     private float defaultPosX;
