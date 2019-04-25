@@ -44,7 +44,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Sprite statBoardSprite;
     private static GameMap map;
     private IGrid grid;
-
+    private int[][] starts = {{0,0},{0,1},{0,2},{0,3},{0,4},{0,5},{0,6},{0,7}};
+    private Server server;
+    private Robot[] robots;
+    private Sprite[] sprites;
+    private Texture[] textures;
 
     //create the initial state of the game
     @Override
@@ -67,14 +71,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
             tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
             createGrid();
-            texture = new Texture(Gdx.files.internal("Models/tank.png"));
-            sprite = new Sprite(texture);
-
             map = new GameMap(grid);
-            posX = 0;
-            posY = 0;
-            int[] startpos = {Math.round(posX), Math.round(posY)};
-            robot = new Robot(sprite, startpos);
+            for (int i = 0; i < 8; i++) {
+                textures[i] = new Texture(Gdx.files.internal("Models/tank" + (i) + ".png"));
+                sprites[i] = new Sprite(texture);
+                robots[i] = new Robot(sprites[i], starts[i]);
+                System.out.println("created robot" + i);
+            }
 
             grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
             sprite.setPosition(robot.getSpriteX(), robot.getSpriteY());
@@ -197,12 +200,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }else{
             if(insideCard(screenX, screenY, mainMenu.getClientBtn())){
                 System.out.println("DU TRYKKET PÅ CLIENT");
-                Client client = new Client("Player", "localhost", 55555);
+                new Client("Player", "localhost", 55555);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
                 System.out.println("DU TRYKKET PÅ SERVER");
                 Server server = new Server(55555);
+                new Client("Player", "localhost", 55555);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getStartBtn())){

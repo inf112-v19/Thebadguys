@@ -28,12 +28,6 @@ public class ServerClient {
         this.address = address;
         this.port = port;
         this.ID = ID;
-
-        texture = new Texture(Gdx.files.internal("Models/tank"+ (ID)+".png"));
-        sprite = new Sprite(texture);
-        robot = new Robot(sprite, starts[ID]);
-        sprite.setPosition(robot.getSpriteX(),robot.getSpriteY());
-
     }
 
     public int getID() {

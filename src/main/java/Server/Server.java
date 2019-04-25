@@ -45,6 +45,7 @@ public class Server implements Runnable{
         }
         run = new Thread(this, "Server");
         run.start();
+        System.out.println("Started server on port: " + port);
     }
 
     public void run() {
@@ -114,7 +115,7 @@ public class Server implements Runnable{
         if (string.startsWith("/c/")) { // client connects
             int id = Identifier.getIdentifier();
             clients.add(new ServerClient(string.split("/c/|/e/")[1], packet.getAddress(), packet.getPort(), id));
-            String ID = "/c/" + id;
+            String ID = "/c/" + id + "/e/";
             send(ID.getBytes(), packet.getAddress(), packet.getPort());
         }
         else if (string.startsWith("/m/")) {
@@ -136,6 +137,10 @@ public class Server implements Runnable{
             positions[i] = client.getPos();
         }
         return positions;
+    }
+
+    public int getClientCount(){
+        return clients.size();
     }
 }
     

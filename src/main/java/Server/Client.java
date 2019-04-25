@@ -1,107 +1,119 @@
 package Server;
 
-import com.jcraft.jogg.Packet;
-import inf112.skeleton.app.Cards;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Arrays;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.DefaultCaret;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
-public class Client {
+public class Client extends JFrame implements Runnable {
+    private static final long serialVersionUID = 1L;
 
-    private String name, address;
-    private int port;
-    private DatagramSocket socket;
-    private InetAddress ip;
-    private Thread send;
-    private int id;
+    private JPanel contentPane;
+    private JTextField txtMessage;
+    private JTextArea history;
+    private DefaultCaret caret;
+    private Thread run, listen;
+    private ClientBackend client;
+
+    private boolean running = false;
+    private JMenuBar menuBar;
+    private JMenu mnFile;
+    private JMenuItem mntmOnlineUsers;
+    private JMenuItem mntmExit;
+
+    //private OnlineUsers users;
 
     public Client(String name, String address, int port) {
-        this.name = name;
-        this.address = address;
-        this.port = port;
-        boolean connect = openConnection(address);
-        if(!connect) {
+        client = new ClientBackend(name, address, port);
+        boolean connect = client.openConnection(address);
+        if (!connect) {
             System.err.println("Connection failed!");
         }
+        //createWindow();
+        String connection = "/c/" + name + "/e/";
+        client.send(connection.getBytes());
+        System.out.println("Attempting a connection to " + address + ":" + port + ", user: " + client.getName());
+        //users = new OnlineUsers();
+        running = true;
+        run = new Thread(this, "Running");
+        run.start();
     }
 
-    public String getName() {
-        return name;
+    /*private void createWindow() {
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                String disconnect = "/d/" + client.getID() + "/e/";
+                send(disconnect, false);
+                running = false;
+
+            }
+        });
+
+        setVisible(true);
+
+        txtMessage.requestFocusInWindow();
+    }*/
+
+    public int getID(){
+        return client.getID();
     }
 
-    public String getAddress() {
-        return address;
+    public void run() {
+        listen();
     }
 
-    public int getPort() {
-        return port;
-    }
-
-    public boolean openConnection(String address) {
-        try {
-            socket = new DatagramSocket();
-            ip = InetAddress.getByName(address);
+    private void send(String message, boolean text) {
+        if (message.equals("")) return;
+        if (text) {
+            message = client.getName() + ": " + message;
+            message = "/m/" + message + "/e/";
+            txtMessage.setText("");
         }
-        catch (UnknownHostException e) {
-            e.printStackTrace();
-            return false;
-        }
-        catch (SocketException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        client.send(message.getBytes());
     }
 
-    public void receive() {
-        byte[] data = new byte[1024];
-        DatagramPacket packet = new DatagramPacket(data, data.length);
-        try{
-            socket.receive(packet);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        process(packet);
-    }
-
-    public void send(final byte[] data) {
-        send = new Thread("Send") {
+    public void listen() {
+        listen = new Thread("Listen") {
             public void run() {
-                DatagramPacket packet = new DatagramPacket(data, data.length, ip, port);
-                try {
-                    socket.send(packet);
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
+                while (running) {
+                    String message = client.receive();
+                    if (message.startsWith("/c/")) {
+                        client.setID(Integer.parseInt(message.split("/c/|/e/")[1]));
+                        client.setName(client.getName()+client.getID());
+                        System.out.println("Successfully connected to server! user: " + client.getName() + " ID: " + client.getID());
+                    } else if (message.startsWith("/m/")) {
+                        String text = message.substring(3);
+                        text = text.split("/e/")[0];
+                    } else if (message.startsWith("/i/")) {
+                        String text = "/i/" + client.getID() + "/e/";
+                        send(text, false);
+                    } else if (message.startsWith("/u/")) {
+                        String[] u = message.split("/u/|/n/|/e/");
+                        //users.update(Arrays.copyOfRange(u, 1, u.length - 1));
+                    }
                 }
             }
         };
-        send.start();
+        listen.start();
     }
 
-    public void send(String message) {
-        if(message.equals("")) return;
-        message = name + ": " + message;
-        message = "/m/" + message;
-        send(message.getBytes());
-    }
-
-    public void process(DatagramPacket packet) {
-        String string = new String(packet.getData());
-        if (string.startsWith("/c/")) {
-            this.id = Integer.parseInt(string.split("/c/|/e/")[1]);
-            System.out.println("Connected to the server! ID: " + this.id);
-        }
-        else if (string.startsWith("/m/")) {
-
-        }
-        else {
-            System.out.println(string);
-        }
-    }
-
-    public int getID() {
-        return ID;
-    }
 }
