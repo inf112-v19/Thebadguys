@@ -14,6 +14,7 @@ public class Client {
     private DatagramSocket socket;
     private InetAddress ip;
     private Thread send;
+    private int id;
 
     public Client(String name, String address, int port) {
         this.name = name;
@@ -23,6 +24,18 @@ public class Client {
         if(!connect) {
             System.err.println("Connection failed!");
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getPort() {
+        return port;
     }
 
     private boolean openConnection(String address, int port) {
@@ -41,7 +54,7 @@ public class Client {
         return true;
     }
 
-    private String receive() {
+    private void receive() {
         byte[] data = new byte[1024];
         DatagramPacket packet = new DatagramPacket(data, data.length);
         try{
@@ -49,8 +62,7 @@ public class Client {
         }catch (IOException e) {
             e.printStackTrace();
         }
-        String message = new String(packet.getData());
-        return message;
+        process(packet);
     }
 
     private void send(final byte[] data) {
@@ -73,5 +85,19 @@ public class Client {
         message = name + ": " + message;
         message = "/m/" + message;
         send(message.getBytes());
+    }
+
+    private void process(DatagramPacket packet) {
+        String string = new String(packet.getData());
+        if (string.startsWith("/c/")) {
+            this.id = Integer.parseInt(string.split("/c/|/e/")[1]);
+            System.out.println("Connected to the server! ID: " + this.id);
+        }
+        else if (string.startsWith("/m/")) {
+
+        }
+        else {
+            System.out.println(string);
+        }
     }
 }
