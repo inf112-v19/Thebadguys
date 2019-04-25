@@ -20,7 +20,7 @@ public class Client {
         this.name = name;
         this.address = address;
         this.port = port;
-        boolean connect = openConnection(address, port);
+        boolean connect = openConnection(address);
         if(!connect) {
             System.err.println("Connection failed!");
         }
@@ -38,7 +38,7 @@ public class Client {
         return port;
     }
 
-    private boolean openConnection(String address, int port) {
+    public boolean openConnection(String address) {
         try {
             socket = new DatagramSocket();
             ip = InetAddress.getByName(address);
@@ -54,7 +54,7 @@ public class Client {
         return true;
     }
 
-    private void receive() {
+    public void receive() {
         byte[] data = new byte[1024];
         DatagramPacket packet = new DatagramPacket(data, data.length);
         try{
@@ -65,7 +65,7 @@ public class Client {
         process(packet);
     }
 
-    private void send(final byte[] data) {
+    public void send(final byte[] data) {
         send = new Thread("Send") {
             public void run() {
                 DatagramPacket packet = new DatagramPacket(data, data.length, ip, port);
@@ -80,14 +80,14 @@ public class Client {
         send.start();
     }
 
-    private void send(String message) {
+    public void send(String message) {
         if(message.equals("")) return;
         message = name + ": " + message;
         message = "/m/" + message;
         send(message.getBytes());
     }
 
-    private void process(DatagramPacket packet) {
+    public void process(DatagramPacket packet) {
         String string = new String(packet.getData());
         if (string.startsWith("/c/")) {
             this.id = Integer.parseInt(string.split("/c/|/e/")[1]);
@@ -99,5 +99,9 @@ public class Client {
         else {
             System.out.println(string);
         }
+    }
+
+    public int getID() {
+        return ID;
     }
 }

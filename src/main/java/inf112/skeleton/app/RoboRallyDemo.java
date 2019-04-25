@@ -2,6 +2,8 @@ package inf112.skeleton.app;
 
 import Grid.IGrid;
 import Grid.MyGrid;
+import Server.Client;
+import Server.Server;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -195,10 +197,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }else{
             if(insideCard(screenX, screenY, mainMenu.getClientBtn())){
                 System.out.println("DU TRYKKET PÅ CLIENT");
+                Client client = new Client("Player", "localhost", 55555);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
                 System.out.println("DU TRYKKET PÅ SERVER");
+                Server server = new Server(55555);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getStartBtn())){
