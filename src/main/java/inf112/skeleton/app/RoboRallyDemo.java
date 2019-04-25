@@ -131,14 +131,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             Cards selectedCards[] = cardHandler.getSelectedCards();
             batch.begin();
             sprite.draw(batch);
+            AIsprite.draw(batch);
             doTurn();
             //draw the cardslots
             cardHandler.drawCardSlots();
             cardHandler.drawLockedList();
             //draw button
             CardButton.getCardSprite().draw(batch);
-
-            AIsprite.draw(batch);
 
             statBoard0.getCardSprite().draw(batch);
 
@@ -402,6 +401,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if (tick % 40 == 0) {
                 if(AIrobot.getAlive()) {
                     AIrobot.doTurn1(turn);
+                    System.out.println("AIDOINGMOVE!: " + turn);
                 }
                 if (robot.getAlive()) {
                 robot.move(selectedCards[turn]);
@@ -409,6 +409,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 turn++;
                 System.out.println("DidTURN "+(turn));
                 robot.getSprite().draw(batch);
+                AIrobot.getSprite().draw(batch);
             }
         }
     }
