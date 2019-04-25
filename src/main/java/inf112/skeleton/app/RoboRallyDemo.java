@@ -38,6 +38,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
+    private Sprite AIsprite;
     private float posX, posY;
     private BitmapFont font;
     private Sprite statBoardSprite;
@@ -67,7 +68,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
             createGrid();
             texture = new Texture(Gdx.files.internal("Models/tank.png"));
+            Texture AItexture = new Texture(Gdx.files.internal("Models/tank.png"));
             sprite = new Sprite(texture);
+            AIsprite = new Sprite(AItexture);
 
             map = new GameMap(grid);
             posX = 0;
@@ -75,7 +78,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             int[] startpos = {Math.round(posX), Math.round(posY)};
             int[] startpos2 = {Math.round(1), Math.round(1)};
             robot = new Robot(sprite, startpos);
-            AIrobot = new AIRobot(sprite, startpos2);
+            AIrobot = new AIRobot(AIsprite, startpos2);
 
             grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
             sprite.setPosition(robot.getX1(), robot.getY1());
