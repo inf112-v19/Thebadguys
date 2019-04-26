@@ -46,9 +46,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private IGrid grid;
     private int[][] starts = {{0,0},{0,1},{0,2},{0,3},{0,4},{0,5},{0,6},{0,7}};
     private Server server;
-    private Robot[] robots;
-    private Sprite[] sprites;
-    private Texture[] textures;
+    private Robot[] robots = new Robot[8];
+    private Sprite[] sprites = new Sprite[8];
+    private Texture[] textures= new Texture[8];
 
     //create the initial state of the game
     @Override
@@ -72,15 +72,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
             createGrid();
             map = new GameMap(grid);
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < server.getClientCount(); i++) {
                 textures[i] = new Texture(Gdx.files.internal("Models/tank" + (i) + ".png"));
-                sprites[i] = new Sprite(texture);
+                sprites[i] = new Sprite(textures[i]);
                 robots[i] = new Robot(sprites[i], starts[i]);
                 System.out.println("created robot" + i);
+                sprites[i].setPosition(robot.getSpriteX(), robot.getSpriteY());
             }
-
-            grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
-            sprite.setPosition(robot.getSpriteX(), robot.getSpriteY());
 
             //create the card that Is clicked
             Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
@@ -205,7 +203,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
                 System.out.println("DU TRYKKET PÅ SERVER");
-                Server server = new Server(55555);
+                server = new Server(55555);
                 new Client("Player", "localhost", 55555);
             }
 
