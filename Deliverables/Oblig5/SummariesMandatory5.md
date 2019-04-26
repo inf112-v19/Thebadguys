@@ -14,3 +14,9 @@ I dag var Tord, Erlend, Christian og André til stedet. Vi jobbet med å merge a
 
 ### Arbeidssammendrag 23.04
 I dag var Wim, Erlend og Christian til stedet. Vi snakket om fremgangen på server/client, og Wim jobbet med å rydde opp i koden i Robot, for å lage nye objekter, og kunne utvikle effektive tester.
+
+### Arbeidssammendrag 25.04
+I dag var alle tilstede, Erlend og André jobbet med AI, Christian jobbet med serveren, Tord jobbet med knapper generelt, og Wim reorganiserte robot og ryddet i koden.
+
+### Arbeidssemdrag 26.04
+I dag var alle tildete, Christian og Erlend jobbet med server og client, Tord jobbet videre med knapper, André jobbet videre med AI og Wim fortsatte med å lage nye objekter for å rydde og objektorientere koden.
