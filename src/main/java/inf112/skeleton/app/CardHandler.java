@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sun.istack.internal.Nullable;
 import map.IGameMap;
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ public class CardHandler {
     private Cards[] selectedCards;
     private Cards clickedCard;
     private Cards listCard;
-    private Cards CardButton;
+    //private Cards CardButton;
     private CardSlots temp;
     private int counter;
 
@@ -116,11 +117,6 @@ public class CardHandler {
         }
     }
 
-    public void printCardSlots(){
-        for (int i = 0; i <selectedCards.length; i++) {
-            System.out.println(selectedCards[i]);
-        }
-    }
 
     //the x cordinate at the centre of a card
     protected Float getCardCenterX(Cards card){
@@ -167,7 +163,7 @@ public class CardHandler {
             updateDeckList();
             extraxtLockedCards();
         }else{
-            for (int i = 0; i < getCardDelt(); i++) {
+            for (int i = 0; i < cardDelt; i++) {
                 spritePos.add(getRandomSprite());
                 spritePos.get(i).setPosition(x, 250);
 
@@ -265,6 +261,7 @@ public class CardHandler {
     //returns a random sprite form the spritesList , uses the rng method
     private Sprite getRandomSprite(){
         int v= rng();
+        //System.out.println(randomSpriteList.size());
         Sprite random = randomSpriteList.get(v);
         randomSpriteList.remove(v);
         return random;
@@ -293,6 +290,7 @@ public class CardHandler {
                // System.out.println("ADDED: " + CardValues.values()[i].getSprite().getTexture().toString());
             }
         }
+        //System.out.println(randomSpriteList.size());
     }
 
     //method that empties the selectedCards array, that is used when an turn is over
@@ -316,28 +314,6 @@ public class CardHandler {
     public int getCardSlotLock(){
         return cardSlotLock;
     }
-
-    /*
-    public void doTurn(){
-        if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && isDone) {
-            for (int i = 0; i < selectedCards.length; i++) {
-                robot.move(selectedCards[i]);
-                map.move(selectedCards[i]);
-                // lockDown(4);
-                if (i == selectedCards.length - 1) {
-                    for(int v=0; v<spritePos.size(); v++){
-                        spritePos.get(v).setPosition(10000, 10000);
-                    }
-                    isDone = false;
-                    notFirst=true;
-                    setCardSprites();
-                    nullyFy();
-
-                }
-            }
-            System.out.println("\n");
-        }
-    }*/
 
     public Cards[] getSelectedCards(){
         return selectedCards;
