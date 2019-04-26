@@ -3,10 +3,11 @@ package inf112.skeleton.app;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import java.io.Serializable;
 import java.util.Random;
 
 // Enum representing card value
-public enum CardValues {
+public enum CardValues implements Serializable {
      BACKUP10(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png")), 10, "BACKUP")
     ,BACKUP20(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png")), 20, "BACKUP")
     ,BACKUP30(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/BackUp.png")), 30, "BACKUP")

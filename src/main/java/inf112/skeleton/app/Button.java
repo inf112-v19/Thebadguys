@@ -21,14 +21,16 @@ public class Button implements IButton {
     private String name;
     private Sprite buttonSprite;
 
-    public void initButton(int posX, int posY, String name, Sprite buttonSprite, RoboRallyDemo game, CardHandler cardHandler, Robot robot) {
+    public Button(int posX, int posY, String name, Sprite buttonSprite, RoboRallyDemo game) {
         this.posX = posX;
         this.posY = posY;
         this.buttonSprite = buttonSprite;
         this.game = game;
         this.name = name;
-        this.cardHandler = cardHandler;
-        this.robot = robot;
+        this.cardHandler = game.getCardHandler();
+        if (!mainMenu.getMainRunning()) {
+            this.robot = game.getRobot();
+        }
         createButton(posX, posY);
     }
 
@@ -49,8 +51,10 @@ public class Button implements IButton {
     }
 
     public boolean buttonClicked(int screenX, int screenY, Button button) {
+
         float NewScreenY = Gdx.graphics.getHeight() - screenY;
         if ((screenX > getPosX()) && (screenX < (getPosX() + buttonSprite.getWidth()) && (NewScreenY > getPosY())) && (NewScreenY < (getPosY() + buttonSprite.getHeight()))) {
+            System.out.println("*click*");
             switch (name) {
                 case "powerDown_inactive":
                     if (!robot.getInitiatePowerdown()) {
@@ -67,7 +71,13 @@ public class Button implements IButton {
                     }
                 case "clientButton":
                     return true;
-                case "StartBtn":
+                case "startButton":
+                    game.create();
+                    System.out.println("start");
+                    mainMenu.setMainRunning(false);
+                    cardHandler.nullyFy();
+                    return true;
+                case "serverButton":
                     return true;
             }
         }

@@ -5,6 +5,7 @@ import Grid.MyGrid;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,6 +37,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Cards statBoard0;
     private Cards card;
 
+    private boolean firstRund=true;
+    private mainMenu mainMenu;
+
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
@@ -49,95 +53,107 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //create the initial state of the game
     @Override
     public void create() {
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        batch = new SpriteBatch();
+        if(firstRund){
+            batch = new SpriteBatch();
+            float w = Gdx.graphics.getWidth();
+            float h = Gdx.graphics.getHeight();
+            //set the camera
+            setCamera(w, h);
+            mainMenu = new mainMenu(batch, this);
+            tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
+            tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+            //Cards selectedCards[] = cardHandler.getSelectedCards();
+            //batch = new SpriteBatch();
+            createGrid();
+            texture = new Texture(Gdx.files.internal("Models/tank.png"));
+            sprite = new Sprite(texture);
 
-        //set the camera
-        setCamera(w, h);
-        //creation of the map
-        tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-        createGrid();
-        texture = new Texture(Gdx.files.internal("Models/tank.png"));
-        sprite = new Sprite(texture);
+            map = new GameMap(grid);
+            posX = 0;
+            posY = 0;
+            int[] startpos = {Math.round(posX), Math.round(posY)};
+            robot = new Robot(sprite, startpos);
 
-        map = new GameMap(grid);
-        posX = 0;
-        posY = 0;
-        int[] startpos = {Math.round(posX), Math.round(posY)};
-        robot = new Robot(sprite, startpos);
+            grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
+            sprite.setPosition(robot.getX1(), robot.getY1());
 
-        grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
-        sprite.setPosition(robot.getX1(), robot.getY1());
+            //create the card that Is clicked
+            Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
+            cardHandler = new CardHandler(batch, robot, map);
 
-        //create the card that Is clicked
-        Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
-        cardHandler = new CardHandler(batch, robot, map);
+            font = new BitmapFont();
 
-        font = new BitmapFont();
+            //create the end turn button
+            endTurnButtonCreation(700, 510);
+            statBoardCreation(700,910);
 
-        //create the end turn button
-        endTurnButtonCreation(700, 510);
-        statBoardCreation(700, 910);
 
-        //set the position of all the cardsprites
-        cardHandler.setCardSprites();
+            //set the position of all the cardsprites
+            cardHandler.setCardSprites();
 
-        //create the 9 cards cards
-        cardHandler.createInitialDecklist();
+            //create the 9 cards cards
+            cardHandler.createInitialDecklist();
 
-        //creation of the 5 cardSlots
-        cardHandler.createCardSlots();
+            //creation of the 5 cardSlots
+            cardHandler.createCardSlots();
+            firstRund=false;
+        }
+        if(mainMenu.getMainRunning()) {
+            mainMenu.startMenu();
+            //creation of the map
+        }else{
 
+            //creation of the map
+
+        }
         Gdx.input.setInputProcessor(this);
+
     }
 
     @Override
     public void dispose() {
         batch.dispose();
-        texture.dispose();
+//        texture.dispose();
     }
 
     //rendering of the map and all the sprites
     @Override
     public void render() {
-        //Gray background color
         Gdx.gl.glClearColor(128 / 255f, 128 / 255f, 128 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if(mainMenu.getMainRunning()){
+            batch.begin();
+            mainMenu.render();
+        }
+        else {
+            camera.update();
+            tiledMapRenderer.setView(camera);
+            tiledMapRenderer.render();
+            //Cards selectedCards[] = cardHandler.getSelectedCards();
+            batch.begin();
+            sprite.draw(batch);
+            doTurn();
+            //draw the cardslots
+            cardHandler.drawCardSlots();
+            cardHandler.drawLockedList();
+            //draw button
+            powerdownButtonCreation(700, 710);
 
-        camera.update();
-        tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
-        Cards selectedCards[] = cardHandler.getSelectedCards();
-        batch.begin();
-        sprite.draw(batch);
-        powerdownButtonCreation(700, 710);
+            endTurnButton.getSprite().draw(batch);
+
+            statBoard0.getCardSprite().draw(batch);
+
+            drawStats();
+
+            powerdownButton.getSprite().draw(batch);
+
+            //draw Cards
+            cardHandler.drawCards();
 
 
-        doTurn();
-        //draw the cardslots
-        cardHandler.drawCardSlots();
+            tick++;
+        }
 
-        cardHandler.drawLockedList();
-
-        //draw button
-        endTurnButton.getSprite().draw(batch);
-
-        powerdownButton.getSprite().draw(batch);
-
-        statBoard0.getCardSprite().draw(batch);
-
-        drawStats();
-
-        powerdownButton.getSprite().draw(batch);
-
-
-        //draw Cards
-        cardHandler.drawCards();
-
-        i++;
-        tick++;
         batch.end();
     }
 
@@ -176,9 +192,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     // And if you click the Execute button the it will change a boolean value
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        endTurnButton.buttonClicked(screenX, screenY, endTurnButton);
-        powerdownButton.buttonClicked(screenX, screenY, powerdownButton);
-        cardHandler.click(Input.Buttons.LEFT, screenX, screenY);
+        if(mainMenu.getMainRunning()) {
+            System.out.println("buttons created");
+            mainMenu.getClientBtn().buttonClicked(screenX, screenY, mainMenu.getClientBtn());
+            mainMenu.getServerBtn().buttonClicked(screenX, screenY, mainMenu.getServerBtn());
+            mainMenu.getStartBtn().buttonClicked(screenX, screenY, mainMenu.getStartBtn());
+        }
+        else {
+            endTurnButton.buttonClicked(screenX, screenY, endTurnButton);
+            powerdownButton.buttonClicked(screenX, screenY, powerdownButton);
+            cardHandler.click(Input.Buttons.LEFT, screenX, screenY);
+        }
         return false;
     }
 
@@ -186,14 +210,44 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //if it is outside then move it back to its default pos
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
         cardHandler.letGo(screenX, screenY);
+
+        if (!mainMenu.getMainRunning()){
+            cardHandler.letGo(screenX, screenY);
+        }
+
+        /*
+        else{
+            if(insideCard(screenX, screenY, mainMenu.getClientBtn())){
+                System.out.println("DU TRYKKET PÅ CLIENT");
+            }
+
+            if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
+                System.out.println("DU TRYKKET PÅ SERVER");
+            }
+
+            if(insideCard(screenX, screenY, mainMenu.getStartBtn())){
+                System.out.println("DU TRYKKET PÅ START");
+                mainMenu.setMainRunning(false);
+                create();
+            }
+        }
+        */
         return false;
+    }
+
+    public boolean insideCard(float screenX, float screenY, Cards card){
+        float NewscreenY= Gdx.graphics.getHeight() - screenY;
+        return (screenX > card.getCardSprite().getX()) && (screenX < (card.getCardSprite().getX() + card.getCardSprite().getWidth())) && (NewscreenY > card.getCardSprite().getY()) && (NewscreenY < (card.getCardSprite().getY() + card.getCardSprite().getHeight()));
     }
 
     @Override
     //if a card is clicked on and draged, then move that clicked card
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        cardHandler.dragged(screenX, screenY);
+        if(!mainMenu.getMainRunning()){
+            cardHandler.dragged(screenX, screenY);
+        }
         return false;
     }
 
@@ -246,8 +300,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(8,6 , MapTile.SPINRIGHT);
         grid.set(8,10, MapTile.SPINRIGHT);
 
-        grid.set(3, 0, MapTile.LASERNORTH);
-
         grid.set(9,0,  MapTile.LASERNORTH);
 
         grid.set(10, 5,MapTile.LASERNORTH);
@@ -263,7 +315,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         grid.set(2, 2, MapTile.HOLE);
 
-        grid.set(3.0, -0.5, MapTile.WALL);
         grid.set(9.0, -0.5, MapTile.WALL);
         grid.set(-0.5, 9.0, MapTile.WALL);
 
@@ -310,8 +361,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         Texture buttonTexture = new Texture(Gdx.files.internal("Models/Button.png"));
         Sprite buttonSprite = new Sprite(buttonTexture);
         buttonSprite.setPosition(x, y);
-        endTurnButton = new Button();
-        endTurnButton.initButton(x, y, "endRoundButton" ,buttonSprite, this, cardHandler, robot);
+        endTurnButton = new Button(x, y, "endRoundButton" ,buttonSprite, this);
     }
 
     public void powerdownButtonCreation(int x, int y) {
@@ -319,15 +369,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
             Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
             powerdownbuttonSprite.setPosition(x, y);
-            this.powerdownButton = new Button();
-            powerdownButton.initButton(x, y, "powerDown_inactive",powerdownbuttonSprite, this, cardHandler, robot);
+            this.powerdownButton = new Button(x, y, "powerDown_inactive",powerdownbuttonSprite, this);
 
         } else {
             Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
             Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
             powerdownbuttonSprite.setPosition(x, y);
-            this.powerdownButton = new Button();
-            powerdownButton.initButton(x,y, "powerDown_active", powerdownbuttonSprite, this, cardHandler, robot);
+            this.powerdownButton = new Button(x,y, "powerDown_active", powerdownbuttonSprite, this);
         }
     }
 
@@ -354,47 +402,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public void doTurn() {
         Cards selectedCards[] = cardHandler.getSelectedCards();
+        robot.setAlive(true);
         if (!robot.getExecutePowerdown()) {
-            if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
-                if (turn >= 5) {
-                    System.out.println("Ferdig med ein heil runde!");
-                    isEndOfTurn = true;
-                    for (int h = 0; h < 7; h++) {
-                        //cardHandler.lockDown();
-                    }
-                    turn = 0;
-                    cardHandler.setNotFirst(true);
-                    cardHandler.nullyFy();
-                    checkLock(selectedCards);
-                    cardHandler.setisDone(false);
-                    cardHandler.setCardSprites();
-
-                    System.out.println("\n");
-                    if (robot.getInitiatePowerdown()) {
-                        robot.setExecutePowerdown(true);
-                    }
-                }
-                if (tick % 40 == 0) {
-                    robot.move(selectedCards[turn]);
-                    //map.move(selectedCards[turn]);
-                    System.out.println("DidTURN " + (turn + 1));
-                    robot.getSprite().draw(batch);
-
-
-                    turn++;
-                }
-            }
-        } else {
-            System.out.println("hello");
-            if (turn == 0) {
-                robot.doPowerdown();
-            }
-            turn++;
-            if (turn >= 5) {
-                robot.setExecutePowerdown(false);
-                robot.setInitiatePowerdown(false);
-            }
-            /*
             if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
                 if (turn >= 5) {
                     System.out.println("Ferdig med ein heil runde!");
@@ -407,31 +416,28 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     checkLock(selectedCards);
                     cardHandler.setisDone(false);
                     cardHandler.setCardSprites();
-        robot.setAlive(true);
-        if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
-            if (turn >= 5) {
-                System.out.println("Ferdig med ein heil runde!");
-                for (int h = 0; h < 5; h++) {
-                    //cardHandler.lockDown();
-                }
-                turn = 0;
-                cardHandler.setNotFirst(true);
-                cardHandler.nullyFy();
-                checkLock(selectedCards);
-                cardHandler.setisDone(false);
-                cardHandler.setCardSprites();
 
-                System.out.println("\n");
-            }
-            if (tick % 40 == 0) {
-                if (robot.getAlive()) {
-                robot.move(selectedCards[turn]);
+                    System.out.println("\n");
                 }
-                turn++;
-                System.out.println("DidTURN "+(turn));
-                robot.getSprite().draw(batch);
+                if (tick % 40 == 0) {
+                    if (robot.getAlive()) {
+                        robot.move(selectedCards[turn]);
+                    }
+                    turn++;
+                    System.out.println("DidTURN "+(turn));
+                    robot.getSprite().draw(batch);
+                }
             }
-            */
+        } else {
+            System.out.println("hello");
+            if (turn == 0) {
+                robot.doPowerdown();
+            }
+            turn++;
+            if (turn >= 5) {
+                robot.setExecutePowerdown(false);
+                robot.setInitiatePowerdown(false);
+            }
         }
     }
 
@@ -473,4 +479,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public static int getTurn() {
         return turn;
     }
+
+    public Robot getRobot() {return robot;}
 }
