@@ -77,7 +77,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 sprites[i] = new Sprite(textures[i]);
                 robots[i] = new Robot(sprites[i], starts[i]);
                 System.out.println("created robot" + i);
-                sprites[i].setPosition(robot.getSpriteX(), robot.getSpriteY());
+            }
+            for(int i = 0; i < server.getClientCount(); i++) {
+                System.out.println(sprites[i]);
+                sprites[i].setPosition(robots[i].getSpriteX(), robots[i].getSpriteY());
             }
 
             //create the card that Is clicked
@@ -198,13 +201,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }else{
             if(insideCard(screenX, screenY, mainMenu.getClientBtn())){
                 System.out.println("DU TRYKKET PÅ CLIENT");
-                new Client("Player", "localhost", 55555);
+                new Client("Player", "localhost", 55557);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
                 System.out.println("DU TRYKKET PÅ SERVER");
-                server = new Server(55555);
-                new Client("Player", "localhost", 55555);
+                server = new Server(55557);
+                new Client("Player", "localhost", 55557);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getStartBtn())){
@@ -362,17 +365,19 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     public void powerdownButtonCreation(float x, float y) {
-        if (!robot.getPowerdown()) {
-            Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
-            Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
-            powerdownbuttonSprite.setPosition(x, y);
-            PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
-        }
-        else {
-            Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
-            Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
-            powerdownbuttonSprite.setPosition(x, y);
-            PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
+        for(int i = 0; i < server.getClientCount(); i++) {
+            if (!robot.getPowerdown()) {
+                Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
+                Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                powerdownbuttonSprite.setPosition(x, y);
+                PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
+            }
+            else {
+                Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
+                Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                powerdownbuttonSprite.setPosition(x, y);
+                PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
+            }
         }
     }
 
@@ -385,7 +390,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 for (int h = 0; h < 5; h++) {
                     //cardHandler.lockDown();
                 }
-                robot.setAlive(true);
+                for(int i = 0; i < server.getClientCount(); i++) {
+                    robots[i].setAlive(true);
+                }
                 turn = 0;
                 cardHandler.setNotFirst(true);
                 cardHandler.nullyFy();
@@ -395,7 +402,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
                 System.out.println("\n");
             }
-            if (tick % 40 == 0) {
+            if (tick % 40 == 0) { // robot order for priority
                 if (robot.getAlive()) {
                 robot.move(selectedCards[turn]);
                 }
