@@ -12,7 +12,7 @@ import map.MapTile;
 
 public class Robot {
     private CardHandler cardHandler;
-    private Sprite sprite;
+    public Sprite sprite;
     private int turn = 0;
     private int posX = 0;
     private int posY = 0;
@@ -103,6 +103,9 @@ public class Robot {
         return this.y1;
     }
 
+    public int getTilePixelWidth(){ return this.tilePixelWidth;}
+    public int getTilePixelHeight(){ return this.tilePixelHeight;}
+
     public void setTurn(int turn) {
         this.turn = turn;
     }
@@ -114,6 +117,10 @@ public class Robot {
 
     public void setFlagsPassed(int flagsPassed){
         this.flagsPassed = flagsPassed;
+    }
+
+    public void setDirection(Direction dir){
+        this.dir = dir;
     }
 
     public void setPosX(int newX) {

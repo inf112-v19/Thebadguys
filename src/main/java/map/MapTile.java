@@ -12,7 +12,7 @@ public enum MapTile {
     EXPRESSCONVEYERBELTSOUTHTOEAST, EXPRESSCONVEYERBELTSOUTHTOWEST, EXPRESSCONVEYERBELTWESTTONORTH, EXPRESSCONVEYERBELTWESTTOSOUTH,
     LASERNORTH, LASEREAST, LASERSOUTH, LASERWEST;
 
-    public static MapTile getRandomCard(){
+    public static MapTile getRandomTile(){
         Random random = new Random();
         return MapTile.values()[random.nextInt(MapTile.values().length)];
     }

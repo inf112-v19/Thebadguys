@@ -357,7 +357,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if (tick % 40 == 0) {
                 if (robot.getTurn() < 4) {
                 robot.move(selectedCards[turn]);
-                map.move(selectedCards[turn]);
                 System.out.println("DidTURN "+(turn+1));
                 robot.getSprite().draw(batch);
                 }
