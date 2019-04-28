@@ -1,5 +1,7 @@
 package Server;
 
+import inf112.skeleton.app.RoboRallyDemo;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -33,6 +35,12 @@ public class Client extends JFrame implements Runnable {
     private DefaultCaret caret;
     private Thread run, listen;
     private ClientBackend client;
+    private boolean ready = false;
+    private String orde;
+    private String move;
+    private int[] order;
+    private String[][] moves;
+    private int clientCount;
 
     private boolean running = false;
     private JMenuBar menuBar;
@@ -73,7 +81,7 @@ public class Client extends JFrame implements Runnable {
         txtMessage.requestFocusInWindow();
     }*/
 
-    public int getID(){
+    public int getID() {
         return client.getID();
     }
 
@@ -81,7 +89,7 @@ public class Client extends JFrame implements Runnable {
         listen();
     }
 
-    private void send(String message, boolean text) {
+    /*private void send(String message, boolean text) {
         if (message.equals("")) return;
         if (text) {
             message = client.getName() + ": " + message;
@@ -89,7 +97,7 @@ public class Client extends JFrame implements Runnable {
             txtMessage.setText("");
         }
         client.send(message.getBytes());
-    }
+    }*/
 
     public void listen() {
         listen = new Thread("Listen") {
@@ -98,17 +106,37 @@ public class Client extends JFrame implements Runnable {
                     String message = client.receive();
                     if (message.startsWith("/c/")) {
                         client.setID(Integer.parseInt(message.split("/c/|/e/")[1]));
-                        client.setName(client.getName()+client.getID());
+                        client.setName(client.getName() + client.getID());
+                        RoboRallyDemo.setID(client.getID());
                         System.out.println("Successfully connected to server! user: " + client.getName() + " ID: " + client.getID());
                     } else if (message.startsWith("/m/")) {
                         String text = message.substring(3);
-                        text = text.split("/e/")[0];
+                        text = text.split("/m/|/e/")[1];
                     } else if (message.startsWith("/i/")) {
                         String text = "/i/" + client.getID() + "/e/";
-                        send(text, false);
+                        //send(text, false);
                     } else if (message.startsWith("/u/")) {
                         String[] u = message.split("/u/|/n/|/e/");
                         //users.update(Arrays.copyOfRange(u, 1, u.length - 1));
+                    } else if (message.startsWith("/r/")) {
+                        message = message.split("/r/|/e/")[1];
+                        System.out.println("player " + Integer.parseInt(message) + " is ready");
+                    } else if (message.startsWith("/a/")) {
+                        ready = true;
+                    } else if (message.startsWith("/b/")) {
+                        ready = false;
+                    } else if (message.startsWith("/o/")) {
+                        message = message.split("/o/|/e/")[1];
+                        move = message.split("~")[0];
+                        makeMoves(move);
+                        orde = message.split("~")[1];
+                        makeOrder(orde);
+                    } else if(message.startsWith("/s/")) {
+                        message = message.split("/s/|/e/")[1];
+                        clientCount = Integer.parseInt(message);
+                    } else if (message.startsWith("/f/")) {
+                        String text = message.split("/f/|/e/")[1];
+                        System.out.println("Connection refused, " + text + ".");
                     }
                 }
             }
@@ -116,4 +144,45 @@ public class Client extends JFrame implements Runnable {
         listen.start();
     }
 
+    public ClientBackend getBackendClient() {
+        return client;
+    }
+
+    public boolean askReady() {
+        client.send("/a//e/".getBytes());
+        // sleep?
+        if(ready) {
+            return true;
+        }
+        return false;
+    }
+
+    public void makeMoves(String move) {
+        moves = new String[clientCount][5];
+        for(int j = 0; j < clientCount; j++) {
+            for(int i = 0; i < 5; i++) {
+                String clientMove = move.split(" ")[j].split("#")[i];
+                moves[j][i] = clientMove;
+            }
+        }
+    }
+
+    public void makeOrder(String orde) {
+        order = new int[clientCount*5];
+        for(int i = 0; i < order.length; i++){
+            order[i] = Integer.parseInt(orde.split("#")[i]);
+        }
+    }
+
+    public int getClientCount() {
+        return clientCount;
+    }
+
+    public String[][] getMoves() {
+        return moves;
+    }
+
+    public int[] getOrder() {
+        return order;
+    }
 }

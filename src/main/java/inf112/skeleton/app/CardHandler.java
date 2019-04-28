@@ -68,11 +68,20 @@ public class CardHandler {
 
     public void letGo(int screenX, int screenY, Cards endTurnBtn, Cards powerDownBtn){
         isInside=false;
+        String sendCards = "";
         if (!mainMenu.getMainRunning()){
             if (insideCard(screenX, screenY, powerDownBtn)){
                 robot.setPowerdown(true);
             }
             if(insideCard(screenX, screenY, endTurnBtn)){
+                for(int i = 0; i < 5; i++) {
+                    if (selectedCards[i] != null) {
+                        sendCards += selectedCards[i].getName() + "~" + selectedCards[i].getPriority() + "~";
+                    }
+                }
+                String string = "/r/"+RoboRallyDemo.getID()+ sendCards + "/e/";
+                System.out.println(sendCards);
+                RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
                 isDone=true;
             }
 

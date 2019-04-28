@@ -201,29 +201,29 @@ public class Robot {
         }
     }
 
-    public void move(Cards card){ // gets the command from a card and figures out which command to execute
-        String command = card.getCardSprite().getTexture().toString();
-        switch (command){
-            case "Models/AlleBevegelseKortUtenPrioritet/BackUp.png":
+    public void move(String move){ // gets the command from a card and figures out which command to execute
+        //String command = card.getCardSprite().getTexture().toString();
+        switch (move){
+            case "BCKUP":
                 canMove(1,-1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-1.png":
+            case "MOVE1":
                 canMove(1,1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
+            case "MOVE2":
                 canMove(2,1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
+            case "MOVE3":
                 canMove(3,1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
+            case "ROE90":
                 this.rotate_right();
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png":
+            case "RE180":
                 this.rotate_right();
                 this.rotate_right();
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png":
+            case "REC90":
                 this.rotate_left();
                 break;
             default:
