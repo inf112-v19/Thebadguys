@@ -134,6 +134,7 @@ public class Server implements Runnable{
             clients.add(new ServerClient(string.split("/c/|/e/")[1], packet.getAddress(), packet.getPort(), id));
             String ID = "/c/" + id + "/e/";
             send(ID.getBytes(), packet.getAddress(), packet.getPort());
+            sendToAllButMe(("/m/" + id +"/e/"), id);
         }
         else if (string.startsWith("/m/")) {
             sendToAll(string);

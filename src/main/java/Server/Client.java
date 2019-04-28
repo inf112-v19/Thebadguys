@@ -111,7 +111,8 @@ public class Client extends JFrame implements Runnable {
                         System.out.println("Successfully connected to server! user: " + client.getName() + " ID: " + client.getID());
                     } else if (message.startsWith("/m/")) {
                         String text = message.substring(3);
-                        text = text.split("/m/|/e/")[1];
+                        int player = Integer.parseInt(text.split("/m/|/e/")[1]);
+                        System.out.println("Player" + player + " connected to the game.");
                     } else if (message.startsWith("/i/")) {
                         String text = "/i/" + client.getID() + "/e/";
                         //send(text, false);
@@ -150,11 +151,10 @@ public class Client extends JFrame implements Runnable {
 
     public boolean askReady() {
         client.send("/a//e/".getBytes());
-        // sleep?
-        if(ready) {
-            return true;
+
+        synchronized (this) {
+            return ready;
         }
-        return false;
     }
 
     public void makeMoves(String move) {
