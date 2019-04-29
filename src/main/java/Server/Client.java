@@ -115,7 +115,6 @@ public class Client extends JFrame implements Runnable {
                         message = message.split("/s/|/e/")[1];
                         clientCount = Integer.parseInt(message);
                         mainMenu.setMainRunning(false);
-                        RoboRallyDemo.setStarted(true);
                     } else if (message.startsWith("/f/")) {
                         String text = message.split("/f/|/e/")[1];
                         System.out.println("Connection refused, " + text + ".");

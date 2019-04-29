@@ -60,7 +60,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private boolean ready[] = {false, false, false, false, false, false, false, false};
     private String[][] moves;
     private int[] order;
-    private boolean started;
 
     //create the initial state of the game
     @Override
@@ -504,10 +503,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public static Client getClient() {
         return client;
-    }
-
-    public static void setStarted(boolean started) {
-        this.started = started;
     }
 
     /*private void createWindow() {
