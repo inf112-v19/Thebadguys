@@ -60,6 +60,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private boolean ready[] = {false, false, false, false, false, false, false, false};
     private String[][] moves;
     private int[] order;
+    private boolean started;
 
     //create the initial state of the game
     @Override
@@ -220,14 +221,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     Main.main(args);
                 }
                 else {
-                    client = new Client("Player", "2001:700:200:f132:bc0e:343a:7bf9:b280", 55557);
+                    client = new Client("Player", "10.111.33.87", 55557);
                 }
             }
 
             if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
                 System.out.println("DU TRYKKET PÅ SERVER");
                 server = new Server(55557);
-                client = new Client("Player", "2001:700:200:f132:bc0e:343a:7bf9:b280", 55557);
+                client = new Client("Player", "10.111.33.87", 55557);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getStartBtn())){
@@ -503,6 +504,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public static Client getClient() {
         return client;
+    }
+
+    public static void setStarted(boolean started) {
+        this.started = started;
     }
 
     /*private void createWindow() {

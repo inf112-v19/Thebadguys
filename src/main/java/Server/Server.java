@@ -83,7 +83,7 @@ public class Server implements Runnable{
                             }
                         }
                         else{
-                            clientResponse.remove(c.getID());
+                            clientResponse.remove(new Integer (c.getID()));
                             c.attempt = 0;
                             System.out.println("I am here");
                         }
