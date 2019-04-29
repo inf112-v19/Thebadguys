@@ -221,8 +221,15 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 }
                 else {
                     client = new Client("Player", "10.0.0.144", 55557);
-                    if(client.getStarted()) {
-                        create();
+                    boolean wait = true;
+                    while (wait) {
+                        if(client.getStarted()) {
+                            create();
+                        }
+                        else {
+                            String message = "/x//e/";
+                            client.getBackendClient().send(message.getBytes());
+                        }
                     }
                 }
             }

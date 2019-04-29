@@ -117,6 +117,12 @@ public class Client extends JFrame implements Runnable {
                         clientCount = Integer.parseInt(message);
                         mainMenu.setMainRunning(false);
                         started = true;
+                    } else if (message.startsWith("/w/")) {
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     } else if (message.startsWith("/f/")) {
                         String text = message.split("/f/|/e/")[1];
                         System.out.println("Connection refused, " + text + ".");

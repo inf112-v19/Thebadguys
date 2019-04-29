@@ -195,6 +195,14 @@ public class Server implements Runnable{
             clientResponse.add(Integer.parseInt(string.split("/i/|/e/")[1]));
 
         }
+        else if (string.startsWith("/x/")) {
+            if(started) {
+                sendToAllButMe("/s/" + clientCount() + "/e/", 0);
+            }
+            else {
+                sendToAllButMe("/w//e/",0);
+            }
+        }
         else if (string.startsWith("/c/") && (started || clientCount() == 8)) { // a connection handler for full server
             string = "/f/" + "server is full or started" + "/e/";
             send(string.getBytes(), packet.getAddress(), packet.getPort());
