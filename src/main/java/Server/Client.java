@@ -66,21 +66,6 @@ public class Client extends JFrame implements Runnable {
         run.start();
     }
 
-    /*private void createWindow() {
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                String disconnect = "/d/" + client.getID() + "/e/";
-                send(disconnect, false);
-                running = false;
-
-            }
-        });
-
-        setVisible(true);
-
-        txtMessage.requestFocusInWindow();
-    }*/
-
     public int getID() {
         return client.getID();
     }
@@ -89,15 +74,9 @@ public class Client extends JFrame implements Runnable {
         listen();
     }
 
-    /*private void send(String message, boolean text) {
-        if (message.equals("")) return;
-        if (text) {
-            message = client.getName() + ": " + message;
-            message = "/m/" + message + "/e/";
-            txtMessage.setText("");
-        }
-        client.send(message.getBytes());
-    }*/
+    public void send(final byte[] message) {
+        client.send(message);
+    }
 
     public void listen() {
         listen = new Thread("Listen") {
@@ -110,12 +89,11 @@ public class Client extends JFrame implements Runnable {
                         RoboRallyDemo.setID(client.getID());
                         System.out.println("Successfully connected to server! user: " + client.getName() + " ID: " + client.getID());
                     } else if (message.startsWith("/m/")) {
-                        String text = message.substring(3);
-                        int player = Integer.parseInt(text.split("/m/|/e/")[1]);
+                        int player = Integer.parseInt(message.split("/m/|/e/")[1]);
                         System.out.println("Player" + player + " connected to the game.");
                     } else if (message.startsWith("/i/")) {
                         String text = "/i/" + client.getID() + "/e/";
-                        //send(text, false);
+                        send(text.getBytes());
                     } else if (message.startsWith("/u/")) {
                         String[] u = message.split("/u/|/n/|/e/");
                         //users.update(Arrays.copyOfRange(u, 1, u.length - 1));
@@ -151,10 +129,12 @@ public class Client extends JFrame implements Runnable {
 
     public boolean askReady() {
         client.send("/a//e/".getBytes());
-
-        synchronized (this) {
-            return ready;
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        return ready;
     }
 
     public void makeMoves(String move) {
@@ -184,5 +164,9 @@ public class Client extends JFrame implements Runnable {
 
     public int[] getOrder() {
         return order;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 }

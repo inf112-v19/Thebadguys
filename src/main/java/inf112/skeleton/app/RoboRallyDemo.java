@@ -19,6 +19,11 @@ import map.GameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+//import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
+
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
@@ -73,6 +78,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             //creation of the map
         }else{
             //creation of the map
+            //createWindow();
             batch = new SpriteBatch();
             tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
             tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
@@ -221,14 +227,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
                 System.out.println("DU TRYKKET PÅ SERVER");
                 server = new Server(55557);
-                client = new Client("Player", "localhost", 55557);
+                client = new Client("Player", "10.0.0.144", 55557);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getStartBtn())){
                 System.out.println("DU TRYKKET PÅ START");
                 if(server != null) {
                     server.setStarted(true);
-                    server.start();
+                    client.getBackendClient().send("/s//e/".getBytes());
                     mainMenu.setMainRunning(false);
                     create();
                 }
@@ -498,4 +504,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public static Client getClient() {
         return client;
     }
+
+    /*private void createWindow() {
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                String disconnect = "/d/" + client.getID() + "/e/";
+                client.send(disconnect.getBytes());
+                client.setRunning(false);
+                client.getBackendClient().close();
+
+            }
+        });
+    }*/
+
 }

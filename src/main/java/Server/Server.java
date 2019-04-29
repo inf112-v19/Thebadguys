@@ -32,12 +32,14 @@ public class Server implements Runnable{
     private boolean started = false;
 
     private List<ServerClient> clients = new ArrayList<ServerClient>();
+    private List<Integer> clientResponse = new ArrayList<Integer>();
 
     private int[][] positions;
     private boolean[] ready = {true, true, true, true, true, true, true, true};
     private String[][] clientCards = new String[8][10];
     private String moves;
     private String moveOrder;
+    private final int MAX_ATTEMPTS = 5;
 
     public Server(int port) {
         this.port = port;
@@ -63,7 +65,29 @@ public class Server implements Runnable{
         manage = new Thread("Manage"){
             public void run() {
                 while(running) {
-
+                    sendToAll("/i/ping/e/");
+                    System.out.println("are you here?");
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    for(int i = 0; i < clients.size(); i++) {
+                        ServerClient c = clients.get(i);
+                        if(!clientResponse.contains(clients.get(i).getID())){
+                            if(c.attempt>= MAX_ATTEMPTS) {
+                                disconnect(c.getID(), false);
+                            }
+                            else {
+                                c.attempt++;
+                            }
+                        }
+                        else{
+                            clientResponse.remove(c.getID());
+                            c.attempt = 0;
+                            System.out.println("I am here");
+                        }
+                    }
                 }
             }
         };
@@ -78,11 +102,12 @@ public class Server implements Runnable{
                     DatagramPacket packet = new DatagramPacket(data, data.length);
                     try {
                         socket.receive(packet);
-                    }catch (IOException e) {
+                    } catch (SocketException e) {
+
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                     process(packet);
-                    //System.out.println(clients.get(0).address.toString() + ":" + clients.get(0).port);
                 }
             }
         };
@@ -122,11 +147,6 @@ public class Server implements Runnable{
         send.start();
     }
 
-    private void send(String message, InetAddress address, int port) {
-        message += "/e/";
-        send(message.getBytes(), address, port);
-    }
-
     private void process(DatagramPacket packet) {
         String string = new String(packet.getData());
         if (string.startsWith("/c/") && !started && clientCount() < 8) { // client connects
@@ -134,10 +154,15 @@ public class Server implements Runnable{
             clients.add(new ServerClient(string.split("/c/|/e/")[1], packet.getAddress(), packet.getPort(), id));
             String ID = "/c/" + id + "/e/";
             send(ID.getBytes(), packet.getAddress(), packet.getPort());
-            sendToAllButMe(("/m/" + id +"/e/"), id);
+            String ID2 = "/m/" + id +"/e/";
+            sendToAllButMe(ID2, id);
         }
-        else if (string.startsWith("/m/")) {
-            sendToAll(string);
+        else if (string.startsWith("/s/")) { // start packet
+            sendToAll("/s/" + clientCount() + "/e/");
+        }
+        else if (string.startsWith("/d/")) { // disconnect packet
+            int id = Integer.parseInt(string.split("/d/|/e/")[1]);
+            disconnect(id, true);
         }
         else if(string.startsWith("/r/")) { // a player is ready
             string = string.split("/r/|/e/")[1];
@@ -151,17 +176,14 @@ public class Server implements Runnable{
             }*/
             string = "/r/" + id + "/e/";
             sendToAllButMe(string, id);
-            /*positions = getPositions();
-            string = "/r/" + positions.toString() + "/e/";
-            sendToAll(string);*/
         }
-        else if(string.startsWith("/o/")) {
+        else if(string.startsWith("/o/")) { // ask for all the moves beeing made this round
             orderMoves();
             string = "/o/" + moves + "~" + moveOrder + "/e/";
             System.out.println(moves);
             send(string.getBytes(),packet.getAddress(), packet.getPort());
         }
-        else if (string.startsWith("/a/")) {
+        else if (string.startsWith("/a/")) { // ask if clients are ready
             if(getReady()) {
                 send("/a//e/".getBytes(), packet.getAddress(), packet.getPort());
             }
@@ -169,7 +191,11 @@ public class Server implements Runnable{
                 send("/b//e/".getBytes(), packet.getAddress(), packet.getPort());
             }
         }
-        else if (string.startsWith("/c/") || started || clientCount() == 8) {
+        else if(string.startsWith("/i/")) {
+            clientResponse.add(Integer.parseInt(string.split("/i/|/e/")[1]));
+
+        }
+        else if (string.startsWith("/c/") && (started || clientCount() == 8)) { // a connection handler for full server
             string = "/f/" + "server is full or started" + "/e/";
             send(string.getBytes(), packet.getAddress(), packet.getPort());
         }
@@ -184,6 +210,25 @@ public class Server implements Runnable{
             positions[i] = client.getPos();
         }
         return positions;
+    }
+
+    private void disconnect(int id, boolean status) {
+        ServerClient c = null;
+        for (int i = 0; i < clientCount(); i++) {
+            if (clients.get(i).getID() == id) {
+                c = clients.get(i);
+                clients.remove(i);
+                break;
+            }
+        }
+        String message = "";
+        if (status) {
+            message = "Client " + c.name + "(" + c.getID() + ")" + c.address.toString() + ":" + c.port + " disconnected.";
+        }
+        else {
+            message = "Client " + c.name + "(" + c.getID() + ")" + c.address.toString() + ":" + c.port + " timed out.";
+        }
+        System.out.println(message);
     }
 
     public int clientCount(){
@@ -260,6 +305,14 @@ public class Server implements Runnable{
 
     public void start() {
         sendToAll("/s/" + clientCount() + "/e/");
+    }
+
+    private void quit() {
+        for (int i = 0; i < clients.size(); i++) {
+            disconnect(clients.get(i).getID(), true);
+        }
+        running = false;
+        socket.close();
     }
 }
     

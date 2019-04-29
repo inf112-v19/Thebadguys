@@ -92,20 +92,6 @@ public class ClientBackend {
         }.start();
     }
 
-    public void process(DatagramPacket packet) {
-        String string = new String(packet.getData());
-        if (string.startsWith("/c/")) {
-            this.id = Integer.parseInt(string.split("/c/|/e/")[1]);
-            System.out.println("Connected to the server! ID: " + this.id);
-        }
-        else if (string.startsWith("/m/")) {
-
-        }
-        else {
-            System.out.println(string);
-        }
-    }
-
     public void setID(int id) {
         this.id = id;
     }
