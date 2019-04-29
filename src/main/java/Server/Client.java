@@ -42,6 +42,7 @@ public class Client extends JFrame implements Runnable {
     private int[] order;
     private String[][] moves;
     private int clientCount;
+    public boolean started = false;
 
     private boolean running = false;
     private JMenuBar menuBar;
@@ -115,6 +116,7 @@ public class Client extends JFrame implements Runnable {
                         message = message.split("/s/|/e/")[1];
                         clientCount = Integer.parseInt(message);
                         mainMenu.setMainRunning(false);
+                        started = true;
                     } else if (message.startsWith("/f/")) {
                         String text = message.split("/f/|/e/")[1];
                         System.out.println("Connection refused, " + text + ".");
@@ -153,6 +155,7 @@ public class Client extends JFrame implements Runnable {
         order = new int[clientCount*5];
         for(int i = 0; i < order.length; i++){
             order[i] = Integer.parseInt(orde.split("#")[i]);
+            System.out.println(order[i]);
         }
     }
 
@@ -170,5 +173,9 @@ public class Client extends JFrame implements Runnable {
 
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    public boolean getStarted() {
+        return started;
     }
 }

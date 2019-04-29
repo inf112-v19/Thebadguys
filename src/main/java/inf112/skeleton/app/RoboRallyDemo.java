@@ -220,14 +220,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     Main.main(args);
                 }
                 else {
-                    client = new Client("Player", "10.111.33.87", 55557);
+                    client = new Client("Player", "10.0.0.144", 55557);
+                    if(client.getStarted()) {
+                        create();
+                    }
                 }
             }
 
             if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
                 System.out.println("DU TRYKKET PÅ SERVER");
                 server = new Server(55557);
-                client = new Client("Player", "10.111.33.87", 55557);
+                client = new Client("Player", "10.0.0.144", 55557);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getStartBtn())){
