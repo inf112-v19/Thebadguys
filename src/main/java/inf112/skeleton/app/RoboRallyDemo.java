@@ -216,21 +216,18 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if(insideCard(screenX, screenY, mainMenu.getClientBtn())){
                 System.out.println("DU TRYKKET PÅ CLIENT");
                 if(server != null) {
-                    String[] args = {""};
-                    Main.main(args);
+                    System.out.println("You can only have one client per computer.");
                 }
                 else {
                     client = new Client("Player", "10.0.0.144", 55557);
-                    boolean wait = true;
-                    while (wait) {
-                        if(client.getStarted()) {
+                        /*if(client.getStarted()) {
                             create();
                         }
                         else {
                             String message = "/x//e/";
                             client.getBackendClient().send(message.getBytes());
-                        }
-                    }
+                        }*/
+
                 }
             }
 
@@ -245,6 +242,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 if(server != null) {
                     server.setStarted(true);
                     client.getBackendClient().send("/s//e/".getBytes());
+                    mainMenu.setMainRunning(false);
+                    create();
+                }
+                else if (client.getStarted()) {
                     mainMenu.setMainRunning(false);
                     create();
                 }

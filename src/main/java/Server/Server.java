@@ -195,7 +195,7 @@ public class Server implements Runnable{
             clientResponse.add(Integer.parseInt(string.split("/i/|/e/")[1]));
 
         }
-        else if (string.startsWith("/x/")) {
+        else if (string.startsWith("/x/")) { // may remove
             if(started) {
                 sendToAllButMe("/s/" + clientCount() + "/e/", 0);
             }

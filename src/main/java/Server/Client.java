@@ -117,7 +117,7 @@ public class Client extends JFrame implements Runnable {
                         clientCount = Integer.parseInt(message);
                         mainMenu.setMainRunning(false);
                         started = true;
-                    } else if (message.startsWith("/w/")) {
+                    } else if (message.startsWith("/w/")) { // may remove
                         try {
                             Thread.sleep(200);
                         } catch (InterruptedException e) {
