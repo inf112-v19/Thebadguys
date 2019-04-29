@@ -63,7 +63,7 @@ public class CardHandler {
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
-        clickedCard=new Cards(0,0, "clickedCard",0, cardSprite10);
+        clickedCard=new Cards(10000,10000, "clickedCard",0, cardSprite10);
         font = new BitmapFont();
     }
 
@@ -77,7 +77,7 @@ public class CardHandler {
             //method that adjusts a cards location on the screen if it is let go of. the position wil depend if it is inside or outside a cardslot
             adjustCardLocation();
             //create a new clickedCard so that a card does not stick to the mouse when let go of
-            clickedCard = new Cards(0, 0, "", 0, cardSprite10);
+            clickedCard = new Cards(10000, 10000, "", 0, cardSprite10);
         }
     }
 
