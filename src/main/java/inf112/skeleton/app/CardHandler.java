@@ -63,7 +63,7 @@ public class CardHandler {
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
-        clickedCard=new Cards(0,0, "",0, cardSprite10);
+        clickedCard=new Cards(0,0, "clickedCard",0, cardSprite10);
         font = new BitmapFont();
     }
 

@@ -37,6 +37,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Cards statBoard0;
     private Cards card;
 
+    private Cards selectedCards[];
+
     private boolean firstRund=true;
     private mainMenu mainMenu;
 
@@ -86,7 +88,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             //create the end turn button
             endTurnButtonCreation(700, 510);
             statBoardCreation(700,910);
-
 
             //set the position of all the cardsprites
             cardHandler.setCardSprites();
@@ -150,6 +151,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             //draw Cards
             cardHandler.drawCards();
 
+            if(tick%40==0) printSelectedCards();
 
             tick++;
         }
@@ -163,6 +165,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         viewPort.update(width, height);
         camera.update();
     }
+
+
 
     @Override
     public void pause() {
@@ -398,6 +402,16 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         font.draw(batch, "" + hp, statBoard0.getCardSprite().getX() + 90, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30);
         font.draw(batch, "" + robot.getLives(), statBoard0.getCardSprite().getX() + 175, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30);
         font.draw(batch, "" + robot.getFlagsPassed(), statBoard0.getCardSprite().getX() + 250, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30);
+    }
+
+    //support metode
+    public void printSelectedCards(){
+        selectedCards = cardHandler.getSelectedCards();
+        for (int i = 0; i<selectedCards.length; i++){
+            if(selectedCards[i]!=null){
+                System.out.println("Card in cardslot" + i +" "+selectedCards[i].getName());
+            }
+        }
     }
 
     public void doTurn() {
