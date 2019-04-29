@@ -153,6 +153,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             if(tick%40==0) printSelectedCards();
 
+            System.out.println("merging");
             tick++;
         }
 
