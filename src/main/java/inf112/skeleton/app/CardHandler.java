@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+//import com.sun.istack.internal.Nullable;
 import map.IGameMap;
 
-import javax.smartcardio.Card;
 import java.util.ArrayList;
 
 public class CardHandler {
@@ -21,7 +21,6 @@ public class CardHandler {
     private ArrayList<CardSlots> cardSlotPos;
     private ArrayList<Sprite> randomSpriteList;
     private ArrayList<Sprite> spritePos;
-
     private Deck Deck;
     private Deck lockedDeck;
     private Cards[] selectedCards;
@@ -39,7 +38,7 @@ public class CardHandler {
     private Robot robot;
     private IGameMap map;
     private int cardDelt=9;
-    private int cardSlotLock=0;;
+    private int cardSlotLock=0;
     private ArrayList<Sprite> lockedList;
     private int pri;
     private String name;
@@ -70,11 +69,20 @@ public class CardHandler {
 
     public void letGo(int screenX, int screenY, Cards endTurnBtn, Cards powerDownBtn){
         isInside=false;
+        String sendCards = "";
         if (!mainMenu.getMainRunning()){
             if (insideCard(screenX, screenY, powerDownBtn)){
                 robot.setPowerdown(true);
             }
             if(insideCard(screenX, screenY, endTurnBtn)){
+                for(int i = 0; i < 5; i++) {
+                    if (selectedCards[i] != null) {
+                        sendCards += selectedCards[i].getName() + "~" + selectedCards[i].getPriority() + "~";
+                    }
+                }
+                String string = "/r/"+RoboRallyDemo.getID()+ sendCards + "/e/";
+                System.out.println(sendCards);
+                RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
                 isDone=true;
             }
 

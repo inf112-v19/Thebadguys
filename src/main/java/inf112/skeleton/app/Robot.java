@@ -30,8 +30,8 @@ public class Robot {
     private int mapHeight = prop.get("height", Integer.class);
     private int tilePixelWidth = prop.get("tilewidth", Integer.class);
     private int tilePixelHeight = prop.get("tileheight", Integer.class);
-    private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
-    private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
+    private int x0 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
+    private int y0 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
     private int turn = RoboRallyDemo.getTurn();
 
     private boolean powerdown = false;
@@ -90,19 +90,27 @@ public class Robot {
     }
 
     public int getX1(){
-        System.out.println(this.x1);
+        System.out.println(this.x0);
         System.out.println(this.mapWidth);
         System.out.println(this.mapHeight);
         System.out.println(this.tilePixelWidth);
         System.out.println(this.tilePixelHeight);
         System.out.println(this.w);
         System.out.println(this.h);
-        return this.x1;
+        return this.x0;
     }
 
     public int getY1(){
-        System.out.println(this.y1);
-        return this.y1;
+        System.out.println(this.y0);
+        return this.y0;
+    }
+
+    public int getSpriteX() {
+        return this.x0 + (this.posX * (this.tilePixelWidth / 6));
+    }
+
+    public int getSpriteY() {
+        return this.y0 + (this.posY * (this.tilePixelWidth / 6));
     }
 
     public void setAlive(boolean alive) {
@@ -193,29 +201,29 @@ public class Robot {
         }
     }
 
-    public void move(Cards card){ // gets the command from a card and figures out which command to execute
-        String command = card.getCardSprite().getTexture().toString();
-        switch (command){
-            case "Models/AlleBevegelseKortUtenPrioritet/BackUp.png":
+    public void move(String move){ // gets the command from a card and figures out which command to execute
+        //String command = card.getCardSprite().getTexture().toString();
+        switch (move){
+            case "BCKUP":
                 canMove(1,-1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-1.png":
+            case "MOVE1":
                 canMove(1,1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
+            case "MOVE2":
                 canMove(2,1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
+            case "MOVE3":
                 canMove(3,1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
+            case "ROE90":
                 this.rotate_right();
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png":
+            case "RE180":
                 this.rotate_right();
                 this.rotate_right();
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png":
+            case "REC90":
                 this.rotate_left();
                 break;
             default:
