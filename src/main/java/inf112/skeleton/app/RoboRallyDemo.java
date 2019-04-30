@@ -69,7 +69,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     public  void createv2(){
-        System.out.println("HEI");
         batch = new SpriteBatch();
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
@@ -87,9 +86,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             AIrobot = new AIRobot(AIsprite, startpos2);
             sprite.setPosition(robot.getSpriteX(), robot.getSpriteY());
             AIsprite.setPosition(AIrobot.getX1()+200, AIrobot.getY1());
-
-            System.out.println("HEI2");
-
         }
 
         if (!singlePlayerMode) {
@@ -110,15 +106,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             //create the card that Is clicked
             Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
             if(singlePlayerMode) {
-                System.out.println("single");
                 cardHandler = new CardHandler(batch, robot, map);
             }
             else if (!singlePlayerMode) {
                 cardHandler = new CardHandler(batch, robots[ID], map);
             }
-
             font = new BitmapFont();
-
             //create the end turn button
             buttonCreation(700, 500);
             statBoardCreation(700,930);
@@ -132,7 +125,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             //creation of the 5 cardSlots
             cardHandler.createCardSlots();
-            System.out.println("DUTRYKKEYjaskdlasd");
 
         Gdx.input.setInputProcessor(this);
     }
@@ -167,11 +159,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //rendering of the map and all the sprites
     @Override
     public void render() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Gdx.gl.glClearColor(128 / 255f, 128 / 255f, 128 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if(mainMenu.getMainRunning()){
@@ -266,16 +253,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     System.out.println("You can only have one client per computer.");
                 }
                 else {
-                    client = new Client("Player", "10.111.32.94", 55557);
-                    create();
-                        /*if(client.getStarted()) {
-
-                        }
-                        else {
-                            String message = "/x//e/";
-                            client.getBackendClient().send(message.getBytes());
-                        }*/
-
+                    client = new Client("Player", "10.111.15.150", 55557);
+                    createv2();
                 }
             }
 
@@ -298,10 +277,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     System.out.println("HEIHEI");
                     createv2();
                     mainMenu.setMainRunning(false);
-                }
-                else if (client.getStarted()) {
-                    mainMenu.setMainRunning(false);
-                    createv2();
                 }
                 else {
                     System.out.println("You don't have a server running!");
