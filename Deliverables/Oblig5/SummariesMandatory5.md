@@ -19,4 +19,7 @@ I dag var Wim, Erlend og Christian til stedet. Vi snakket om fremgangen på serv
 I dag var alle tilstede, Erlend og André jobbet med AI, Christian jobbet med serveren, Tord jobbet med knapper generelt, og Wim reorganiserte robot og ryddet i koden.
 
 ### Arbeidssemdrag 26.04
-I dag var alle tildete, Christian og Erlend jobbet med server og client, Tord jobbet videre med knapper, André jobbet videre med AI og Wim fortsatte med å lage nye objekter for å rydde og objektorientere koden.
+I dag var alle tilstedet, Christian og Erlend jobbet med server og client, Tord jobbet videre med knapper, André jobbet videre med AI og Wim fortsatte med å lage nye objekter for å rydde og objektorientere koden.
+
+### Arbeidssammendrag 30.04
+I dag var alle tilstede, Erlend og Christian jobbet videre med server og multiplayer, André jobbet med robotlaser, Wim jobbet med å objektorientere koden. Tord gikk til kunden (Siv) for å oppklare hvordan det endelige produktet skulle fungere.
