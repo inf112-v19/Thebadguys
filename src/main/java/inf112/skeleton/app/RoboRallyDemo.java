@@ -69,7 +69,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     public  void createv2(){
-        System.out.println("HEI");
         batch = new SpriteBatch();
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
@@ -87,9 +86,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             AIrobot = new AIRobot(AIsprite, startpos2);
             sprite.setPosition(robot.getSpriteX(), robot.getSpriteY());
             AIsprite.setPosition(AIrobot.getX1()+200, AIrobot.getY1());
-
-            System.out.println("HEI2");
-
         }
 
         if (!singlePlayerMode) {
@@ -167,11 +163,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //rendering of the map and all the sprites
     @Override
     public void render() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Gdx.gl.glClearColor(128 / 255f, 128 / 255f, 128 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if(mainMenu.getMainRunning()){
@@ -266,16 +257,21 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     System.out.println("You can only have one client per computer.");
                 }
                 else {
-                    client = new Client("Player", "10.111.32.94", 55557);
-                    create();
-                        /*if(client.getStarted()) {
-
+                    client = new Client("Player", "10.111.15.150", 55557);
+                    boolean wait = false;
+                    while(!wait) {
+                        System.out.println("Waiting for the server to start the game.");
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                        else {
-                            String message = "/x//e/";
-                            client.getBackendClient().send(message.getBytes());
-                        }*/
-
+                        if (client.getStarted()) {
+                            System.out.println("create blir callet");
+                            createv2();
+                        }
+                        wait =client.getStarted();
+                    }
                 }
             }
 
@@ -496,7 +492,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public void doTurn () {
         Cards selectedCards[] = cardHandler.getSelectedCards();
-        if (!singlePlayerMode) {
+        if (!singlePlayerMode && server != null) {
             server.roundStart();
         }
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone() && checkMode()) {
