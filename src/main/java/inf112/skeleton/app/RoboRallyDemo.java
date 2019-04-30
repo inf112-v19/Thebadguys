@@ -68,63 +68,49 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return singlePlayerMode;
     }
 
-    //create the initial state of the game
-    @Override
-    public void create() {
-        if(firstRund){
-            batch = new SpriteBatch();
-            float w = Gdx.graphics.getWidth();
-            float h = Gdx.graphics.getHeight();
-            //set the camera
-            setCamera(w, h);
-            mainMenu = new mainMenu(batch);
-            firstRund=false;
+    public  void createv2(){
+        System.out.println("HEI");
+        batch = new SpriteBatch();
+        tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        createGrid();
+        map = new GameMap(grid);
+
+        if (singlePlayerMode) {
+            texture = new Texture(Gdx.files.internal("Models/tank0.png"));
+            Texture AItexture = new Texture(Gdx.files.internal("Models/tank1.png"));
+            sprite = new Sprite(texture);
+            AIsprite = new Sprite(AItexture);
+            int[] startpos = {0, 0};
+            int[] startpos2 = {4, 0};
+            robot = new Robot(sprite, startpos);
+            AIrobot = new AIRobot(AIsprite, startpos2);
+            sprite.setPosition(robot.getSpriteX(), robot.getSpriteY());
+            AIsprite.setPosition(AIrobot.getX1()+200, AIrobot.getY1());
+
+            System.out.println("HEI2");
+
         }
-        if(mainMenu.getMainRunning()) {
-            mainMenu.startMenu();
-            //creation of the map
-        }else{
-            //creation of the map
-            //createWindow();
-            batch = new SpriteBatch();
-            tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
-            tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-            createGrid();
-            map = new GameMap(grid);
 
-            if (singlePlayerMode) {
-                texture = new Texture(Gdx.files.internal("Models/tank0.png"));
-                Texture AItexture = new Texture(Gdx.files.internal("Models/tank1.png"));
-                sprite = new Sprite(texture);
-                AIsprite = new Sprite(AItexture);
-                int[] startpos = {0, 0};
-                int[] startpos2 = {4, 0};
-                robot = new Robot(sprite, startpos);
-                AIrobot = new AIRobot(AIsprite, startpos2);
-                sprite.setPosition(robot.getSpriteX(), robot.getSpriteY());
-                AIsprite.setPosition(AIrobot.getX1()+200, AIrobot.getY1());
-
+        if (!singlePlayerMode) {
+            clientCount = client.getClientCount();
+            order = new int[clientCount*5];
+            moves = new String[clientCount][5];
+            for (int i = 0; i < clientCount; i++) {
+                textures[i] = new Texture(Gdx.files.internal("Models/tank" + (i) + ".png"));
+                sprites[i] = new Sprite(textures[i]);
+                robots[i] = new Robot(sprites[i], starts[i]);
+                System.out.println("created robot" + i);
             }
-
-            if (!singlePlayerMode) {
-                clientCount = client.getClientCount();
-                order = new int[clientCount*5];
-                moves = new String[clientCount][5];
-                for (int i = 0; i < clientCount; i++) {
-                    textures[i] = new Texture(Gdx.files.internal("Models/tank" + (i) + ".png"));
-                    sprites[i] = new Sprite(textures[i]);
-                    robots[i] = new Robot(sprites[i], starts[i]);
-                    System.out.println("created robot" + i);
-                }
-                for(int i = 0; i < clientCount; i++) {
-                    sprites[i].setPosition(robots[i].getSpriteX(), robots[i].getSpriteY());
-                }
+            for(int i = 0; i < clientCount; i++) {
+                sprites[i].setPosition(robots[i].getSpriteX(), robots[i].getSpriteY());
             }
-
+        }
 
             //create the card that Is clicked
             Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
             if(singlePlayerMode) {
+                System.out.println("single");
                 cardHandler = new CardHandler(batch, robot, map);
             }
             else if (!singlePlayerMode) {
@@ -146,6 +132,27 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             //creation of the 5 cardSlots
             cardHandler.createCardSlots();
+            System.out.println("DUTRYKKEYjaskdlasd");
+
+        Gdx.input.setInputProcessor(this);
+    }
+
+
+    //create the initial state of the game
+    @Override
+    public void create() {
+        if(firstRund){
+            batch = new SpriteBatch();
+            float w = Gdx.graphics.getWidth();
+            float h = Gdx.graphics.getHeight();
+            //set the camera
+            setCamera(w, h);
+            mainMenu = new mainMenu(batch);
+            firstRund=false;
+        }
+        if(mainMenu.getMainRunning()) {
+            mainMenu.startMenu();
+            //creation of the map
         }
         Gdx.input.setInputProcessor(this);
 
@@ -160,6 +167,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //rendering of the map and all the sprites
     @Override
     public void render() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Gdx.gl.glClearColor(128 / 255f, 128 / 255f, 128 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if(mainMenu.getMainRunning()){
@@ -255,8 +267,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 }
                 else {
                     client = new Client("Player", "10.111.32.94", 55557);
+                    create();
                         /*if(client.getStarted()) {
-                            create();
+
                         }
                         else {
                             String message = "/x//e/";
@@ -269,7 +282,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
                 System.out.println("DU TRYKKET PÅ SERVER");
                 server = new Server(55557);
-                client = new Client("Player", "10.111.32.94", 55557);
+                client = new Client("Player", "10.111.15.150", 55557);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getStartBtn())){
@@ -278,16 +291,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     server.setStarted(true);
                     client.getBackendClient().send("/s//e/".getBytes());
                     mainMenu.setMainRunning(false);
-                    create();
+                    createv2();
                 }
                 else if (server == null) {
                     singlePlayerMode = true;
+                    System.out.println("HEIHEI");
+                    createv2();
                     mainMenu.setMainRunning(false);
-                    create();
                 }
                 else if (client.getStarted()) {
                     mainMenu.setMainRunning(false);
-                    create();
+                    createv2();
                 }
                 else {
                     System.out.println("You don't have a server running!");
