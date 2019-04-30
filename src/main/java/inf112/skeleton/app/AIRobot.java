@@ -58,97 +58,10 @@ public class AIRobot{
     }
 
 
-    public void doTurn1(int turn){
+    public void doTurn(int turn){
         makeDeck();
         fillDeck();
         move(selectedCards[turn]);
-    }
-
-    public void doTurn(){
-        makeDeck();
-        fillDeck();
-            if(getPosX() < gameMap.getCheckPointX(flagsPassed)) {
-                switch (dir) {
-                    case NORTH:
-                        for(int i = 0; i<selectedCards.length; i++){
-                            if(selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png"){
-                                move(selectedCards[i]);
-                            }
-                        }
-                        break;
-                    case EAST:
-                        for(int i = 0; i<selectedCards.length; i++){
-                            if(selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Move-3.png"){
-                                move(selectedCards[i]);
-                            }
-                            else if((selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Move-2.png")){
-                                move(selectedCards[i]);
-                            }
-                            else if((selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Move-1.png")){
-                                move(selectedCards[i]);
-                            }
-                        }
-                        break;
-                    case SOUTH:
-                        for(int i = 0; i<selectedCards.length; i++){
-                            if(selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png"){
-                                move(selectedCards[i]);
-                            }
-                        }
-                        break;
-                    case WEST:
-                        int count = 0;
-                        for(int i = 0; i<selectedCards.length; i++){
-                            if(selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png"){
-                                move(selectedCards[i]);
-                            }
-                        }
-                        break;
-                    default:
-                        System.out.println("Something went wrong");
-                }
-
-            }
-        /*if(getPosY() < gameMap.getCheckPointY(flagsPassed)) {
-            switch (dir) {
-                case NORTH:
-                    for(int i = 0; i<selectedCards.length; i++){
-                        if(selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Move-3.png"){
-                            move(selectedCards[i]);
-                        }
-                        else if((selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Move-2.png")){
-                            move(selectedCards[i]);
-                        }
-                        else if((selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Move-1.png")){
-                            move(selectedCards[i]);
-                        }
-                    }
-                    break;
-                case EAST:
-                    for(int i = 0; i<selectedCards.length; i++){
-                        if(selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png"){
-                            move(selectedCards[i]);
-                        }
-                    }
-                    break;
-                case SOUTH:
-                    for(int i = 0; i<selectedCards.length; i++){
-                        if(selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png"){
-                            move(selectedCards[i]);
-                        }
-                    }
-                case WEST:
-                    for(int i = 0; i<selectedCards.length; i++){
-                        if(selectedCards[i].getCardSprite().getTexture().toString() == "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png"){
-                            move(selectedCards[i]);
-                        }
-                    }
-                    break;
-                default:
-                    System.out.println("Something went wrong");
-            }
-        }*/
-
     }
 
     public AIRobot(Sprite sprite){

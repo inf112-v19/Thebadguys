@@ -400,7 +400,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             }
             if (tick % 40 == 0) {
                 if(AIrobot.getAlive()) {
-                    AIrobot.doTurn1(turn);
+                    AIrobot.doTurn(turn);
                     System.out.println("AIDOINGMOVE!: " + turn);
                 }
                 if (robot.getAlive()) {
