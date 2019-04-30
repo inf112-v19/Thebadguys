@@ -31,6 +31,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Cards CardButton;
     private Cards PowerdownButton;
     private Robot robot;
+    private AIRobot AIrobot;
     private FitViewport viewPort;
     private static CardHandler cardHandler;
     private Cards statBoard0;
@@ -43,6 +44,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
+    private Sprite AIsprite;
     private float posX, posY;
     private BitmapFont font;
     private Sprite statBoardSprite;
@@ -60,6 +62,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private boolean ready[] = {false, false, false, false, false, false, false, false};
     private String[][] moves;
     private int[] order;
+    private static boolean singlePlayerMode = false;
+
+    public static boolean getSinglePlayerMode() {
+        return singlePlayerMode;
+    }
 
     //create the initial state of the game
     @Override
@@ -84,22 +91,45 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
             createGrid();
             map = new GameMap(grid);
-            clientCount = client.getClientCount();
-            order = new int[clientCount*5];
-            moves = new String[clientCount][5];
-            for (int i = 0; i < clientCount; i++) {
-                textures[i] = new Texture(Gdx.files.internal("Models/tank" + (i) + ".png"));
-                sprites[i] = new Sprite(textures[i]);
-                robots[i] = new Robot(sprites[i], starts[i]);
-                System.out.println("created robot" + i);
+
+            if (singlePlayerMode) {
+                texture = new Texture(Gdx.files.internal("Models/tank0.png"));
+                Texture AItexture = new Texture(Gdx.files.internal("Models/tank1.png"));
+                sprite = new Sprite(texture);
+                AIsprite = new Sprite(AItexture);
+                int[] startpos = {0, 0};
+                int[] startpos2 = {4, 0};
+                robot = new Robot(sprite, startpos);
+                AIrobot = new AIRobot(AIsprite, startpos2);
+                sprite.setPosition(robot.getSpriteX(), robot.getSpriteY());
+                AIsprite.setPosition(AIrobot.getX1()+200, AIrobot.getY1());
+
             }
-            for(int i = 0; i < clientCount; i++) {
-                sprites[i].setPosition(robots[i].getSpriteX(), robots[i].getSpriteY());
+
+            if (!singlePlayerMode) {
+                clientCount = client.getClientCount();
+                order = new int[clientCount*5];
+                moves = new String[clientCount][5];
+                for (int i = 0; i < clientCount; i++) {
+                    textures[i] = new Texture(Gdx.files.internal("Models/tank" + (i) + ".png"));
+                    sprites[i] = new Sprite(textures[i]);
+                    robots[i] = new Robot(sprites[i], starts[i]);
+                    System.out.println("created robot" + i);
+                }
+                for(int i = 0; i < clientCount; i++) {
+                    sprites[i].setPosition(robots[i].getSpriteX(), robots[i].getSpriteY());
+                }
             }
+
 
             //create the card that Is clicked
             Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
-            cardHandler = new CardHandler(batch, robots[ID], map);
+            if(singlePlayerMode) {
+                cardHandler = new CardHandler(batch, robot, map);
+            }
+            else if (!singlePlayerMode) {
+                cardHandler = new CardHandler(batch, robots[ID], map);
+            }
 
             font = new BitmapFont();
 
@@ -141,7 +171,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             tiledMapRenderer.render();
             Cards selectedCards[] = cardHandler.getSelectedCards();
             batch.begin();
-            for (int i = 0; i < clientCount; i++){sprites[i].draw(batch);}
+            if (singlePlayerMode) {
+                AIsprite.draw(batch);
+                sprite.draw(batch);
+            } else {
+                for (int i = 0; i < clientCount; i++){sprites[i].draw(batch);}
+            }
             doTurn();
             //draw the cardslots
             cardHandler.drawCardSlots();
@@ -153,7 +188,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             drawStats();
 
-            PowerdownButton.getCardSprite().draw(batch);
+            //PowerdownButton.getCardSprite().draw(batch);
 
             //draw Cards
             cardHandler.drawCards();
@@ -211,7 +246,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         if (!mainMenu.getMainRunning()){
-            cardHandler.letGo(screenX, screenY, CardButton, PowerdownButton);
+            cardHandler.letGo(screenX, screenY, CardButton);
         }else{
             if(insideCard(screenX, screenY, mainMenu.getClientBtn())){
                 System.out.println("DU TRYKKET PÅ CLIENT");
@@ -219,7 +254,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     System.out.println("You can only have one client per computer.");
                 }
                 else {
-                    client = new Client("Player", "10.0.0.144", 55557);
+                    client = new Client("Player", "10.111.32.94", 55557);
                         /*if(client.getStarted()) {
                             create();
                         }
@@ -234,7 +269,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
                 System.out.println("DU TRYKKET PÅ SERVER");
                 server = new Server(55557);
-                client = new Client("Player", "10.0.0.144", 55557);
+                client = new Client("Player", "10.111.32.94", 55557);
             }
 
             if(insideCard(screenX, screenY, mainMenu.getStartBtn())){
@@ -242,6 +277,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 if(server != null) {
                     server.setStarted(true);
                     client.getBackendClient().send("/s//e/".getBytes());
+                    mainMenu.setMainRunning(false);
+                    create();
+                }
+                else if (server == null) {
+                    singlePlayerMode = true;
                     mainMenu.setMainRunning(false);
                     create();
                 }
@@ -442,18 +482,24 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public void doTurn () {
         Cards selectedCards[] = cardHandler.getSelectedCards();
-        server.roundStart();
-        if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone() && client.askReady()) {
-            client.getBackendClient().send("/o//e/".getBytes());
-            moves = client.getMoves();
-            order = client.getOrder();
+        if (!singlePlayerMode) {
+            server.roundStart();
+        }
+        if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone() && checkMode()) {
+            if (!singlePlayerMode) {
+                client.getBackendClient().send("/o//e/".getBytes());
+                moves = client.getMoves();
+                order = client.getOrder();
+            }
             if (turn >= 5) {
                 System.out.println("Ferdig med ein heil runde!");
                 for (int h = 0; h < 5; h++) {
                     //cardHandler.lockDown();
                 }
-                for(int i = 0; i < clientCount; i++) {
-                    robots[i].setAlive(true);
+                if (!singlePlayerMode) {
+                    for (int i = 0; i < clientCount; i++) {
+                        robots[i].setAlive(true);
+                    }
                 }
                 turn = 0;
                 cardHandler.setNotFirst(true);
@@ -464,20 +510,34 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
                 System.out.println("\n");
             }
-            if (tick % 40 == 0) { // robot order for priority
-                for(int i = 0; i < 5; i++) {
-                    for(int j = 0; j < clientCount; j++) {
-                        if (robots[order[i+j]].getAlive()) {
-                            robots[order[i+j]].move(moves[order[i+j]][i]);
-                        }
+            if (tick % 40 == 0) {
+                if (singlePlayerMode) {
+                    if (AIrobot.getAlive()) {
+                        robot.move(selectedCards[turn].getName());
+                        AIrobot.doTurn(turn);
+                        System.out.println("AIDOINGMOVE!: " + turn);
+                        turn++;
+                        System.out.println("DidTURN " + (turn));
+                        robot.getSprite().draw(batch);
+                        AIrobot.getSprite().draw(batch);
                     }
-                    turn++;
-                    System.out.println("DidTURN "+(turn));
-                    //robot.getSprite().draw(batch);
+                }
+                else if (!singlePlayerMode) {
+                    for (int i = 0; i < 5; i++) {
+                        for (int j = 0; j < clientCount; j++) {
+                            if (robots[order[i + j]].getAlive()) {
+                                robots[order[i + j]].move(moves[order[i + j]][i]);
+                            }
+                        }
+                        turn++;
+                        System.out.println("DidTURN " + (turn));
+                        //robot.getSprite().draw(batch);
+                    }
                 }
             }
         }
     }
+
     public static CardHandler getCardHandler(){
         return cardHandler;
     }
@@ -514,6 +574,15 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public static Client getClient() {
         return client;
+    }
+
+    public boolean checkMode() {
+        if(singlePlayerMode) {
+            return true;
+        }
+        else {
+            return client.askReady();
+        }
     }
 
     /*private void createWindow() {

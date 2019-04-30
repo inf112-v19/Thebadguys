@@ -67,22 +67,24 @@ public class CardHandler {
         clickedCard.getCardSprite().setPosition(screenX - clickedCard.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - clickedCard.getCardSprite().getHeight() / 2);
     }
 
-    public void letGo(int screenX, int screenY, Cards endTurnBtn, Cards powerDownBtn){
+    public void letGo(int screenX, int screenY, Cards endTurnBtn){
         isInside=false;
         String sendCards = "";
         if (!mainMenu.getMainRunning()){
-            if (insideCard(screenX, screenY, powerDownBtn)){
-                robot.setPowerdown(true);
-            }
+            //if (insideCard(screenX, screenY, powerDownBtn)){
+            //    robot.setPowerdown(true);
+            //}
             if(insideCard(screenX, screenY, endTurnBtn)){
-                for(int i = 0; i < 5; i++) {
-                    if (selectedCards[i] != null) {
-                        sendCards += selectedCards[i].getName() + "~" + selectedCards[i].getPriority() + "~";
+                if (!RoboRallyDemo.getSinglePlayerMode()) {
+                    for(int i = 0; i < 5; i++) {
+                        if (selectedCards[i] != null) {
+                            sendCards += selectedCards[i].getName() + "~" + selectedCards[i].getPriority() + "~";
+                        }
                     }
+                    String string = "/r/"+RoboRallyDemo.getID()+ sendCards + "/e/";
+                    System.out.println(sendCards);
+                    RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
                 }
-                String string = "/r/"+RoboRallyDemo.getID()+ sendCards + "/e/";
-                System.out.println(sendCards);
-                RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
                 isDone=true;
             }
 
