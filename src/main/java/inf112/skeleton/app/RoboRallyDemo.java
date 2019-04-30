@@ -106,15 +106,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             //create the card that Is clicked
             Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
             if(singlePlayerMode) {
-                System.out.println("single");
                 cardHandler = new CardHandler(batch, robot, map);
             }
             else if (!singlePlayerMode) {
                 cardHandler = new CardHandler(batch, robots[ID], map);
             }
-
             font = new BitmapFont();
-
             //create the end turn button
             buttonCreation(700, 500);
             statBoardCreation(700,930);
@@ -128,7 +125,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             //creation of the 5 cardSlots
             cardHandler.createCardSlots();
-            System.out.println("DUTRYKKEYjaskdlasd");
 
         Gdx.input.setInputProcessor(this);
     }
@@ -294,10 +290,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     System.out.println("HEIHEI");
                     createv2();
                     mainMenu.setMainRunning(false);
-                }
-                else if (client.getStarted()) {
-                    mainMenu.setMainRunning(false);
-                    createv2();
                 }
                 else {
                     System.out.println("You don't have a server running!");
