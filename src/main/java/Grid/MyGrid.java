@@ -22,7 +22,6 @@ public class MyGrid<T> implements IGrid<T> {
         this.width = width;
         tiles = new ArrayList<T>(4*height * width);
         for (int i = 0; i < 4*height * width; ++i) {
-
             tiles.add(initElement);
         }
     }
@@ -44,9 +43,9 @@ public class MyGrid<T> implements IGrid<T> {
     public void set(int x, int y, T elem) {
         x = 2*x +1;
         y = 2*y +1;
-        if(x < 0 || x >= 2*width)
+        if(x < 0 || x > 2*width)
             throw new IndexOutOfBoundsException();
-        if(y < 0 || y >= 2*height)
+        if(y < 0 || y > 2*height)
             throw new IndexOutOfBoundsException();
         int index = x + width*(y);
         tiles.set(index, elem);
@@ -55,9 +54,9 @@ public class MyGrid<T> implements IGrid<T> {
     public void set(double x, double y, T elem) {
         x = 2*x +1;
         y = 2*y +1;
-        if(x < 0 || x >= 2*width)
+        if(x < 0 || x > 2*width)
             throw new IndexOutOfBoundsException();
-        if(y < 0 || y >= 2*height)
+        if(y < 0 || y > 2*height)
             throw new IndexOutOfBoundsException();
         int index =  (int)(x) + (int)(width*(y));
         tiles.set(index, elem);
@@ -68,9 +67,9 @@ public class MyGrid<T> implements IGrid<T> {
     public T get(int x, int y) {
         x = 2*x +1;
         y = 2*y +1;
-        if(x < 0 || x >= 2*width)
+        if(x < 0 || x > 2*width)
             throw new IndexOutOfBoundsException();
-        if(y < 0 || y >= 2*height)
+        if(y < 0 || y > 2*height)
             throw new IndexOutOfBoundsException();
         int index = x + width*(y);
         return tiles.get(index);
@@ -82,24 +81,6 @@ public class MyGrid<T> implements IGrid<T> {
         if(x < 0 || x > 2*width)
             throw new IndexOutOfBoundsException();
         if(y < 0 || y > 2*height)
-            throw new IndexOutOfBoundsException();
-        int index = (int)(x) + (int)(width*(y));
-        return tiles.get(index);
-    }
-
-    public T getSpecial(int x, int y) {
-        if(x < 0 || x >= 2*width)
-            throw new IndexOutOfBoundsException();
-        if(y < 0 || y >= 2*height)
-            throw new IndexOutOfBoundsException();
-        int index = x + width*(y);
-        return tiles.get(index);
-    }
-
-    public T getSpecial(double x, double y) {
-        if(x < 0 || x >= 2*width)
-            throw new IndexOutOfBoundsException();
-        if(y < 0 || y >= 2*height)
             throw new IndexOutOfBoundsException();
         int index = (int)(x) + (int)(width*(y));
         return tiles.get(index);

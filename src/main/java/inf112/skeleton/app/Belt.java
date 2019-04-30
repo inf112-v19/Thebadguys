@@ -10,11 +10,11 @@ public class Belt extends BeltElement {
         super(map);
     }
 
-    public void doBelt(Robot robot) {
+    public static void doBelt(Robot robot) {
         int posX = robot.getPosX();
         int posY = robot.getPosY();
 
-        switch (RoboRallyDemo.getIGameMap().isConveyerBelt(posX, posY)) {
+        switch (map.isConveyerBelt(posX, posY)) {
             case "northNoTurn":
                 canMoveConveyor(Direction.NORTH, robot);
                 break;
@@ -29,42 +29,42 @@ public class Belt extends BeltElement {
                 break;
             case "northRight":
                 if (canMoveConveyor(Direction.NORTH, robot) == 1) {
-                    this.rotate_right(robot);
+                    rotate_right(robot);
                 }
                 break;
             case "northLeft":
                 if (canMoveConveyor(Direction.NORTH, robot) == 1) {
-                    robot.rotate_left();
+                    rotate_left(robot);
                 }
                 break;
             case "eastRight":
                 if (canMoveConveyor(Direction.EAST, robot) == 1) {
-                    robot.rotate_right();
+                    rotate_right(robot);
                 }
                 break;
             case "eastLeft":
                 if (canMoveConveyor(Direction.EAST, robot) == 1) {
-                    robot.rotate_left();
+                    rotate_left(robot);
                 }
                 break;
             case "southRight":
                 if (canMoveConveyor(Direction.SOUTH, robot) == 1) {
-                    robot.rotate_right();
+                    rotate_right(robot);
                 }
                 break;
             case "southLeft":
                 if (canMoveConveyor(Direction.SOUTH, robot) == 1) {
-                    robot.rotate_left();
+                    rotate_left(robot);
                 }
                 break;
             case "westRight":
                 if (canMoveConveyor(Direction.WEST, robot) == 1) {
-                    robot.rotate_right();
+                    rotate_right(robot);
                 }
                 break;
             case "westLeft":
                 if (canMoveConveyor(Direction.WEST, robot) == 1) {
-                    robot.rotate_left();
+                    rotate_left(robot);
                 }
                 break;
             case "noBelt":
@@ -72,6 +72,4 @@ public class Belt extends BeltElement {
         }
     }
 }
-
-
 

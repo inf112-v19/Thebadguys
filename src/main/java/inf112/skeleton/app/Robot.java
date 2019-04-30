@@ -1,6 +1,4 @@
 package inf112.skeleton.app;
-
-
 import Grid.Direction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -9,11 +7,12 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
 import map.MapTile;
+import inf112.skeleton.app.ExpressBelt;
 
 public class Robot {
     private CardHandler cardHandler;
     public Sprite sprite;
-    private int turn = 0;
+    private Boolean alive = true;
     private int posX = 0;
     private int posY = 0;
     private int[] checkpoint = {posX, posY};
@@ -31,8 +30,14 @@ public class Robot {
     private int tilePixelWidth = prop.get("tilewidth", Integer.class);
     private int tilePixelHeight = prop.get("tileheight", Integer.class);
     private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
-    private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
+    private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9 - 50;
+    private int turn = RoboRallyDemo.getTurn();
 
+    ExpressBelt ebelt;
+    Belt belt;
+    Spin spin;
+
+    private boolean powerdown = false;
 
     public Robot(Sprite sprite){
         this.sprite = sprite;
@@ -49,10 +54,16 @@ public class Robot {
         this.checkpoint = checkpoint;
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
+
+        //Initiating Board element objects.
+        ebelt = new ExpressBelt(gameMap);
+        belt = new Belt(gameMap);
+        spin = new Spin(gameMap);
+
     }
 
-    public int getTurn() {
-        return this.turn;
+    public Boolean getAlive() {
+        return this.alive;
     }
 
     public int getPosX(){
@@ -108,6 +119,9 @@ public class Robot {
 
     public void setTurn(int turn) {
         this.turn = turn;
+    }
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public void setCheckpoint(int x, int y){
@@ -226,109 +240,10 @@ public class Robot {
             default:
                 System.out.println("Something went wrong");
         }
-        switch(gameMap.isExpressConveyerBelt(this.posX, this.posY)) {
-            case "northNoTurn":
-                canMoveConveyer(Direction.NORTH);
-                break;
-            case "eastNoTurn":
-                canMoveConveyer(Direction.EAST);
-                break;
-            case "southNoTurn":
-                canMoveConveyer(Direction.SOUTH);
-                break;
-            case "westNoTurn":
-                canMoveConveyer(Direction.WEST);
-                break;
-            case "northRight":
-                if (canMoveConveyer(Direction.NORTH) == 1)
-                {this.rotate_right();}
-                break;
-            case "northLeft":
-                if (canMoveConveyer(Direction.NORTH) == 1)
-                {this.rotate_left();}
-                break;
-            case "eastRight":
-                if (canMoveConveyer(Direction.EAST) == 1)
-                {this.rotate_right();}
-                break;
-            case "eastLeft":
-                if (canMoveConveyer(Direction.EAST) == 1)
-                {this.rotate_left();}
-                break;
-            case "southRight":
-                if (canMoveConveyer(Direction.SOUTH) == 1)
-                {this.rotate_right();}
-                break;
-            case "southLeft":
-                if (canMoveConveyer(Direction.SOUTH) == 1)
-                {this.rotate_left();}
-                break;
-            case "westRight":
-                if (canMoveConveyer(Direction.WEST) == 1)
-                {this.rotate_right();}
-                break;
-            case "westLeft":
-                if (canMoveConveyer(Direction.WEST) == 1)
-                {this.rotate_left();}
-                break;
-            case "noBelt":
-                break;
-        }
-        switch(gameMap.isConveyerBelt(this.posX, this.posY)) {
-            case "northNoTurn":
-                canMoveConveyer(Direction.NORTH);
-                break;
-            case "eastNoTurn":
-                canMoveConveyer(Direction.EAST);
-                break;
-            case "southNoTurn":
-                canMoveConveyer(Direction.SOUTH);
-                break;
-            case "westNoTurn":
-                canMoveConveyer(Direction.WEST);
-                break;
-            case "northRight":
-                if (canMoveConveyer(Direction.NORTH) == 1)
-                {this.rotate_right();}
-                break;
-            case "northLeft":
-                if (canMoveConveyer(Direction.NORTH) == 1)
-                {this.rotate_left();}
-                break;
-            case "eastRight":
-                if (canMoveConveyer(Direction.EAST) == 1)
-                {this.rotate_right();}
-                break;
-            case "eastLeft":
-                if (canMoveConveyer(Direction.EAST) == 1)
-                {this.rotate_left();}
-                break;
-            case "southRight":
-                if (canMoveConveyer(Direction.SOUTH) == 1)
-                {this.rotate_right();}
-                break;
-            case "southLeft":
-                if (canMoveConveyer(Direction.SOUTH) == 1)
-                {this.rotate_left();}
-                break;
-            case "westRight":
-                if (canMoveConveyer(Direction.WEST) == 1)
-                {this.rotate_right();}
-                break;
-            case "westLeft":
-                if (canMoveConveyer(Direction.WEST) == 1)
-                {this.rotate_left();}
-                break;
-            case "noBelt":
-                break;
-        }
-        if(gameMap.isSpinLeft(this.posX, this.posY)){
-            System.out.println("SPIN!");
-            this.rotate_left();
-        }
-        if (gameMap.isSpinRight(this.posX, this.posY)) {
-            this.rotate_right();
-        }
+        ExpressBelt.doExpressBelt(this);
+        Belt.doBelt(this);
+        Spin.doSpin(this);
+
         gameMap.fireLasers(this);
         //add method to fire my laser
         if (gameMap.isCheckpoint(this.posX, this.posY, this.flagsPassed)) {
@@ -358,7 +273,7 @@ public class Robot {
         this.damage = 0;
         this.takeDamage();
         this.takeDamage();
-        this.turn = 4;
+        this.alive = false;
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
             System.out.println("You lost the game");
@@ -432,26 +347,6 @@ public class Robot {
         }
     }
 
-    public int checkConveyer(Direction dir) {
-        if (dir == Direction.NORTH && this.posY + 1 == 12) {
-            return -1;
-        }
-        else if (dir == Direction.EAST && this.posX + 1 == 12) {
-            return -1;
-        }
-        else if (dir == Direction.SOUTH && this.posY - 1 == -1) {
-            return -1;
-        }
-        else if (dir == Direction.WEST && this.posX - 1 == -1) {
-            return -1;
-        }
-        else if (gameMap.wallNearby(dir, this.posX, this.posY)) {
-            return 0;
-        }
-        else {
-            return 1;
-        } // add check for a second robot on the same conveyer target, if so move them both to original possition
-    }
 
     public void canMove(int loops, int amount) {
         for (int i = 0; i < loops; i++){
@@ -472,45 +367,11 @@ public class Robot {
         }
     }
 
-    public int canMoveConveyer(Direction dir) {
-            if (this.checkConveyer(dir) == 1) {
-                this.moveConveyer(dir);
-                return 1;
-            }
-            else if (this.checkConveyer(dir) == -1) {
-                this.died();
-                System.out.println("Moved off the map");
-                return 0;
-            }
-            else if (this.checkConveyer(dir) == 0) {
-                System.out.println("You hit a wall!");
-                return 0;
-            }
-            else {
-                return 0;
-            }
+    public Boolean getPowerdown() {
+        return powerdown;
     }
 
-    public void moveConveyer(Direction dir) {
-        if (dir == Direction.NORTH) {
-            this.posY += 1;
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + (1 * (this.tilePixelWidth / 6)));
-        }
-        else if (dir == Direction.EAST) {
-            this.posX += 1;
-            this.sprite.setPosition(this.sprite.getX() + (1 * (this.tilePixelWidth / 6)), this.sprite.getY());
-        }
-        else if (dir == Direction.SOUTH) {
-            this.posY -= 1;
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - (1 * (this.tilePixelWidth / 6)));
-        }
-        else if (dir == Direction.WEST) {
-            this.posX -= 1;
-            this.sprite.setPosition(this.sprite.getX() - (1 * (this.tilePixelWidth / 6)), this.sprite.getY());
-        }
-        if (gameMap.isHole(this.posX, this.posY)) {
-            System.out.println("You fell into a hole!");
-            this.died();
-        }
+    public void setPowerdown(boolean Powerdown) {
+        this.powerdown = Powerdown;
     }
 }

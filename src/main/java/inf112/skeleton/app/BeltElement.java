@@ -11,7 +11,7 @@ public abstract class BeltElement extends BoardElement{
          super (map);
     }
 
-    public int checkConveyor(Direction dir, Robot robot) {
+    public static int checkConveyor(Direction dir, Robot robot) {
 
         int posX = robot.getPosX();
         int posY = robot.getPosY();
@@ -36,7 +36,7 @@ public abstract class BeltElement extends BoardElement{
         } // add check for a second robot on the same conveyer target, if so move them both to original position
     }
 
-    public int canMoveConveyor(Direction dir, Robot robot) {
+    public static int canMoveConveyor(Direction dir, Robot robot) {
         if (checkConveyor(dir, robot) == 1) {
             moveConveyor(dir, robot);
             return 1;
@@ -55,25 +55,25 @@ public abstract class BeltElement extends BoardElement{
         }
     }
 
-    public void moveConveyor(Direction dir, Robot robot) {
+    public static void moveConveyor(Direction dir, Robot robot) {
 
         int posX = robot.getPosX();
         int posY = robot.getPosY();
 
         if (dir == Direction.NORTH) {
-            posY += 1;
+            robot.setPosY(++posY);
             robot.sprite.setPosition(robot.sprite.getX(), robot.sprite.getY() + (1 * (robot.getTilePixelWidth() / 6)));
         }
         else if (dir == Direction.EAST) {
-            posX += 1;
+            robot.setPosX(++posX);
             robot.sprite.setPosition(robot.sprite.getX() + (1 * (robot.getTilePixelWidth() / 6)), robot.sprite.getY());
         }
         else if (dir == Direction.SOUTH) {
-            posY -= 1;
+            robot.setPosY(--posY);
             robot.sprite.setPosition(robot.sprite.getX(), robot.sprite.getY() - (1 * (robot.getTilePixelWidth() / 6)));
         }
         else if (dir == Direction.WEST) {
-            posX -= 1;
+            robot.setPosX(--posX);
             robot.sprite.setPosition(robot.sprite.getX() - (1 * (robot.getTilePixelWidth() / 6)), robot.sprite.getY());
         }
         if (map.isHole(posX, posY)) {

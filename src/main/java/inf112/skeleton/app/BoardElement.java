@@ -6,7 +6,7 @@ import map.IGameMap;
 
 public abstract class BoardElement {
 
-    protected GameMap map;
+    protected  static GameMap map;
 
     public BoardElement(GameMap map) {
 
@@ -14,7 +14,7 @@ public abstract class BoardElement {
 
     }
 
-    public void rotate_right(Robot robot) {
+    public static void rotate_right(Robot robot) {
         if (robot.getDirection() == Direction.WEST) {
             robot.setDirection(Direction.NORTH);
         } else if (robot.getDirection() == Direction.NORTH) {
@@ -27,7 +27,7 @@ public abstract class BoardElement {
         robot.sprite.rotate(-90);
     }
 
-    public void rotate_left(Robot robot) {
+    public static void rotate_left(Robot robot) {
         if (robot.getDirection() == Direction.NORTH) {
             robot.setDirection(Direction.WEST);
         } else if(robot.getDirection()==Direction.WEST) {
