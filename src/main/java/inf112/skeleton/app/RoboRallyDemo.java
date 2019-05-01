@@ -206,7 +206,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             drawStats();
 
-            powerdownButton.getSprite().draw(batch);
+            //powerdownButton.getSprite().draw(batch);
 
             //draw Cards
             cardHandler.drawCards();
@@ -280,7 +280,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 System.out.println("DU TRYKKET PÅ SERVER");
                 if (server == null) {
                     server = new Server(55557);
-                    client = new Client("Player", "10.111.15.150", 55557);
+                    client = new Client("Player", "localhost", 55557);
                 }
                 else {
                     System.out.println("You already have a server running!");

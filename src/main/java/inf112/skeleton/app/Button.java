@@ -7,7 +7,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
 
-import javax.smartcardio.Card;
+//import javax.smartcardio.Card;
 
 public class Button implements IButton {
 
