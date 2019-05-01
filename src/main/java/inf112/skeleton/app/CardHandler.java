@@ -18,8 +18,6 @@ public class CardHandler {
     private SpriteBatch batch;
     private Sprite cardSprite10;
     private BitmapFont font;
-    private Button powerdownButton;
-    private Button endTurnButton;
 
     private ArrayList<CardSlots> cardSlotPos;
     private ArrayList<Sprite> randomSpriteList;
@@ -30,7 +28,6 @@ public class CardHandler {
     private Cards[] selectedCards;
     private Cards clickedCard;
     private Cards listCard;
-    //private Cards CardButton;
     private CardSlots temp;
     private int counter;
 
@@ -39,8 +36,6 @@ public class CardHandler {
     private boolean isClicked=false;
     private boolean isInside;
 
-    private Robot robot;
-    private IGameMap map;
     private int cardDelt=9;
     private int cardSlotLock=0;;
     private ArrayList<Sprite> lockedList;
@@ -48,7 +43,7 @@ public class CardHandler {
     private String name;
     private int x;
 
-    public CardHandler(SpriteBatch batch, Robot robot, IGameMap map){
+    public CardHandler(SpriteBatch batch){
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
         cardSlotPos= new ArrayList<>();
@@ -58,8 +53,6 @@ public class CardHandler {
         lockedList = new ArrayList<>();
         selectedCards = new Cards[5];
         this.batch=batch;
-        this.robot=robot;
-        this.map=map;
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);

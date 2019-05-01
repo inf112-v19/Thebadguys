@@ -29,7 +29,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static Boolean isEndOfTurn = false;
 
     private Button endTurnButton;
-    //private Cards PowerdownButton;
     private Button powerdownButton;
     private Robot robot;
     private FitViewport viewPort;
@@ -81,7 +80,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             //create the card that Is clicked
             Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
-            cardHandler = new CardHandler(batch, robot, map);
+            cardHandler = new CardHandler(batch);
 
             font = new BitmapFont();
 
@@ -197,7 +196,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if(mainMenu.getMainRunning()) {
-            System.out.println("buttons created");
             mainMenu.getClientBtn().buttonClicked(screenX, screenY, mainMenu.getClientBtn());
             mainMenu.getServerBtn().buttonClicked(screenX, screenY, mainMenu.getServerBtn());
             mainMenu.getStartBtn().buttonClicked(screenX, screenY, mainMenu.getStartBtn());
@@ -221,23 +219,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             cardHandler.letGo(screenX, screenY);
         }
 
-        /*
-        else{
-            if(insideCard(screenX, screenY, mainMenu.getClientBtn())){
-                System.out.println("DU TRYKKET PÅ CLIENT");
-            }
-
-            if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
-                System.out.println("DU TRYKKET PÅ SERVER");
-            }
-
-            if(insideCard(screenX, screenY, mainMenu.getStartBtn())){
-                System.out.println("DU TRYKKET PÅ START");
-                mainMenu.setMainRunning(false);
-                create();
-            }
-        }
-        */
         return false;
     }
 
