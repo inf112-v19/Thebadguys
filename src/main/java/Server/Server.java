@@ -175,7 +175,7 @@ public class Server implements Runnable{
                 System.out.println(clientCards[id][i]);
             }*/
             string = "/r/" + id + "/e/";
-            sendToAllButMe(string, id);
+            sendToAll(string);
         }
         else if(string.startsWith("/o/")) { // ask for all the moves beeing made this round
             orderMoves();

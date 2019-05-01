@@ -101,7 +101,7 @@ public class Client extends JFrame implements Runnable {
                         //users.update(Arrays.copyOfRange(u, 1, u.length - 1));
                     } else if (message.startsWith("/r/")) {
                         int id = Integer.parseInt(message.split("/r/|/e/")[1]);
-                        System.out.println("player " + Integer.parseInt(message) + " is ready");
+                        System.out.println("player " + id + " is ready");
                         RoboRallyDemo.setReady(id);
                     } else if (message.startsWith("/a/")) {
                         ready = true;
