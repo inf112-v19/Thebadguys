@@ -207,7 +207,7 @@ public class Robot {
     public void move(String move){ // gets the command from a card and figures out which command to execute
         //String command = card.getCardSprite().getTexture().toString();
         switch (move){
-            case "BCKUP":
+            case "BACKUP":
                 canMove(1,-1);
                 break;
             case "MOVE1":
@@ -219,14 +219,14 @@ public class Robot {
             case "MOVE3":
                 canMove(3,1);
                 break;
-            case "ROE90":
+            case "ROTATE90":
                 this.rotate_right();
                 break;
-            case "RE180":
+            case "ROTATE180":
                 this.rotate_right();
                 this.rotate_right();
                 break;
-            case "REC90":
+            case "ROTATEC90":
                 this.rotate_left();
                 break;
             default:
