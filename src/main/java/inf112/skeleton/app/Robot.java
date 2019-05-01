@@ -513,9 +513,9 @@ public class Robot {
         this.executePowerdown = ExecutePowerdown;
     }
 
+    public void setInitPowerdown(boolean initPowerdown) {this.initPowerdown = initPowerdown;}
 
     public void doPowerdown() {
-
         damage = 0;
         cardHandler.setCardDelt(9);
         System.out.println("Powerdowning");

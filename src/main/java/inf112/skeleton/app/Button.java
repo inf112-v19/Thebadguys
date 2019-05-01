@@ -54,13 +54,13 @@ public class Button implements IButton {
             switch (name) {
 
                 case "powerDown_inactive":
-                    /*
-                    if (!robot.getInitiatePowerdown()) {
-                        robot.setInitiatePowerdown(true);
+
+                    if (!robot.getInitPowerdown()) {
+                        robot.setInitPowerdown(true);
                         System.out.println("Hey it worked");
                         return true;
                     }
-                    */
+
                 case "endRoundButton":
                     Cards selectedCards[] = cardHandler.getSelectedCards();
                     String sendCards = "";
