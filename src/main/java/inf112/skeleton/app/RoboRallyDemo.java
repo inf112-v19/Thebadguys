@@ -547,14 +547,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
 
     public void drawReady(int i, int ID){
-            font.setColor(0, 1, 0, 1);
-            if (i == ID) {
-                String you = colors[i] + " (you)";
-                font.draw(batch, you + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
-            } else {
-                font.draw(batch, colors[i] + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
-            }
+        font.setColor(0, 1, 0, 1);
+        if (i == ID) {
+            String you = colors[i] + " (you)";
+            font.draw(batch, you + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
+        } else {
+            font.draw(batch, colors[i] + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
         }
+    }
 
 
     //support metode
@@ -573,9 +573,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public void doTurn () {
         Cards selectedCards[] = cardHandler.getSelectedCards();
 
-        if (!singlePlayerMode && server != null) {
-            server.roundStart();
-        }
         if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone() && checkMode()) {
             if (!singlePlayerMode) {
                 client.getBackendClient().send("/o//e/".getBytes());
@@ -603,6 +600,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 cardHandler.setCardSprites();
 
                 System.out.println("\n");
+                if (!singlePlayerMode ) {
+                    for(int i = 0; i < clientCount; i++) {
+                        ready[i] = false;
+                    }
+                    if (server != null) {
+                        server.roundStart();
+                    }
+                }
             }
             if (tick % 40 == 0) {
                 if (singlePlayerMode) {
