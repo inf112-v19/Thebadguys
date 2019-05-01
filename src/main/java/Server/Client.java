@@ -139,11 +139,6 @@ public class Client extends JFrame implements Runnable {
 
     public boolean askReady() {
         client.send("/a//e/".getBytes());
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return ready;
     }
 

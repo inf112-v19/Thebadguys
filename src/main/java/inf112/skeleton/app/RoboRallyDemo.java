@@ -503,6 +503,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                         robots[i].setAlive(true);
                     }
                 }
+                else {
+                    robot.setAlive(true);
+                }
                 turn = 0;
                 cardHandler.setNotFirst(true);
                 cardHandler.nullyFy();
