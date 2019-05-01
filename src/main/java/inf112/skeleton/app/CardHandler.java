@@ -322,12 +322,14 @@ public class CardHandler {
     }
 
     public void lockDown(){
-        if(cardDelt>5){
-            cardDelt--;
+        if(robot.getDamage() < 5){
+            cardDelt = 9 - robot.getDamage();
         }else{
-            if(cardSlotLock<5){
+            cardDelt = 9 - robot.getDamage();
+            cardSlotLock = robot.getDamage() - 4;
+            /*if(cardSlotLock<5){
                 cardSlotLock++;
-            }
+            }*/
         }
     }
 

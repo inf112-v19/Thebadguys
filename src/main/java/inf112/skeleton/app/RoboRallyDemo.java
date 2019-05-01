@@ -206,7 +206,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             drawStats();
 
-            //powerdownButton.getSprite().draw(batch);
+            powerdownButton.getSprite().draw(batch);
 
             //draw Cards
             cardHandler.drawCards();
@@ -458,7 +458,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
 
     public void powerdownButtonCreation(int x, int y) {
-        if (singlePlayerMode && server != null) {
+        if (singlePlayerMode) { // dette skjer aldri, dersom det er singleplayer mode, vil server alltid == null
             if (!robot.getInitPowerdown()) {
                 Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
                 Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
@@ -607,6 +607,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     if (server != null) {
                         server.roundStart();
                     }
+                    drawStats();
                 }
             }
             if (tick % 40 == 0) {
