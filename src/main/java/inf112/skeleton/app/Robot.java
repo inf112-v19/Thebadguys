@@ -34,7 +34,8 @@ public class Robot {
     private int y0 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
     private int turn = RoboRallyDemo.getTurn();
 
-    private boolean powerdown = false;
+    private boolean InitiatePowerdown = false;
+    private boolean ExecutePowerdown = false;
 
     public Robot(Sprite sprite){
         this.sprite = sprite;
@@ -44,10 +45,12 @@ public class Robot {
         this.checkpoint = checkpoint;
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
+        //this.game = game;
+        //this.cardHandler = game.getCardHandler();
     }
 
     public Robot(Sprite sprite, int[] checkpoint){
-        this.sprite=sprite;
+        this.sprite = sprite;
         this.checkpoint = checkpoint;
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
@@ -406,7 +409,7 @@ public class Robot {
             this.damage += 1;
             System.out.println("You now have" + this.damage);
             cardHandler = RoboRallyDemo.getCardHandler();
-            cardHandler.lockDown();
+            cardHandler.setCardDelt(9-getDamage());
             System.out.println(this.damage);
         }
         else {
@@ -517,11 +520,27 @@ public class Robot {
         }
     }
 
-    public Boolean getPowerdown() {
-        return powerdown;
+    public Boolean getInitiatePowerdown() {
+        return InitiatePowerdown;
     }
 
-    public void setPowerdown(boolean Powerdown) {
-        this.powerdown = Powerdown;
+    public void setInitiatePowerdown(boolean InitiatePowerdown) {
+        this.InitiatePowerdown = InitiatePowerdown;
+    }
+
+    public Boolean getExecutePowerdown() { return ExecutePowerdown; }
+
+    public void setExecutePowerdown(boolean ExecutePowerdown) { this.ExecutePowerdown = ExecutePowerdown; }
+
+
+
+    public void doPowerdown() {
+        /*
+        damage = 0;
+        cardHandler.setCardDelt(9);
+        System.out.println("Powerdowning");
+        System.out.println("Current damage: " +getDamage());
+        System.out.println(cardHandler.getCardDelt());
+         */
     }
 }

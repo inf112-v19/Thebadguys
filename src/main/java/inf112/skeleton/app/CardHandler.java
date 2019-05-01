@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 //import com.sun.istack.internal.Nullable;
+import com.sun.istack.internal.Nullable;
+import map.GameMap;
 import map.IGameMap;
 
 import java.util.ArrayList;
@@ -26,7 +28,6 @@ public class CardHandler {
     private Cards[] selectedCards;
     private Cards clickedCard;
     private Cards listCard;
-    //private Cards CardButton;
     private CardSlots temp;
     private int counter;
 
@@ -36,7 +37,8 @@ public class CardHandler {
     private boolean isInside;
 
     private Robot robot;
-    private IGameMap map;
+    private GameMap map;
+
     private int cardDelt=9;
     private int cardSlotLock=0;
     private ArrayList<Sprite> lockedList;
@@ -44,7 +46,7 @@ public class CardHandler {
     private String name;
     private int x;
 
-    public CardHandler(SpriteBatch batch, Robot robot, IGameMap map){
+    public CardHandler(SpriteBatch batch, Robot robot, GameMap map){
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
         cardSlotPos= new ArrayList<>();
@@ -59,14 +61,26 @@ public class CardHandler {
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
-        clickedCard=new Cards(0,0, "",0, cardSprite10);
+        clickedCard=new Cards(10000,10000, "clickedCard",0, cardSprite10);
         font = new BitmapFont();
     }
 
-    public void dragged(int screenX, int screenY, Cards CardButton){
+    public void dragged(int screenX, int screenY){
         clickedCard.getCardSprite().setPosition(screenX - clickedCard.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - clickedCard.getCardSprite().getHeight() / 2);
     }
 
+    public void letGo(int screenX, int screenY){
+        isInside = false;
+        if (!mainMenu.getMainRunning()) {
+            //method that adjusts a cards location on the screen if it is let go of. the position wil depend if it is inside or outside a cardslot
+            adjustCardLocation();
+
+            //create a new clickedCard so that a card does not stick to the mouse when let go of
+            clickedCard = new Cards(10000, 10000, "", 0, cardSprite10);
+        }
+    }
+
+    /*
     public void letGo(int screenX, int screenY, Cards endTurnBtn){
         isInside=false;
         String sendCards = "";
@@ -86,25 +100,17 @@ public class CardHandler {
                     RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
                 }
                 isDone=true;
-            }
+            }*/
 
-            //method that ajusts a cards location on the screen if it is let go of. the position wil depend if it is inside or outside a cardslot
-            ajustCardLocation();
-
-            //create a new clickedCard so that a card does not stick to the mouse when let go of
-            clickedCard=new Cards(0,0, "",0, cardSprite10);
-        }
-    }
-
-    public void click(int button, int screenX, int screenY, Cards CardButton){
+    public void click(int button, int screenX, int screenY){
         counter=0;
-        for(int i=0; i<cardDelt; i++){
-            if(insideCard(screenX, screenY,Deck.getDeckList().get(i)) && button == Input.Buttons.LEFT){
+        for(int i=0; i < getCardDelt(); i++){
+            if(insideCard(screenX, screenY, Deck.getDeckList().get(i)) && button == Input.Buttons.LEFT){
                 clickedCard=Deck.getDeckList().get(i);
                 for(int j=0; j<5; j++){
                     if(insideCardSlot(clickedCard, cardSlotPos.get(j))){
                         isClicked=true;
-                        counter=j;
+                        counter = j;
                         break;
                     }
                 }
@@ -164,7 +170,7 @@ public class CardHandler {
         }
     }
 
-    public void ajustCardLocation(){
+    public void adjustCardLocation(){
         //if a card is inside a cardslot and it is released move it into the middle of the slot
         for(int i=0; i<5; i++){
             if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
@@ -351,11 +357,19 @@ public class CardHandler {
     public boolean getisDone(){
         return isDone;
     }
+    public boolean newTurn(){
+        return isDone;
+    }
 
     public void drawLockedList(){
         for(Sprite sprite:lockedList){
             sprite.draw(batch);
         }
     }
+    public int getCardDelt(){return cardDelt;}
+
+    public void setCardDelt(int cardDelt) {this.cardDelt = cardDelt;}
+
+    public void setIsDone(boolean isDone) {this.isDone = isDone;}
 }
 
