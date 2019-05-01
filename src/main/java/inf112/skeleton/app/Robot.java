@@ -34,7 +34,8 @@ public class Robot {
     private int y0 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
     private int turn = RoboRallyDemo.getTurn();
 
-    private boolean powerdown = false;
+    private boolean initPowerdown = false;
+    private boolean executePowerdown = false;
 
     public Robot(Sprite sprite) {
         this.sprite = sprite;
@@ -499,30 +500,27 @@ public class Robot {
         }
     }
 
-    public Boolean getPowerdown() {
-        return powerdown;
+    public Boolean getInitPowerdown() {
+        return initPowerdown;
     }
 
-    /*
+
     public Boolean getExecutePowerdown() {
-        return ExecutePowerdown;
+        return executePowerdown;
     }
 
     public void setExecutePowerdown(boolean ExecutePowerdown) {
-        this.ExecutePowerdown = ExecutePowerdown;
-    }*/
+        this.executePowerdown = ExecutePowerdown;
+    }
 
 
     public void doPowerdown() {
-        /*
+
         damage = 0;
         cardHandler.setCardDelt(9);
         System.out.println("Powerdowning");
         System.out.println("Current damage: " +getDamage());
         System.out.println(cardHandler.getCardDelt());
-         */
-    }
-    public void setPowerdown ( boolean Powerdown){
-        this.powerdown = Powerdown;
+
     }
 }

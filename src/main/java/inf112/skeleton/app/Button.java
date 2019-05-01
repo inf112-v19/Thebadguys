@@ -52,13 +52,15 @@ public class Button implements IButton {
         if ((screenX > getPosX()) && (screenX < (getPosX() + buttonSprite.getWidth()) && (NewScreenY > getPosY())) && (NewScreenY < (getPosY() + buttonSprite.getHeight()))) {
             System.out.println("*click*");
             switch (name) {
-                /*
+
                 case "powerDown_inactive":
+                    /*
                     if (!robot.getInitiatePowerdown()) {
                         robot.setInitiatePowerdown(true);
                         System.out.println("Hey it worked");
                         return true;
-                    }*/
+                    }
+                    */
                 case "endRoundButton":
                     Cards selectedCards[] = cardHandler.getSelectedCards();
                     String sendCards = "";

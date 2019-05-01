@@ -198,7 +198,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             cardHandler.drawCardSlots();
             cardHandler.drawLockedList();
             //draw button
-            //powerdownButtonCreation(700, 710);
+            powerdownButtonCreation(700, 710);
 
             endTurnButton.getSprite().draw(batch);
 
@@ -206,7 +206,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
             drawStats();
 
-//            powerdownButton.getSprite().draw(batch);
+            powerdownButton.getSprite().draw(batch);
 
             //draw Cards
             cardHandler.drawCards();
@@ -456,21 +456,43 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         endTurnButton = new Button(x, y, "endRoundButton", buttonSprite);
     }
 
-    /*
-    public void powerdownButtonCreation(int x, int y) {
-        if (!robot.getInitiatePowerdown()) {
-            Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
-            Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
-            powerdownbuttonSprite.setPosition(x, y);
-            this.powerdownButton = new Button(x, y, "powerDown_inactive", powerdownbuttonSprite);
 
-        } else {
-            Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
-            Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
-            powerdownbuttonSprite.setPosition(x, y);
-            this.powerdownButton = new Button(x, y, "powerDown_active", powerdownbuttonSprite);
+    public void powerdownButtonCreation(int x, int y) {
+        if (singlePlayerMode && server != null) {
+            if (!robot.getInitPowerdown()) {
+                Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
+                Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                powerdownbuttonSprite.setPosition(x, y);
+                this.powerdownButton = new Button(x, y, "powerDown_inactive", powerdownbuttonSprite);
+
+            } else {
+                Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
+                Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                powerdownbuttonSprite.setPosition(x, y);
+                this.powerdownButton = new Button(x, y, "powerDown_active", powerdownbuttonSprite);
+            }
         }
-    }*/
+        if (!singlePlayerMode) {
+            for(int i = 0; i < clientCount; i++) {
+                if (!robots[i].getInitPowerdown()) {
+                    Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
+                    Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                    powerdownbuttonSprite.setPosition(x, y);
+                    powerdownButton = new Button(x, y, "powerDown_inactive", powerdownbuttonSprite);
+                }
+                else {
+                    Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
+                    Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                    powerdownbuttonSprite.setPosition(x, y);
+                    powerdownButton = new Button(x, y, "powerDown_active", powerdownbuttonSprite);
+                }
+            }
+
+        }
+    }
+
+
+
 
 
     //creation og the stat-board
@@ -545,23 +567,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
     }
 
-    /*
-    public void powerdownButtonCreation(float x, float y) {
-        for(int i = 0; i < clientCount; i++) {
-            if (!robots[i].getPowerdown()) {
-                Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
-                Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
-                powerdownbuttonSprite.setPosition(x, y);
-                PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
-            }
-            else {
-                Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
-                Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
-                powerdownbuttonSprite.setPosition(x, y);
-                PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
-            }
-        }
-    }*/
+
+
 
     public void doTurn () {
         Cards selectedCards[] = cardHandler.getSelectedCards();
