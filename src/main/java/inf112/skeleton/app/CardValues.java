@@ -313,11 +313,11 @@ public enum CardValues implements Serializable {
     ,ROTATE90pri404(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 404, "ROTATE90")
     ,ROTATE90pri406(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 406, "ROTATE90")
     ,ROTATE90pri408(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 408, "ROTATE90")
-    ,ROTATE90pri420(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 400, "ROTATE90")
-    ,ROTATE90pri422(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 402, "ROTATE90")
-    ,ROTATE90pri424(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 404, "ROTATE90")
-    ,ROTATE90pri426(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 406, "ROTATE90")
-    ,ROTATE90pri428(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 408, "ROTATE90")
+    ,ROTATE90pri420(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 420, "ROTATE90")
+    ,ROTATE90pri422(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 422, "ROTATE90")
+    ,ROTATE90pri424(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 424, "ROTATE90")
+    ,ROTATE90pri426(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 426, "ROTATE90")
+    ,ROTATE90pri428(new Sprite(new Texture("Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png")), 428, "ROTATE90")
 
 
 
