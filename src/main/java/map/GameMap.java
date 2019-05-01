@@ -193,8 +193,6 @@ public class GameMap implements IGameMap {
         for (int i = 0; i < tiles.getWidth(); i++) {
             for (int j = 0; j < tiles.getHeight(); j++) {
                 if (tiles.get(i, j) == MapTile.LASERNORTH) {
-                    System.out.println(i);
-                    System.out.println(j);
                     int targetHit = 0;
                     int tempY1 = j;
                     while (targetHit == 0 && tempY1 < 12) {
@@ -207,8 +205,6 @@ public class GameMap implements IGameMap {
                         tempY1++;
                     }
                 } else if (tiles.get(i, j) == MapTile.LASEREAST) {
-                    System.out.println(i);
-                    System.out.println(j);
                     int targetHit = 0;
                     int tempX1 = i;
                     while (targetHit == 0 && tempX1 != 12) {
@@ -252,8 +248,6 @@ public class GameMap implements IGameMap {
         for (int i = 0; i < tiles.getWidth(); i++) {
             for (int j = 0; j < tiles.getHeight(); j++) {
                 if (tiles.get(i, j) == MapTile.LASERNORTH) {
-                    System.out.println(i);
-                    System.out.println(j);
                     int targetHit = 0;
                     int tempY1 = j;
                     while (targetHit == 0 && tempY1 < 12) {
@@ -266,8 +260,6 @@ public class GameMap implements IGameMap {
                         tempY1++;
                     }
                 } else if (tiles.get(i, j) == MapTile.LASEREAST) {
-                    System.out.println(i);
-                    System.out.println(j);
                     int targetHit = 0;
                     int tempX1 = i;
                     while (targetHit == 0 && tempX1 != 12) {

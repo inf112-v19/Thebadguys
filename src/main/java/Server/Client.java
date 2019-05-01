@@ -100,8 +100,9 @@ public class Client extends JFrame implements Runnable {
                         String[] u = message.split("/u/|/n/|/e/");
                         //users.update(Arrays.copyOfRange(u, 1, u.length - 1));
                     } else if (message.startsWith("/r/")) {
-                        message = message.split("/r/|/e/")[1];
+                        int id = Integer.parseInt(message.split("/r/|/e/")[1]);
                         System.out.println("player " + Integer.parseInt(message) + " is ready");
+                        RoboRallyDemo.setReady(id);
                     } else if (message.startsWith("/a/")) {
                         ready = true;
                     } else if (message.startsWith("/b/")) {
@@ -139,11 +140,7 @@ public class Client extends JFrame implements Runnable {
 
     public boolean askReady() {
         client.send("/a//e/".getBytes());
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        //sleep?
         return ready;
     }
 

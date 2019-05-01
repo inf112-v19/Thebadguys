@@ -27,10 +27,6 @@ public class Button implements IButton {
         this.buttonSprite = buttonSprite;
         this.name = name;
         this.cardHandler = RoboRallyDemo.getCardHandler();
-        /*
-        if (!mainMenu.getMainRunning()) {
-            this.robot = RoboRallyDemo.getRobot();
-        }*/
         createButton(posX, posY);
     }
 

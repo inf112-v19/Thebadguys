@@ -35,7 +35,7 @@ public class Server implements Runnable{
     private List<Integer> clientResponse = new ArrayList<Integer>();
 
     private int[][] positions;
-    private boolean[] ready = {true, true, true, true, true, true, true, true};
+    private boolean[] ready = {false, false, false, false, false, false, false, false};
     private String[][] clientCards = new String[8][10];
     private String moves;
     private String moveOrder;
@@ -249,7 +249,7 @@ public class Server implements Runnable{
 
     public boolean getReady(){
         for(int i = 0; i < clientCount(); i++) {
-            if(ready[i] = false) {
+            if(!ready[i]) {
                 return false;
             }
         }

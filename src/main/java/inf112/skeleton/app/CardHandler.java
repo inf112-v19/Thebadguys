@@ -7,9 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 //import com.sun.istack.internal.Nullable;
-import com.sun.istack.internal.Nullable;
-import map.GameMap;
 import map.IGameMap;
 
 import java.util.ArrayList;
@@ -19,6 +18,8 @@ public class CardHandler {
     private SpriteBatch batch;
     private Sprite cardSprite10;
     private BitmapFont font;
+    private Button powerdownButton;
+    private Button endTurnButton;
 
     private ArrayList<CardSlots> cardSlotPos;
     private ArrayList<Sprite> randomSpriteList;
@@ -28,6 +29,7 @@ public class CardHandler {
     private Cards[] selectedCards;
     private Cards clickedCard;
     private Cards listCard;
+    //private Cards CardButton;
     private CardSlots temp;
     private int counter;
 
@@ -37,8 +39,7 @@ public class CardHandler {
     private boolean isInside;
 
     private Robot robot;
-    private GameMap map;
-
+    private IGameMap map;
     private int cardDelt=9;
     private int cardSlotLock=0;
     private ArrayList<Sprite> lockedList;
@@ -46,7 +47,7 @@ public class CardHandler {
     private String name;
     private int x;
 
-    public CardHandler(SpriteBatch batch, Robot robot, GameMap map){
+    public CardHandler(SpriteBatch batch, Robot robot, IGameMap map){
         //creation of all arrays containing positions or cards
         spritePos= new ArrayList<>();
         cardSlotPos= new ArrayList<>();
@@ -104,13 +105,13 @@ public class CardHandler {
 
     public void click(int button, int screenX, int screenY){
         counter=0;
-        for(int i=0; i < getCardDelt(); i++){
-            if(insideCard(screenX, screenY, Deck.getDeckList().get(i)) && button == Input.Buttons.LEFT){
+        for(int i=0; i<cardDelt; i++){
+            if(insideCard(screenX, screenY,Deck.getDeckList().get(i)) && button == Input.Buttons.LEFT){
                 clickedCard=Deck.getDeckList().get(i);
                 for(int j=0; j<5; j++){
                     if(insideCardSlot(clickedCard, cardSlotPos.get(j))){
                         isClicked=true;
-                        counter = j;
+                        counter=j;
                         break;
                     }
                 }
