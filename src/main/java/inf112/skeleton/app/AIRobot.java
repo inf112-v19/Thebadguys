@@ -30,8 +30,8 @@ public class AIRobot{
     private int mapHeight = prop.get("height", Integer.class);
     private int tilePixelWidth = prop.get("tilewidth", Integer.class);
     private int tilePixelHeight = prop.get("tileheight", Integer.class);
-    private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
-    private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
+    private int x0 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
+    private int y0 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
     private int turn = RoboRallyDemo.getTurn();
     private Deck randomDeck;
     private Cards selectedCards[];
@@ -118,19 +118,19 @@ public class AIRobot{
     }
 
     public int getX1(){
-        System.out.println(this.x1);
-        System.out.println(this.mapWidth);
-        System.out.println(this.mapHeight);
-        System.out.println(this.tilePixelWidth);
-        System.out.println(this.tilePixelHeight);
-        System.out.println(this.w);
-        System.out.println(this.h);
-        return this.x1;
+        return this.x0;
     }
 
     public int getY1(){
-        System.out.println(this.y1);
-        return this.y1;
+        return this.y0;
+    }
+
+    public int getSpriteX() {
+        return this.x0 + (this.posX * (this.tilePixelWidth / 6));
+    }
+
+    public int getSpriteY() {
+        return this.y0 + (this.posY * (this.tilePixelWidth / 6));
     }
 
     public void setAlive(boolean alive) {
