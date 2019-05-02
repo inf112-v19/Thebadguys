@@ -49,6 +49,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private boolean firstRund = true;
     private mainMenu mainMenu;
 
+    private boolean firstround=true;
+
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
@@ -221,6 +223,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             batch.begin();
             mainMenu.render();
         }else{
+            selectedCards = cardHandler.getSelectedCards();
+            printSelectedCards();
+            if(selectedCards[0]!=null){
+                if(selectedCards[0].getName()=="clickedCard"){
+                    cardHandler.crushBug();
+                }
+            }
             camera.update();
             tiledMapRenderer.setView(camera);
             tiledMapRenderer.render();

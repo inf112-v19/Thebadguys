@@ -77,7 +77,7 @@ public class CardHandler {
             adjustCardLocation();
 
             //create a new clickedCard so that a card does not stick to the mouse when let go of
-            clickedCard = new Cards(10000, 10000, "", 0, cardSprite10);
+            clickedCard = new Cards(10000, 10000, "clickedCard", 0, cardSprite10);
         }
     }
 
@@ -118,6 +118,10 @@ public class CardHandler {
                 break;
             }
         }
+    }
+
+    public void crushBug(){
+        selectedCards[0]=null;
     }
 
     //the x cordinate at the centre of a card
