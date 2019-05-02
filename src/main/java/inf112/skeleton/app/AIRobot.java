@@ -453,7 +453,7 @@ public class AIRobot{
         else if (this.dir == Direction.WEST && (this.posX - amount == -1 || this.posX - amount == 12)) {
             return -1;
         }
-        else if (gameMap.wallNearby(this.dir, this.posX, this.posY)) {
+        else if (gameMap.wallNearby(this.dir, this.posX, this.posY, amount)) {
             return 0;
         }
         else {
@@ -474,7 +474,7 @@ public class AIRobot{
         else if (dir == Direction.WEST && this.posX - 1 == -1) {
             return -1;
         }
-        else if (gameMap.wallNearby(dir, this.posX, this.posY)) {
+        else if (gameMap.convWallNearby(dir, this.posX, this.posY)) {
             return 0;
         }
         else {

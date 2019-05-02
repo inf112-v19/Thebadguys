@@ -23,6 +23,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 //import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
@@ -44,12 +46,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Cards statBoard0;
     private Cards card;
 
-    private Cards selectedCards[];
+    private static Cards selectedCards[];
 
     private boolean firstRund = true;
     private mainMenu mainMenu;
 
     private boolean firstround=true;
+
+    private ArrayList<Sprite> statBoardList = new ArrayList<>();
 
     private SpriteBatch batch;
     private Texture texture;
@@ -66,7 +70,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static Robot[] robots = new Robot[8];
     private Sprite[] sprites = new Sprite[8];
     private Texture[] textures = new Texture[8];
-    private int clientCount;
+    private static int clientCount;
     private String[] colors = {"Gold", "Cyan", "Green", "Red", "Blue", "Purple", "Basil", "Lemon"};
     private static int ID;
     private static boolean ready[] = {false, false, false, false, false, false, false, false};
@@ -173,7 +177,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         font = new BitmapFont();
         //create the end turn button
         endTurnButtonCreation(700, 510);
-        statBoardCreation(700, 910);
+        statBoardCreation(700, 1030);
 
         //set the position of all the cardsprites
         cardHandler.setCardSprites();
@@ -265,7 +269,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 //draw Cards
                 cardHandler.drawCards();
             }
-            statBoard0.getCardSprite().draw(batch);
+            //statBoard0.getCardSprite().draw(batch);
 
             drawStats();
 
@@ -317,7 +321,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 if(client != null) {
                     System.out.println("You can only have one client per computer.");
                 } else {
-                    client = new Client("Player", "10.111.15.150", 55557);
+                    System.out.println("Skriv inn host ip som streng(ipV4 || ipV6)! eks:(10.10.12.31): ");
+                    Scanner inn = new Scanner(System.in);
+                    String ip = inn.nextLine();
+                    System.out.println(ip);
+                    client = new Client("Player", ip, 55557);
                     boolean wait = false;
                     while (!wait) {
                         System.out.println("Waiting for the server to start the game."); // TODO remove
@@ -372,9 +380,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return false;
     }
 
-    public Robot getRobot() {
+    public static Robot getRobot() {
         return robot;
     }
+
+    public static Robot[] getRobots() {return robots;}
 
     //if a card is inside a cardslot and it is released move it into the middle of the slot,
     //if it is outside then move it back to its default pos
@@ -463,6 +473,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(10, 3,MapTile.CHECKPOINT4);
 
         grid.set(2, 2, MapTile.HOLE);
+        grid.set(3,8, MapTile.HOLE);
+        grid.set(9,7, MapTile.HOLE);
+        grid.set(10,2, MapTile.HOLE);
 
         grid.set(9.0, -0.5, MapTile.WALL);
         grid.set(-0.5, 9.0, MapTile.WALL);
@@ -478,8 +491,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         grid.set(0.0,4.5,MapTile.WALL);
         grid.set(1.0,4.5,MapTile.WALL);
-        grid.set(2.0,4.5,MapTile.WALL);
-        grid.set(3.0,4.5,MapTile.WALL);
         grid.set(4.0,4.5,MapTile.WALL);
         grid.set(5.0,4.5,MapTile.WALL);
         grid.set(6.0,4.5,MapTile.WALL);
@@ -549,20 +560,46 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
 
-
+    public static int getClientCount() {return clientCount;}
 
 
     //creation og the stat-board
     public void statBoardCreation ( float x, float y){
-        Texture statTexture = new Texture(Gdx.files.internal("Models/stats.PNG"));
+        float v=y;
+        Texture statTexture = new Texture(Gdx.files.internal("Models/Topofstatboard.PNG"));
         statBoardSprite = new Sprite(statTexture);
         statBoardSprite.setPosition(x, y);
         statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
+        statBoardList.add(statBoardSprite);
+
+        if(!singlePlayerMode){
+            for(int i =0; i<clientCount; i++){
+                v-=27;
+                Texture statTexture0 = new Texture(Gdx.files.internal("Models/actualstatboard.PNG"));
+                statBoardSprite = new Sprite(statTexture0);
+                statBoardSprite.setPosition(x, v);
+                //statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
+                statBoardList.add(statBoardSprite);
+            }
+        }else{
+            for(int i =0; i<AIs.length+1; i++){
+                v-=27;
+                Texture statTexture0 = new Texture(Gdx.files.internal("Models/actualstatboard.PNG"));
+                statBoardSprite = new Sprite(statTexture0);
+                statBoardSprite.setPosition(x, v);
+                //statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
+                statBoardList.add(statBoardSprite);
+            }
+        }
+
     }
 
     //draw the stat font on top of the board
     public void drawStats(){
         if (!singlePlayerMode) {
+            for(int i=0; i<statBoardList.size(); i++){
+                statBoardList.get(i).draw(batch);
+            }
             for(int i = 0; i < clientCount; i++){
                 if (robots[i] != null) {
                     int hp = 9 - robots[i].getDamage();
@@ -584,6 +621,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 }
             }
         } else {
+            for (int i=0; i<statBoardList.size(); i++){
+                statBoardList.get(i).draw(batch);
+            }
             if (robot != null) {
                 int hp = 9 - robot.getDamage();
                 font.setColor(0, 0, 0, 1);
@@ -599,10 +639,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 if (AIs[i] != null) {
                     int hpAI = 9 - AIs[i].getDamage();
                     String AI = colors[i+1] + " (AI)";
-                    font.draw(batch, AI + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 25);
-                    font.draw(batch, "" + hpAI, statBoard0.getCardSprite().getX() + 90, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 25);
-                    font.draw(batch, "" + AIs[i].getLives(), statBoard0.getCardSprite().getX() + 175, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 25);
-                    font.draw(batch, "" + AIs[i].getFlagsPassed(), statBoard0.getCardSprite().getX() + 250, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 25);
+                    font.draw(batch, AI + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
+                    font.draw(batch, "" + hpAI, statBoard0.getCardSprite().getX() + 90, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
+                    font.draw(batch, "" + AIs[i].getLives(), statBoard0.getCardSprite().getX() + 175, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
+                    font.draw(batch, "" + AIs[i].getFlagsPassed(), statBoard0.getCardSprite().getX() + 250, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
                 }
             }
         }
@@ -634,6 +674,19 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
 
     public void doTurn () {
+        if (singlePlayerMode) {
+            if (robot.getExecPowerdown() && turn == 0) {
+                robot.doPowerdown();
+            }
+        }
+        if (!singlePlayerMode) {
+            for (int i = 0; i < clientCount; i++) {
+                if (robots[i].getExecPowerdown() && turn == 0) {
+                    robots[i].doPowerdown();
+                }
+            }
+        }
+
         selectedCards = cardHandler.getSelectedCards();
 
         if (areCardSlotsFull() && cardHandler.getisDone() && checkMode()) {
@@ -665,7 +718,16 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 cardHandler.setNotFirst(true);
                 cardHandler.nullyFy();
                 checkLock(selectedCards);
-                cardHandler.setisDone(false);
+                if (singlePlayerMode) {
+                    if (robot != null && !robot.getInitPowerdown()) {
+                        cardHandler.setisDone(false);
+                    }
+                }
+                else {
+                    if (robots[ID] != null && !robots[ID].getInitPowerdown()) {
+                        cardHandler.setIsDone(false);
+                    }
+                }
                 cardHandler.setCardSprites();
 
                 System.out.println("\n");
@@ -682,8 +744,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if (tick % 500 == 0) {
                 if (singlePlayerMode) {
                     if (robot != null && robot.getAlive()) {
+                        printSelectedCards();
                         robot.move(selectedCards[turn].getName());
-                        robot.robotFireLasers(AIs);
+                        if(robot.getExecPowerdown() == false) {
+                            robot.robotFireLasers(AIs);
+                        }
                     }
                     for (int i = 0; i < AIs.length; i++) {
                         if (AIs[i] != null && AIs[i].getAlive()) {
@@ -703,6 +768,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                             AIs[i].getSprite().draw(batch);
                         }
                     }
+                    if (robot.getInitPowerdown() && turn == 5) {
+                        robot.setExecPowerdown(true);
+                    }
 
                 }
                 else if (!singlePlayerMode) {
@@ -712,10 +780,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                         }
                     }
                     for(int x = 0; x < clientCount; x++){
-                        robots[x].robotFireLasers(robots);
+                        if(robots[x].getExecPowerdown() == false) {
+                            robots[x].robotFireLasers(robots);
+                        }
                     }
+
                     turn++;
+
                     for (int i = 0; i < clientCount; i++) {
+                        if (turn == 5 && robots[i].getInitPowerdown()) {
+                            robots[i].setExecPowerdown(true);
+                        }
                         if (robots[i] != null) {
                             robots[i].getSprite().draw(batch);
                         }
@@ -726,7 +801,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
     }
 
-    private boolean areCardSlotsFull() {
+    public static boolean areCardSlotsFull() {
         if(selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && amIAlive()) {
             return true;
         }
