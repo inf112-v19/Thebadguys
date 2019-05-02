@@ -511,11 +511,11 @@ public class Robot {
         return executePowerdown;
     }
 
-    public void robotFireLasers(Robot[] robot) {
+    public void robotFireLasers(AIRobot[] robot) {
         for (int i = 0; i < robot.length; i++) {
             if (this.getDirection() == Direction.NORTH) {
                 boolean targetHit = false;
-                int tempY1 = this.getPosY();
+                int tempY1 = this.getPosY()+1;
                 while (targetHit == false && tempY1 < 12) {
                     if (robot[i].getPosX() == this.getPosX() && robot[i].getPosY() == tempY1) {
                         robot[i].takeDamage();
@@ -528,7 +528,7 @@ public class Robot {
                 }
             } else if (this.getDirection() == Direction.EAST) {
                 boolean targetHit = false;
-                int tempX1 = i;
+                int tempX1 = this.getPosX()+1;
                 while (targetHit == false && tempX1 != 12) {
                     if (robot[i].getPosX() == tempX1 && robot[i].getPosY() == this.getPosY()) {
                         robot[i].takeDamage();
@@ -540,7 +540,7 @@ public class Robot {
                 }
             } else if (this.getDirection() == Direction.SOUTH) {
                 boolean targetHit = false;
-                int tempY1 = this.getPosY();
+                int tempY1 = this.getPosY()-1;
                 while (targetHit == false && tempY1 != -1) {
                     if (robot[i].getPosX() == this.getPosX() && robot[i].getPosY() == tempY1) {
                         robot[i].takeDamage();
@@ -552,7 +552,63 @@ public class Robot {
                 }
             } else if (this.getDirection() == Direction.WEST) {
                 boolean targetHit = false;
-                int tempX1 = this.getPosX();
+                int tempX1 = this.getPosX()-1;
+                while (targetHit == false && tempX1 != -1) {
+                    if (robot[i].getPosX() == tempX1 && robot[i].getPosY() == this.getPosY()) {
+                        robot[i].takeDamage();
+                        targetHit = true;
+                    } else if (gameMap.getTiles().get(tempX1 - 0.5, this.getPosY()) == MapTile.WALL) {
+                        targetHit = true;
+                    }
+                    tempX1--;
+                }
+            }
+
+        }
+    }
+
+    public void robotFireLasers(Robot[] robot) {
+        for (int i = 0; i < robot.length; i++) {
+            if (this.getDirection() == Direction.NORTH) {
+                boolean targetHit = false;
+                int tempY1 = this.getPosY()+1;
+                while (targetHit == false && tempY1 < 12) {
+                    if (robot[i].getPosX() == this.getPosX() && robot[i].getPosY() == tempY1) {
+                        robot[i].takeDamage();
+                        System.out.println("robot has received damage" + robot[i].getDamage());
+                        targetHit = true;
+                    } else if (gameMap.getTiles().get((double) this.getPosX(), tempY1 + 0.5) == MapTile.WALL) {
+                        targetHit = true;
+                    }
+                    tempY1++;
+                }
+            } else if (this.getDirection() == Direction.EAST) {
+                boolean targetHit = false;
+                int tempX1 = this.getPosX()+1;
+                while (targetHit == false && tempX1 != 12) {
+                    if (robot[i].getPosX() == tempX1 && robot[i].getPosY() == this.getPosY()) {
+                        robot[i].takeDamage();
+                        targetHit = true;
+                    } else if (gameMap.getTiles().get(tempX1 + 0.5, this.getPosY()) == MapTile.WALL) {
+                        targetHit = true;
+                    }
+                    tempX1++;
+                }
+            } else if (this.getDirection() == Direction.SOUTH) {
+                boolean targetHit = false;
+                int tempY1 = this.getPosY()-1;
+                while (targetHit == false && tempY1 != -1) {
+                    if (robot[i].getPosX() == this.getPosX() && robot[i].getPosY() == tempY1) {
+                        robot[i].takeDamage();
+                        targetHit = true;
+                    } else if (gameMap.getTiles().get(this.getPosX(), tempY1 - 0.5) == MapTile.WALL) {
+                        targetHit = true;
+                    }
+                    tempY1--;
+                }
+            } else if (this.getDirection() == Direction.WEST) {
+                boolean targetHit = false;
+                int tempX1 = this.getPosX()-1;
                 while (targetHit == false && tempX1 != -1) {
                     if (robot[i].getPosX() == tempX1 && robot[i].getPosY() == this.getPosY()) {
                         robot[i].takeDamage();

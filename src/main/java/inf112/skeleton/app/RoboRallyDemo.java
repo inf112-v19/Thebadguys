@@ -683,14 +683,14 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 if (singlePlayerMode) {
                     if (robot != null && robot.getAlive()) {
                         robot.move(selectedCards[turn].getName());
+                        robot.robotFireLasers(AIs);
                     }
                     for (int i = 0; i < AIs.length; i++) {
                         if (AIs[i] != null && AIs[i].getAlive()) {
                             AIs[i].doTurn(turn);
+                            AIs[i].robotFireLasers(AIs);
+                            AIs[i].robotFireLasers(robot);
                         }
-                    }
-                    for (int i=0; i<AIs.length; i++){
-                        AIs[i].robotFireLasers(AIs);
                     }
                     System.out.println("AIDOINGMOVE!: " + turn);
                     System.out.println("DidTURN " + (turn));
@@ -710,6 +710,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                         if (robots[order[turn + j]] != null && robots[order[turn + j]].getAlive()) {
                             robots[order[turn + j]].move(moves[order[turn + j]][turn]);
                         }
+                    }
+                    for(int x = 0; x < clientCount; x++){
+                        robots[x].robotFireLasers(robots);
                     }
                     turn++;
                     for (int i = 0; i < clientCount; i++) {
