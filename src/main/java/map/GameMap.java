@@ -335,6 +335,7 @@ public class GameMap implements IGameMap {
         }
     }
 
+    //haha
     public Boolean wallNearby(Direction dir, int x, int y, int amount) {
         if (dir == Direction.NORTH && tiles.get((double) x, y + 0.5) == MapTile.WALL) {
             return true;
