@@ -387,6 +387,10 @@ public class GameMap implements IGameMap {
         return tiles.getWidth();
     }
 
+    public IGrid<MapTile> getTiles(){
+        return tiles;
+    }
+
     @Override
     public boolean isPlaying() {
         return true;
