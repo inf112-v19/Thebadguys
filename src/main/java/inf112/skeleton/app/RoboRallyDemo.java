@@ -224,7 +224,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             mainMenu.render();
         }else{
             selectedCards = cardHandler.getSelectedCards();
-            printSelectedCards();
             if(selectedCards[0]!=null){
                 if(selectedCards[0].getName()=="clickedCard"){
                     cardHandler.crushBug();
