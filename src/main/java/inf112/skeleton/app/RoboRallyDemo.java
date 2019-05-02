@@ -574,7 +574,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         if(!singlePlayerMode){
             for(int i =0; i<clientCount; i++){
-
+                v-=27;
+                Texture statTexture0 = new Texture(Gdx.files.internal("Models/actualstatboard.PNG"));
+                statBoardSprite = new Sprite(statTexture0);
+                statBoardSprite.setPosition(x, v);
+                //statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
+                statBoardList.add(statBoardSprite);
             }
         }else{
             for(int i =0; i<AIs.length+1; i++){
