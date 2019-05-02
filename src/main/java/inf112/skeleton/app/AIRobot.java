@@ -11,6 +11,7 @@ import map.GameMap;
 import map.MapTile;
 
 public class AIRobot{
+    private int id;
     private CardHandler cardHandler;
     private Sprite sprite;
     private Boolean alive = true;
@@ -30,8 +31,8 @@ public class AIRobot{
     private int mapHeight = prop.get("height", Integer.class);
     private int tilePixelWidth = prop.get("tilewidth", Integer.class);
     private int tilePixelHeight = prop.get("tileheight", Integer.class);
-    private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
-    private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
+    private int x0 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
+    private int y0 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
     private int turn = RoboRallyDemo.getTurn();
     private Deck randomDeck;
     private Cards selectedCards[];
@@ -59,9 +60,11 @@ public class AIRobot{
 
 
     public void doTurn(int turn){
-        makeDeck();
-        fillDeck();
-        move(selectedCards[turn]);
+        if (RoboRallyDemo.amIAliveAI(id)) {
+            makeDeck();
+            fillDeck();
+            move(selectedCards[turn]);
+        }
     }
 
     public AIRobot(Sprite sprite){
@@ -74,11 +77,12 @@ public class AIRobot{
         this.posY = checkpoint[1];
     }
 
-    public AIRobot(Sprite sprite, int[] checkpoint){
+    public AIRobot(Sprite sprite, int[] checkpoint, int id){
         this.sprite=sprite;
         this.checkpoint = checkpoint;
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
+        this.id = id;
     }
 
     public Boolean getAlive() {
@@ -118,19 +122,19 @@ public class AIRobot{
     }
 
     public int getX1(){
-        System.out.println(this.x1);
-        System.out.println(this.mapWidth);
-        System.out.println(this.mapHeight);
-        System.out.println(this.tilePixelWidth);
-        System.out.println(this.tilePixelHeight);
-        System.out.println(this.w);
-        System.out.println(this.h);
-        return this.x1;
+        return this.x0;
     }
 
     public int getY1(){
-        System.out.println(this.y1);
-        return this.y1;
+        return this.y0;
+    }
+
+    public int getSpriteX() {
+        return this.x0 + (this.posX * (this.tilePixelWidth / 6));
+    }
+
+    public int getSpriteY() {
+        return this.y0 + (this.posY * (this.tilePixelWidth / 6));
     }
 
     public void setAlive(boolean alive) {
@@ -385,7 +389,8 @@ public class AIRobot{
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
             System.out.println("You lost the game");
-            System.exit(0);
+            //System.exit(0);
+            RoboRallyDemo.killMe(id, true);
         }
         else {
             System.out.println("you died");

@@ -48,7 +48,7 @@ public class Client extends JFrame implements Runnable {
     private JMenuBar menuBar;
     private JMenu mnFile;
     private JMenuItem mntmOnlineUsers;
-    private JMenuItem mntmExit;
+    private JMenuItem mntmExit; // TODO cleanup imports and constructor
 
     //private OnlineUsers users;
 
@@ -100,8 +100,11 @@ public class Client extends JFrame implements Runnable {
                         String[] u = message.split("/u/|/n/|/e/");
                         //users.update(Arrays.copyOfRange(u, 1, u.length - 1));
                     } else if (message.startsWith("/r/")) {
-                        message = message.split("/r/|/e/")[1];
-                        System.out.println("player " + Integer.parseInt(message) + " is ready");
+                        int id = Integer.parseInt(message.split("/r/|/e/")[1]);
+                        if (id != client.getID()) {
+                            System.out.println("player " + id + " is ready");
+                        }
+                        RoboRallyDemo.setReady(id);
                     } else if (message.startsWith("/a/")) {
                         ready = true;
                     } else if (message.startsWith("/b/")) {
@@ -117,7 +120,10 @@ public class Client extends JFrame implements Runnable {
                         clientCount = Integer.parseInt(message);
                         mainMenu.setMainRunning(false);
                         started = true;
-                    } else if (message.startsWith("/w/")) { // may remove
+                    } else if (message.startsWith("/d/")) {
+                        int id = Integer.parseInt(message.split("/d/|/e/")[1]);
+                        RoboRallyDemo.setDead(id);
+                    } else if (message.startsWith("/w/")) { // TODO may remove
                         try {
                             Thread.sleep(200);
                         } catch (InterruptedException e) {
@@ -139,11 +145,6 @@ public class Client extends JFrame implements Runnable {
 
     public boolean askReady() {
         client.send("/a//e/".getBytes());
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return ready;
     }
 
@@ -161,7 +162,7 @@ public class Client extends JFrame implements Runnable {
         order = new int[clientCount*5];
         for(int i = 0; i < order.length; i++){
             order[i] = Integer.parseInt(orde.split("#")[i]);
-            System.out.println(order[i]);
+            System.out.println(order[i]); // TODO remove
         }
     }
 
@@ -179,7 +180,7 @@ public class Client extends JFrame implements Runnable {
 
     public void setRunning(boolean running) {
         this.running = running;
-    }
+    } // TODO remove?
 
     public boolean getStarted() {
         return started;

@@ -35,7 +35,7 @@ public class Server implements Runnable{
     private List<Integer> clientResponse = new ArrayList<Integer>();
 
     private int[][] positions;
-    private boolean[] ready = {true, true, true, true, true, true, true, true};
+    private boolean[] ready = {false, false, false, false, false, false, false, false};
     private String[][] clientCards = new String[8][10];
     private String moves;
     private String moveOrder;
@@ -66,7 +66,6 @@ public class Server implements Runnable{
             public void run() {
                 while(running) {
                     sendToAll("/i/ping/e/");
-                    System.out.println("are you here?");
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
@@ -85,7 +84,6 @@ public class Server implements Runnable{
                         else{
                             clientResponse.remove(new Integer (c.getID()));
                             c.attempt = 0;
-                            System.out.println("I am here");
                         }
                     }
                 }
@@ -153,9 +151,9 @@ public class Server implements Runnable{
             int id = Identifier.getIdentifier();
             clients.add(new ServerClient(string.split("/c/|/e/")[1], packet.getAddress(), packet.getPort(), id));
             String ID = "/c/" + id + "/e/";
-            send(ID.getBytes(), packet.getAddress(), packet.getPort());
+            send(ID.getBytes(), packet.getAddress(), packet.getPort()); // returns the clients ID to the client
             String ID2 = "/m/" + id +"/e/";
-            sendToAllButMe(ID2, id);
+            sendToAllButMe(ID2, id); // tells everybody else a new client has connected
         }
         else if (string.startsWith("/s/")) { // start packet
             sendToAll("/s/" + clientCount() + "/e/");
@@ -175,12 +173,11 @@ public class Server implements Runnable{
                 System.out.println(clientCards[id][i]);
             }*/
             string = "/r/" + id + "/e/";
-            sendToAllButMe(string, id);
+            sendToAll(string);
         }
         else if(string.startsWith("/o/")) { // ask for all the moves beeing made this round
             orderMoves();
             string = "/o/" + moves + "~" + moveOrder + "/e/";
-            System.out.println(moves);
             send(string.getBytes(),packet.getAddress(), packet.getPort());
         }
         else if (string.startsWith("/a/")) { // ask if clients are ready
@@ -202,6 +199,10 @@ public class Server implements Runnable{
             else {
                 sendToAllButMe("/w//e/",0);
             }
+        }
+        else if (string.startsWith("/d/")) {
+            int id = Integer.parseInt(string.split("/d/|/e/")[1]);
+            sendToAllButMe("/d/" + id + "/e/", id);
         }
         else if (string.startsWith("/c/") && (started || clientCount() == 8)) { // a connection handler for full server
             string = "/f/" + "server is full or started" + "/e/";
@@ -249,7 +250,7 @@ public class Server implements Runnable{
 
     public boolean getReady(){
         for(int i = 0; i < clientCount(); i++) {
-            if(ready[i] = false) {
+            if(!ready[i]) {
                 return false;
             }
         }

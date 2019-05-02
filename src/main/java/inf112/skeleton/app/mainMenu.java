@@ -10,10 +10,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class mainMenu {
 
     private static boolean mainRunning;
-    Cards serverButton;
-    Cards clientButton;
-    Cards startButton;
+    Button serverButton;
+    Button clientButton;
+    Button startButton;
+
+
     SpriteBatch batch;
+
     private BitmapFont font;
 
     public mainMenu(SpriteBatch batch){
@@ -28,44 +31,44 @@ public class mainMenu {
         Texture clientTexture = new Texture(Gdx.files.internal("Models/black.jpg"));
         Sprite clientSprite = new Sprite(clientTexture);
         clientSprite.setPosition(150, 500);
-        clientButton = new Cards(150, 500, "", 0, clientSprite);
+        clientButton = new Button(150, 500, "clientButton", clientSprite);
 
         Texture serverTexture = new Texture(Gdx.files.internal("Models/black.jpg"));
         Sprite serverSprite = new Sprite(serverTexture);
         serverSprite.setPosition(400, 500);
-        serverButton = new Cards(400, 500, "", 0, serverSprite);
+        serverButton = new Button(400, 500, "serverButton", serverSprite);
 
 
         Texture startTexture = new Texture(Gdx.files.internal("Models/black.jpg"));
         Sprite startSprite = new Sprite(startTexture);
         startSprite.setPosition(650, 500);
-        startButton = new Cards(650, 500, "", 0, startSprite);
+        startButton = new Button(650, 500, "startButton", startSprite);
     }
 
     public void render(){
-        clientButton.getCardSprite().draw(batch);
-        font.draw(batch,"CLIENT", clientButton.getCardSprite().getX()+75, clientButton.getCardSprite().getY()+getCardCenterY(clientButton));
+        clientButton.getSprite().draw(batch);
+        font.draw(batch,"CLIENT", clientButton.getSprite().getX()+75, clientButton.getSprite().getY()+getCenterY(clientButton));
 
-        serverButton.getCardSprite().draw(batch);
-        font.draw(batch,"SERVER", serverButton.getCardSprite().getX()+75, serverButton.getCardSprite().getY()+getCardCenterY(serverButton));
+        serverButton.getSprite().draw(batch);
+        font.draw(batch,"SERVER", serverButton.getSprite().getX()+75, serverButton.getSprite().getY()+getCenterY(serverButton));
 
-        startButton.getCardSprite().draw(batch);
-        font.draw(batch,"START", startButton.getCardSprite().getX()+75, startButton.getCardSprite().getY()+getCardCenterY(clientButton));
+        startButton.getSprite().draw(batch);
+        font.draw(batch,"START", startButton.getSprite().getX()+75, startButton.getSprite().getY()+getCenterY(clientButton));
     }
 
-    protected Float getCardCenterY(Cards card){
-        return card.getCardSprite().getHeight()/2;
+    protected Float getCenterY(Button btn){
+        return btn.getSprite().getHeight()/2;
     }
 
-    protected Cards getClientBtn(){
+    protected Button getClientBtn(){
         return clientButton;
     }
 
-    protected Cards getServerBtn(){
+    protected Button getServerBtn(){
         return serverButton;
     }
 
-    protected Cards getStartBtn(){
+    protected Button getStartBtn(){
         return startButton;
     }
 
