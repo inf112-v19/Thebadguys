@@ -80,10 +80,10 @@ public class TestBot implements IRobot {
         return this.tilePixelHeight;
     }
 
-
     public void moveSprite(float x, float y){
         this.sprite.setPosition(x, y);
     }
+
     public void rotateSprite(float z){
         this.sprite.rotate(z);
     }

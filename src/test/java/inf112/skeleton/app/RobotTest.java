@@ -21,6 +21,7 @@ public class RobotTest {
         posY = 0;
         startpos = new int[]{Math.round(posX), Math.round(posY)};
         robot = new TestBot(startpos);
+
         assertEquals(robot.getCheckpoint(), startpos);
         assertEquals(robot.getPosX(), 0);
         assertEquals(robot.getPosY(), 0);
@@ -28,6 +29,8 @@ public class RobotTest {
         assertEquals(robot.getDamage(), 0);
         assertEquals(robot.getLives(), 3);
         assertEquals(robot.getFlagsPassed(), 0);
+        assertEquals(robot.getAlive(), true);
+        assertEquals(robot.getSprite(), null);
     }
 
 
@@ -39,10 +42,7 @@ public class RobotTest {
 
         robot.setDamage(0);
         assertEquals(robot.getDamage(), 0);
-        robot.setDamage(3);
-        assertEquals(robot.getDamage(), 3);
-        robot.setDamage(9);
-        assertEquals(robot.getDamage(), 9);
+
     }
 
     @Test
@@ -52,6 +52,6 @@ public class RobotTest {
         robot = new TestBot(startpos);
 
         robot.takeDamage();
-        assertEquals(robot.getLives(), 2);
+        assertEquals(robot.getLives(), 3);
     }
 }
