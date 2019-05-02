@@ -233,9 +233,13 @@ public class Server implements Runnable{
         String message = "";
         if (status) {
             message = "Client " + c.name + "(" + c.getID() + ")" + c.address.toString() + ":" + c.port + " disconnected.";
+            String disc = "/d/" + c.getID() + "/e/";
+            sendToAllButMe(disc, c.getID());
         }
         else {
             message = "Client " + c.name + "(" + c.getID() + ")" + c.address.toString() + ":" + c.port + " timed out.";
+            String disc = "/d/" + c.getID() + "/e/";
+            sendToAllButMe(disc, c.getID());
         }
         System.out.println(message);
     }
