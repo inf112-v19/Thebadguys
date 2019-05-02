@@ -314,21 +314,21 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (mainMenu.getMainRunning()) {
             if (mainMenu.getClientBtn().buttonClicked(screenX, screenY, mainMenu.getClientBtn())) {
-                System.out.println("DU TRYKKET PÅ CLIENT");
+                System.out.println("DU TRYKKET PÅ CLIENT"); // TODO remove
                 if(client != null) {
                     System.out.println("You can only have one client per computer.");
                 } else {
                     client = new Client("Player", "10.111.15.150", 55557);
                     boolean wait = false;
                     while (!wait) {
-                        System.out.println("Waiting for the server to start the game.");
+                        System.out.println("Waiting for the server to start the game."); // TODO remove
                         try {
                             Thread.sleep(300);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         if (client.getStarted()) {
-                            System.out.println("create blir callet");
+                            System.out.println("create blir callet"); // TODO remove
                             createv2();
                         }
                         wait = client.getStarted();
@@ -336,7 +336,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 }
             }
             if (mainMenu.getServerBtn().buttonClicked(screenX, screenY, mainMenu.getServerBtn())) {
-                System.out.println("DU TRYKKET PÅ SERVER");
+                System.out.println("DU TRYKKET PÅ SERVER"); // TODO remove
                 if (server == null) {
                     server = new Server(55557);
                     client = new Client("Player", "localhost", 55557);
@@ -348,8 +348,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 }
             }
             if (mainMenu.getStartBtn().buttonClicked(screenX, screenY, mainMenu.getStartBtn())) {
-                System.out.println("DU TRYKKET PÅ START");
+                System.out.println("DU TRYKKET PÅ START"); // TODO remove
                 if (server != null) {
+                    System.out.println("Starting the multiplayer game!");
                     server.setStarted(true);
                     client.getBackendClient().send("/s//e/".getBytes());
                     mainMenu.setMainRunning(false);
@@ -357,19 +358,16 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 }
                 else if (server == null) {
                     singlePlayerMode = true;
-                    System.out.println("Starting Singleplayer mode!");
+                    System.out.println("Starting singleplayer game!");
                     setID(0);
                     createv2();
                     mainMenu.setMainRunning(false);
-                }
-                else {
-                    System.out.println("You don't have a server running!");
                 }
             }
 
         } else {
             endTurnButton.buttonClicked(screenX, screenY, endTurnButton);
-            //powerdownButton.buttonClicked(screenX, screenY, powerdownButton);
+            powerdownButton.buttonClicked(screenX, screenY, powerdownButton);
             cardHandler.click(Input.Buttons.LEFT, screenX, screenY);
         }
         return false;

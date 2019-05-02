@@ -46,18 +46,18 @@ public class Button implements IButton {
         return buttonSprite;
     }
 
-    public boolean buttonClicked(int screenX, int screenY, Button button) {
+    public boolean buttonClicked(int screenX, int screenY, Button button) { // TODO add parameters for id and singleplayermode boolean
 
         float NewScreenY = Gdx.graphics.getHeight() - screenY;
         if ((screenX > getPosX()) && (screenX < (getPosX() + buttonSprite.getWidth()) && (NewScreenY > getPosY())) && (NewScreenY < (getPosY() + buttonSprite.getHeight()))) {
-            System.out.println("*click*");
+            System.out.println("*click*"); // TODO remove
             switch (name) {
 
                 case "powerDown_inactive":
 
-                    if (!robot.getInitPowerdown()) {
+                    if (!robot.getInitPowerdown()) { // perform check if single or multiplayer
                         robot.setInitPowerdown(true);
-                        System.out.println("Hey it worked");
+                        System.out.println("Hey it worked"); // TODO remove
                         return true;
                     }
 
@@ -72,7 +72,7 @@ public class Button implements IButton {
                             }
                         }
                         String string = "/r/"+RoboRallyDemo.getID()+ sendCards + "/e/";
-                        System.out.println(sendCards);
+                        System.out.println(sendCards); // TODO remove
                         RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
                     }
                 case "clientButton":
