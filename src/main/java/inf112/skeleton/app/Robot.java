@@ -519,7 +519,6 @@ public class Robot {
                 while (targetHit == false && tempY1 < 12) {
                     if (robot[i].getPosX() == this.getPosX() && robot[i].getPosY() == tempY1) {
                         robot[i].takeDamage();
-                        System.out.println("robot has received damage" + robot[i].getDamage());
                         targetHit = true;
                     } else if (gameMap.getTiles().get((double) this.getPosX(), tempY1 + 0.5) == MapTile.WALL) {
                         targetHit = true;
@@ -575,7 +574,6 @@ public class Robot {
                 while (targetHit == false && tempY1 < 12) {
                     if (robot[i].getPosX() == this.getPosX() && robot[i].getPosY() == tempY1) {
                         robot[i].takeDamage();
-                        System.out.println("robot has received damage" + robot[i].getDamage());
                         targetHit = true;
                     } else if (gameMap.getTiles().get((double) this.getPosX(), tempY1 + 0.5) == MapTile.WALL) {
                         targetHit = true;
