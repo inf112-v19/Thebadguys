@@ -55,7 +55,7 @@ public class Button implements IButton {
             switch (name) {
 
                 case "powerDown_inactive":
-                    System.out.println(robot);
+                    System.out.println("powerdown initiated");
                     if (!RoboRallyDemo.getSinglePlayerMode()) {
                         for (int i = 0; i < RoboRallyDemo.getClientCount(); i++) {
                             if (!RoboRallyDemo.getRobots()[i].getInitPowerdown()) {
@@ -73,18 +73,21 @@ public class Button implements IButton {
                     }
 
                 case "endRoundButton":
-                    cardHandler.setisDone(true);
-                    if (!RoboRallyDemo.getSinglePlayerMode()) {
-                        Cards selectedCards[] = cardHandler.getSelectedCards();
-                        String sendCards = "";
-                        for(int i = 0; i < 5; i++) {
-                            if (selectedCards[i] != null) {
-                                sendCards += selectedCards[i].getName() + "~" + selectedCards[i].getPriority() + "~";
+                    if (RoboRallyDemo.areCardSlotsFull()) {
+                        System.out.println("isDone true");
+                        cardHandler.setisDone(true);
+                        if (!RoboRallyDemo.getSinglePlayerMode()) {
+                            Cards selectedCards[] = cardHandler.getSelectedCards();
+                            String sendCards = "";
+                            for (int i = 0; i < 5; i++) {
+                                if (selectedCards[i] != null) {
+                                    sendCards += selectedCards[i].getName() + "~" + selectedCards[i].getPriority() + "~";
+                                }
                             }
+                            String string = "/r/" + RoboRallyDemo.getID() + sendCards + "/e/";
+                            System.out.println(sendCards); // TODO remove
+                            RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
                         }
-                        String string = "/r/"+RoboRallyDemo.getID()+ sendCards + "/e/";
-                        System.out.println(sendCards); // TODO remove
-                        RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
                     }
                 case "clientButton":
                     return true;
