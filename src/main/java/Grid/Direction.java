@@ -10,6 +10,19 @@ public enum Direction {
         return Direction.values()[random.nextInt(Direction.values().length)];
     }
 
+    public static Direction OppositeDirection(Direction dir){
+        if (dir == NORTH){
+            return SOUTH;
+        }
+        else if (dir == SOUTH){
+            return NORTH;
+        }
+        else if (dir == WEST){
+            return EAST;
+        }
+        else return WEST;
+    }
+
 }
 
 
