@@ -300,7 +300,7 @@ public class GameMap implements IGameMap {
         }
     }
 
-    public Boolean wallNearby(Direction dir, int x, int y) {
+    public Boolean wallNearby(Direction dir, int x, int y, int amount) {
         if (dir == Direction.NORTH && tiles.get((double) x, y + 0.5) == MapTile.WALL) {
             return true;
         } else if (dir == Direction.EAST && tiles.get(x + 0.5, (double) y) == MapTile.WALL) {
@@ -309,7 +309,29 @@ public class GameMap implements IGameMap {
             return true;
         } else if (dir == Direction.WEST && tiles.get(x - 0.5, (double) y) == MapTile.WALL) {
             return true;
+        } else if (dir == Direction.EAST && amount == -1 && tiles.get(x - 0.5, (double) y) == MapTile.WALL){
+            return true;
+        }else if (dir == Direction.SOUTH && amount == -1 && tiles.get(x, (double) y + 0.5) == MapTile.WALL){
+            return true;
+        }else if (dir == Direction.WEST && amount == -1 && tiles.get(x + 0.5, (double) y) == MapTile.WALL){
+            return true;
+        }else if (dir == Direction.NORTH && amount == -1 && tiles.get(x, (double) y-0.5) == MapTile.WALL){
+            return true;
         } else {
+            return false;
+        }
+    }
+
+    public Boolean convWallNearby(Direction dir, int x, int y) {
+        if (dir == Direction.NORTH && tiles.get((double) x, y + 0.5) == MapTile.WALL) {
+            return true;
+        } else if (dir == Direction.EAST && tiles.get(x + 0.5, (double) y) == MapTile.WALL) {
+            return true;
+        } else if (dir == Direction.SOUTH && tiles.get((double) x, y - 0.5) == MapTile.WALL) {
+            return true;
+        } else if (dir == Direction.WEST && tiles.get(x - 0.5, (double) y) == MapTile.WALL) {
+            return true;
+        }  else {
             return false;
         }
     }

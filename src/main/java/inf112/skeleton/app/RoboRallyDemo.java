@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Scanner;
 
 //import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
@@ -317,7 +318,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 if(client != null) {
                     System.out.println("You can only have one client per computer.");
                 } else {
-                    client = new Client("Player", "10.111.15.150", 55557);
+                    System.out.println("Skriv inn host ip som streng(ipV4 || ipV6)! eks:(10.10.12.31): ");
+                    Scanner inn = new Scanner(System.in);
+                    String ip = inn.nextLine();
+                    System.out.println(ip);
+                    client = new Client("Player", ip, 55557);
                     boolean wait = false;
                     while (!wait) {
                         System.out.println("Waiting for the server to start the game."); // TODO remove
@@ -708,6 +713,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                             robots[order[turn + j]].move(moves[order[turn + j]][turn]);
                         }
                     }
+                    
                     turn++;
                     for (int i = 0; i < clientCount; i++) {
                         if (robots[i] != null) {
