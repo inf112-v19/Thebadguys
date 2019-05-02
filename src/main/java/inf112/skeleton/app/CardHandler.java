@@ -3,11 +3,14 @@ package inf112.skeleton.app;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 //import com.sun.istack.internal.Nullable;
 import map.IGameMap;
+
 import java.util.ArrayList;
 
 public class CardHandler {
@@ -15,14 +18,14 @@ public class CardHandler {
     private SpriteBatch batch;
     private Sprite cardSprite10;
     private BitmapFont font;
+    private Button powerdownButton;
+    private Button endTurnButton;
 
     private ArrayList<CardSlots> cardSlotPos;
     private ArrayList<Sprite> randomSpriteList;
     private ArrayList<Sprite> spritePos;
-
     private Deck Deck;
     private Deck lockedDeck;
-
     private Cards[] selectedCards;
     private Cards clickedCard;
     private Cards listCard;
@@ -33,10 +36,12 @@ public class CardHandler {
     private boolean isDone=false;
     private boolean notFirst=false;
     private boolean isClicked=false;
+    private boolean isInside;
+
     private Robot robot;
     private IGameMap map;
     private int cardDelt=9;
-    private int cardSlotLock=0;;
+    private int cardSlotLock=0;
     private ArrayList<Sprite> lockedList;
     private int pri;
     private String name;
@@ -54,58 +59,51 @@ public class CardHandler {
         this.batch=batch;
         this.robot=robot;
         this.map=map;
-        counter=0;
-        int x=0;
-        String name="";
-        int pri=0;
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
-        clickedCard=new Cards(0,0, "",0, cardSprite10);
+        clickedCard=new Cards(10000,10000, "clickedCard",0, cardSprite10);
         font = new BitmapFont();
     }
 
-    public void dragged(int screenX, int screenY, Cards CardButton){
+    public void dragged(int screenX, int screenY){
         clickedCard.getCardSprite().setPosition(screenX - clickedCard.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - clickedCard.getCardSprite().getHeight() / 2);
     }
 
-    public void letGo(int screenX, int screenY, Cards endTurnBtn, Cards powerDownBtn){
-        boolean isInside=false;
+    public void letGo(int screenX, int screenY){
+        isInside = false;
+        if (!mainMenu.getMainRunning()) {
+            //method that adjusts a cards location on the screen if it is let go of. the position wil depend if it is inside or outside a cardslot
+            adjustCardLocation();
 
-        if (insideCard(screenX, screenY, powerDownBtn)){
-            robot.setPowerdown(true);
+            //create a new clickedCard so that a card does not stick to the mouse when let go of
+            clickedCard = new Cards(10000, 10000, "clickedCard", 0, cardSprite10);
         }
-
-        if(insideCard(screenX, screenY, endTurnBtn)){
-            isDone=true;
-        }
-        //if a card is inside a cardslot and it is released move it into the middle of the slot
-        for(int i=0; i<5; i++){
-            if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
-                if(isClicked){
-                    selectedCards[counter]=null;
-                    isClicked=false;
-                }
-                selectedCards[i]=clickedCard;
-                isInside=true;
-                clickedCard.getCardSprite().setPosition(cardSlotPos.get(i).getCardSlotSprite().getX()+getCardSlotCenterX(cardSlotPos.get(i))-getCardCenterX(clickedCard), cardSlotPos.get(i).getCardSlotSprite().getY()+getCardSlotCenterY(cardSlotPos.get(i))-getCardCenterY(clickedCard));
-                counter=i;
-                break;
-            }
-        }
-        //if it is outside then move it back to its default pos
-        if(!isInside){
-            clickedCard.getCardSprite().setPosition(clickedCard.getDefaultPosX(), clickedCard.getDefaultPosY());
-            if(isClicked){
-                selectedCards[counter]=null;
-                isClicked=false;
-            }
-        }
-        //create a new clickedCard so that a card does not stick to the mouse when let go of
-        clickedCard=new Cards(0,0, "",0, cardSprite10);
     }
 
-    public void click(int button, int screenX, int screenY, Cards CardButton){
+    /*
+    public void letGo(int screenX, int screenY, Cards endTurnBtn){
+        isInside=false;
+        String sendCards = "";
+        if (!mainMenu.getMainRunning()){
+            //if (insideCard(screenX, screenY, powerDownBtn)){
+            //    robot.setPowerdown(true);
+            //}
+            if(insideCard(screenX, screenY, endTurnBtn)){
+                if (!RoboRallyDemo.getSinglePlayerMode()) {
+                    for(int i = 0; i < 5; i++) {
+                        if (selectedCards[i] != null) {
+                            sendCards += selectedCards[i].getName() + "~" + selectedCards[i].getPriority() + "~";
+                        }
+                    }
+                    String string = "/r/"+RoboRallyDemo.getID()+ sendCards + "/e/";
+                    System.out.println(sendCards);
+                    RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
+                }
+                isDone=true;
+            }*/
+
+    public void click(int button, int screenX, int screenY){
         counter=0;
         for(int i=0; i<cardDelt; i++){
             if(insideCard(screenX, screenY,Deck.getDeckList().get(i)) && button == Input.Buttons.LEFT){
@@ -122,6 +120,15 @@ public class CardHandler {
         }
     }
 
+    public void crushBug(){
+        selectedCards[0]=null;
+    }
+
+    public void powerdownCards() {
+        for (int i = 0; i < 5; i++) {
+            selectedCards[i] = new Cards(10000, 10000, "powerdown", 0);
+        }
+    }
 
     //the x cordinate at the centre of a card
     protected Float getCardCenterX(Cards card){
@@ -151,7 +158,6 @@ public class CardHandler {
     //metode for å sjekke om muspeikeren er over et kort
     public boolean insideCard(float screenX, float screenY, Cards card){
         float NewscreenY= Gdx.graphics.getHeight() - screenY;
-        //System.out.println((screenX > card.getCardSprite().getX()) && (screenX < (card.getCardSprite().getX() + card.getCardSprite().getWidth())) && (NewscreenY > card.getCardSprite().getY()) && (NewscreenY < (card.getCardSprite().getY() + card.getCardSprite().getHeight())));
         return (screenX > card.getCardSprite().getX()) && (screenX < (card.getCardSprite().getX() + card.getCardSprite().getWidth())) && (NewscreenY > card.getCardSprite().getY()) && (NewscreenY < (card.getCardSprite().getY() + card.getCardSprite().getHeight()));
     }
 
@@ -159,7 +165,6 @@ public class CardHandler {
     //if it is not the first turn then I use this method to change the sprites of the cards to get new random cards
     protected void setCardSprites() {
         int x=0;
-        System.out.println(Deck.getDeckList().size());
         randomSpriteList.clear();
         addSprites();
         if(notFirst){
@@ -172,6 +177,31 @@ public class CardHandler {
                 spritePos.add(getRandomSprite());
                 spritePos.get(i).setPosition(x, 250);
                 x+=105;
+            }
+        }
+    }
+
+    public void adjustCardLocation(){
+        //if a card is inside a cardslot and it is released move it into the middle of the slot
+        for(int i=0; i<5; i++){
+            if(insideCardSlot(clickedCard, cardSlotPos.get(i)) && selectedCards[i]==null){
+                if(isClicked){
+                    selectedCards[counter]=null;
+                    isClicked=false;
+                }
+                selectedCards[i]=clickedCard;
+                isInside=true;
+                clickedCard.getCardSprite().setPosition(cardSlotPos.get(i).getCardSlotSprite().getX()+getCardSlotCenterX(cardSlotPos.get(i))-getCardCenterX(clickedCard), cardSlotPos.get(i).getCardSlotSprite().getY()+getCardSlotCenterY(cardSlotPos.get(i))-getCardCenterY(clickedCard));
+                counter=i;
+                break;
+            }
+        }
+        //if it is outside then move it back to its default pos
+        if(!isInside){
+            clickedCard.getCardSprite().setPosition(clickedCard.getDefaultPosX(), clickedCard.getDefaultPosY());
+            if(isClicked){
+                selectedCards[counter]=null;
+                isClicked=false;
             }
         }
     }
@@ -198,12 +228,13 @@ public class CardHandler {
 
     //method to create the card-Objects
     protected void createInitialDecklist(){
+        int x=0;
         for(Sprite sprite: spritePos){
             name=spriteToName(sprite);
             pri=spriteToPri(sprite);
-            System.out.println(name+" "+pri);
             listCard=new Cards(x, 250, name, pri, sprite);
             Deck.getDeckList().add(listCard);
+            x+=105;
         }
     }
 
@@ -218,7 +249,6 @@ public class CardHandler {
             listCard=new Cards(x, 250, name, pri,spritePos.get(i));
             Deck.getDeckList().add(listCard);
             x+=105;
-            System.out.println(name + " " +pri);
         }
     }
 
@@ -265,7 +295,6 @@ public class CardHandler {
     //returns a random sprite form the spritesList , uses the rng method
     private Sprite getRandomSprite(){
         int v= rng();
-        //System.out.println(randomSpriteList.size());
         Sprite random = randomSpriteList.get(v);
         randomSpriteList.remove(v);
         return random;
@@ -284,17 +313,14 @@ public class CardHandler {
                 if(selected!=null){
                     if(card.getSprite()==selected.getCardSprite()){
                         locked=true;
-                       //System.out.println("locked!");
                         break;
                     }
                 }
             }
             if(!locked){
                 randomSpriteList.add(card.getSprite());
-               // System.out.println("ADDED: " + CardValues.values()[i].getSprite().getTexture().toString());
             }
         }
-        //System.out.println(randomSpriteList.size());
     }
 
     //method that empties the selectedCards array, that is used when an turn is over
@@ -306,12 +332,14 @@ public class CardHandler {
     }
 
     public void lockDown(){
-        if(cardDelt>5){
-            cardDelt--;
+        if(robot.getDamage() < 5){
+            cardDelt = 9 - robot.getDamage();
         }else{
-            if(cardSlotLock<5){
+            cardDelt = 9 - robot.getDamage();
+            cardSlotLock = robot.getDamage() - 4;
+            /*if(cardSlotLock<5){
                 cardSlotLock++;
-            }
+            }*/
         }
     }
 
@@ -340,6 +368,14 @@ public class CardHandler {
     }
 
     public boolean getisDone(){
+        if (RoboRallyDemo.amIAlive()) {
+            return isDone;
+        }
+        else {
+            return true;
+        }
+    }
+    public boolean newTurn(){
         return isDone;
     }
 
@@ -348,5 +384,10 @@ public class CardHandler {
             sprite.draw(batch);
         }
     }
+    public int getCardDelt(){return cardDelt;}
+
+    public void setCardDelt(int cardDelt) {this.cardDelt = cardDelt;}
+
+    public void setIsDone(boolean isDone) {this.isDone = isDone;}
 }
 

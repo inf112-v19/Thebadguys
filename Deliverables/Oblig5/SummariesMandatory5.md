@@ -14,3 +14,19 @@ I dag var Tord, Erlend, Christian og André til stedet. Vi jobbet med å merge a
 
 ### Arbeidssammendrag 23.04
 I dag var Wim, Erlend og Christian til stedet. Vi snakket om fremgangen på server/client, og Wim jobbet med å rydde opp i koden i Robot, for å lage nye objekter, og kunne utvikle effektive tester.
+
+### Arbeidssammendrag 25.04
+I dag var alle tilstede, Erlend og André jobbet med AI, Christian jobbet med serveren, Tord jobbet med knapper generelt, og Wim reorganiserte robot og ryddet i koden.
+
+### Arbeidssemdrag 26.04
+I dag var alle tilstedet, Christian og Erlend jobbet med server og client, Tord jobbet videre med knapper, André jobbet videre med AI og Wim fortsatte med å lage nye objekter for å rydde og objektorientere koden.
+
+### Arbeidssammendrag 30.04
+I dag var alle tilstede, Erlend og Christian jobbet videre med server og multiplayer, André jobbet med robotlaser, Wim jobbet med å objektorientere koden. Tord gikk til kunden (Siv) for å oppklare hvordan det endelige produktet skulle fungere.
+
+### Arbeidssammendrag 01.05
+I dag var alle tilstede untatt André, vi fikk singeplayer til å fungere sammen med AI, wim jobbet med test robot klasse for å teste robot. 
+Videre jobbet vi med å merge.
+
+### Arbeiddssammendrag 02.05
+I dag var alle tilstede, Christian og Erlend jobbet med multiplayer og server, Tord jobbet med powerdown, André jobbet med at robot og AI kunne skyte laser på hverandre, Wim jobbet med tester. Vi merget også alt arbeidet vi hadde gjort på hver vår branch slik at programmet skulle fungere med alle funksjonene.
