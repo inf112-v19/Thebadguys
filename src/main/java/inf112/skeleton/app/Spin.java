@@ -8,7 +8,7 @@ public class Spin extends BoardElement {
         super(map);
     }
 
-    public static void doSpin(Robot robot){
+    public static void doSpin(IRobot robot){
 
         int posX = robot.getPosX();
         int posY = robot.getPosY();

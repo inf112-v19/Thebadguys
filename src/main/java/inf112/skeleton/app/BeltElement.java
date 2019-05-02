@@ -11,7 +11,7 @@ public abstract class BeltElement extends BoardElement{
          super (map);
     }
 
-    public static int checkConveyor(Direction dir, Robot robot) {
+    public static int checkConveyor(Direction dir, IRobot robot) {
 
         int posX = robot.getPosX();
         int posY = robot.getPosY();
@@ -36,7 +36,7 @@ public abstract class BeltElement extends BoardElement{
         } // add check for a second robot on the same conveyer target, if so move them both to original position
     }
 
-    public static int canMoveConveyor(Direction dir, Robot robot) {
+    public static int canMoveConveyor(Direction dir, IRobot robot) {
         if (checkConveyor(dir, robot) == 1) {
             moveConveyor(dir, robot);
             return 1;
@@ -55,26 +55,26 @@ public abstract class BeltElement extends BoardElement{
         }
     }
 
-    public static void moveConveyor(Direction dir, Robot robot) {
+    public static void moveConveyor(Direction dir, IRobot robot) {
 
         int posX = robot.getPosX();
         int posY = robot.getPosY();
 
         if (dir == Direction.NORTH) {
             robot.setPosY(++posY);
-            robot.sprite.setPosition(robot.sprite.getX(), robot.sprite.getY() + (1 * (robot.getTilePixelWidth() / 6)));
+            robot.moveSprite(robot.getSprite().getX(), robot.getSprite().getY() + (1 * (robot.getTilePixelHeight() / 6)));
         }
         else if (dir == Direction.EAST) {
             robot.setPosX(++posX);
-            robot.sprite.setPosition(robot.sprite.getX() + (1 * (robot.getTilePixelWidth() / 6)), robot.sprite.getY());
+            robot.moveSprite(robot.getSprite().getX() + (1 * (robot.getTilePixelWidth() / 6)), robot.getSprite().getY());
         }
         else if (dir == Direction.SOUTH) {
             robot.setPosY(--posY);
-            robot.sprite.setPosition(robot.sprite.getX(), robot.sprite.getY() - (1 * (robot.getTilePixelWidth() / 6)));
+            robot.moveSprite(robot.getSprite().getX(), robot.getSprite().getY() - (1 * (robot.getTilePixelHeight() / 6)));
         }
         else if (dir == Direction.WEST) {
             robot.setPosX(--posX);
-            robot.sprite.setPosition(robot.sprite.getX() - (1 * (robot.getTilePixelWidth() / 6)), robot.sprite.getY());
+            robot.moveSprite(robot.getSprite().getX() - (1 * (robot.getTilePixelWidth() / 6)), robot.getSprite().getY());
         }
         if (map.isHole(posX, posY)) {
             System.out.println("You fell into a hole!");

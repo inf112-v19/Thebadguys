@@ -10,7 +10,7 @@ public class Belt extends BeltElement {
         super(map);
     }
 
-    public static void doBelt(Robot robot) {
+    public static void doBelt(IRobot robot) {
         int posX = robot.getPosX();
         int posY = robot.getPosY();
 

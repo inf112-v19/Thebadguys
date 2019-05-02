@@ -369,7 +369,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         for (int i = 0; i < 9; i++) {
             //"Models"+(i+1)+".png";
             //String path = "Models/AlleBevegelseKortUtenPrioritet/genericCard.png";
-            //spritePos.add(setSprite(path));
+            //spritePos.add(moveSprite(path));
             spritePos.add(getRandomSprite());
             spritePos.get(i).setPosition(x, 250);
             x+=105;
