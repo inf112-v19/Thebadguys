@@ -45,7 +45,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Cards statBoard0;
     private Cards card;
 
-    private Cards selectedCards[];
+    private static Cards selectedCards[];
 
     private boolean firstRund = true;
     private mainMenu mainMenu;
@@ -762,7 +762,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
     }
 
-    private boolean areCardSlotsFull() {
+    public static boolean areCardSlotsFull() {
         if(selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && amIAlive()) {
             return true;
         }
