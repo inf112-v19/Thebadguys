@@ -356,7 +356,8 @@ public class AIRobot{
         if (gameMap.isSpinRight(this.posX, this.posY)) {
             this.rotate_right();
         }
-        gameMap.fireLasers(this);
+
+        //gameMap.fireLasers(this);
         //add method to fire my laser
         if (gameMap.isCheckpoint(this.posX, this.posY, this.flagsPassed)) {
             this.flagsPassed += 1;
