@@ -200,6 +200,10 @@ public class Server implements Runnable{
                 sendToAllButMe("/w//e/",0);
             }
         }
+        else if (string.startsWith("/d/")) {
+            int id = Integer.parseInt(string.split("/d/|/e/")[1]);
+            sendToAllButMe("/d/" + id + "/e/", id);
+        }
         else if (string.startsWith("/c/") && (started || clientCount() == 8)) { // a connection handler for full server
             string = "/f/" + "server is full or started" + "/e/";
             send(string.getBytes(), packet.getAddress(), packet.getPort());

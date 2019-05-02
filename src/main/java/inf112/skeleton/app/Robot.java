@@ -375,7 +375,8 @@ public class Robot {
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
             System.out.println("You lost the game");
-            System.exit(0); // TODO if an AI dies this closes the game for everybody
+            //System.exit(0); // TODO if an AI dies this closes the game for everybody
+            RoboRallyDemo.killMe(RoboRallyDemo.getID(), false);
         } else {
             System.out.println("you died");
             // moves the sprite the appropriate amount in both x and y direction to the robots backup

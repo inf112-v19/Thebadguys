@@ -120,6 +120,9 @@ public class Client extends JFrame implements Runnable {
                         clientCount = Integer.parseInt(message);
                         mainMenu.setMainRunning(false);
                         started = true;
+                    } else if (message.startsWith("/d/")) {
+                        int id = Integer.parseInt(message.split("/d/|/e/")[1]);
+                        RoboRallyDemo.setDead(id);
                     } else if (message.startsWith("/w/")) { // TODO may remove
                         try {
                             Thread.sleep(200);

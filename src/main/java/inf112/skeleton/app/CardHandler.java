@@ -358,7 +358,12 @@ public class CardHandler {
     }
 
     public boolean getisDone(){
-        return isDone;
+        if (RoboRallyDemo.amIAlive()) {
+            return isDone;
+        }
+        else {
+            return true;
+        }
     }
     public boolean newTurn(){
         return isDone;

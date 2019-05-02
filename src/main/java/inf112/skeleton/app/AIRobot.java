@@ -11,6 +11,7 @@ import map.GameMap;
 import map.MapTile;
 
 public class AIRobot{
+    private int id;
     private CardHandler cardHandler;
     private Sprite sprite;
     private Boolean alive = true;
@@ -59,9 +60,11 @@ public class AIRobot{
 
 
     public void doTurn(int turn){
-        makeDeck();
-        fillDeck();
-        move(selectedCards[turn]);
+        if (RoboRallyDemo.amIAliveAI(id)) {
+            makeDeck();
+            fillDeck();
+            move(selectedCards[turn]);
+        }
     }
 
     public AIRobot(Sprite sprite){
@@ -74,11 +77,12 @@ public class AIRobot{
         this.posY = checkpoint[1];
     }
 
-    public AIRobot(Sprite sprite, int[] checkpoint){
+    public AIRobot(Sprite sprite, int[] checkpoint, int id){
         this.sprite=sprite;
         this.checkpoint = checkpoint;
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
+        this.id = id;
     }
 
     public Boolean getAlive() {
@@ -385,7 +389,8 @@ public class AIRobot{
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
             System.out.println("You lost the game");
-            System.exit(0);
+            //System.exit(0);
+            RoboRallyDemo.killMe(id, true);
         }
         else {
             System.out.println("you died");
