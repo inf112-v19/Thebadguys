@@ -39,12 +39,17 @@ public class Robot  implements IRobot{
     Belt belt = new Belt(gameMap);
     Spin spin = new Spin(gameMap);
     private boolean initPowerdown = false;
-    private boolean executePowerdown = false;
-
-    private boolean powerdown = false;
+    private boolean execPowerdown = false;
 
     public Robot(Sprite sprite) {
         this.sprite = sprite;
+    }
+
+    public Robot(int[] checkpoint) {
+        this.checkpoint = checkpoint;
+        this.posX = checkpoint[0];
+        this.posY = checkpoint[1];
+        //this.game = game;
     }
 
     public Robot(Sprite sprite, int[] checkpoint) {
@@ -164,14 +169,6 @@ public class Robot  implements IRobot{
 
     public void setLives(int newLives) {
         this.lives = newLives;
-    }
-
-    public Boolean getPowerdown() {
-        return powerdown;
-    }
-
-    public void setPowerdown(boolean Powerdown) {
-        this.powerdown = Powerdown;
     }
 
     public void rotate_right() {
@@ -380,22 +377,24 @@ public class Robot  implements IRobot{
         }
     }
 
-    public void setExecutePowerdown(boolean ExecutePowerdown) {
-        this.executePowerdown = ExecutePowerdown;
-    }
 
+
+
+
+    public boolean getExecPowerdown() {return execPowerdown;}
+    public void setExecPowerdown(boolean execPowerdown) {this.execPowerdown = execPowerdown;}
+
+    public Boolean getInitPowerdown() {
+        return initPowerdown;
+    }
     public void setInitPowerdown(boolean initPowerdown) {this.initPowerdown = initPowerdown;}
-
-    public boolean getInitPowerdown() {
-        return this.initPowerdown;
-    }
 
     public void doPowerdown() {
         damage = 0;
-        cardHandler.setCardDelt(9);
+        RoboRallyDemo.getCardHandler().setCardDelt(9);
+        RoboRallyDemo.getCardHandler().powerdownCards();
         System.out.println("Powerdowning");
-        System.out.println("Current damage: " +getDamage());
-        System.out.println(cardHandler.getCardDelt());
-
+        setExecPowerdown(false);
+        setInitPowerdown(false);
     }
 }

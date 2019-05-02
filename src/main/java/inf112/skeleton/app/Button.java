@@ -27,6 +27,7 @@ public class Button implements IButton {
         this.buttonSprite = buttonSprite;
         this.name = name;
         this.cardHandler = RoboRallyDemo.getCardHandler();
+        this.robot = RoboRallyDemo.getRobot();
         createButton(posX, posY);
     }
 
@@ -54,18 +55,28 @@ public class Button implements IButton {
             switch (name) {
 
                 case "powerDown_inactive":
+                    System.out.println(robot);
+                    if (!RoboRallyDemo.getSinglePlayerMode()) {
+                        for (int i = 0; i < RoboRallyDemo.getClientCount(); i++) {
+                            if (!RoboRallyDemo.getRobots()[i].getInitPowerdown()) {
+                                RoboRallyDemo.getRobots()[i].setInitPowerdown(true);
+                                System.out.println("Powerdown initiated for a robot"); // TODO remove
+                            }
+                        }
+                    }
 
-                    if (!robot.getInitPowerdown()) { // perform check if single or multiplayer
+                    else if (!robot.getInitPowerdown()) { // perform check if single or multiplayer
+                        System.out.println("in singleplayer");
                         robot.setInitPowerdown(true);
-                        System.out.println("Hey it worked"); // TODO remove
+                        System.out.println("Powerdown initiated for player"); // TODO remove
                         return true;
                     }
 
                 case "endRoundButton":
-                    Cards selectedCards[] = cardHandler.getSelectedCards();
-                    String sendCards = "";
                     cardHandler.setisDone(true);
                     if (!RoboRallyDemo.getSinglePlayerMode()) {
+                        Cards selectedCards[] = cardHandler.getSelectedCards();
+                        String sendCards = "";
                         for(int i = 0; i < 5; i++) {
                             if (selectedCards[i] != null) {
                                 sendCards += selectedCards[i].getName() + "~" + selectedCards[i].getPriority() + "~";

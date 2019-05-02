@@ -31,10 +31,6 @@ public interface IRobot {
 
     void canMove(int loops, int amount);
 
-    Boolean getPowerdown();
-
-    void setPowerdown(boolean Powerdown);
-
     void setPosX(int newX);
 
     void setPosY(int newY);
