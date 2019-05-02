@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 //import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
@@ -51,6 +52,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private mainMenu mainMenu;
 
     private boolean firstround=true;
+
+    private ArrayList<Sprite> statBoardList = new ArrayList<>();
 
     private SpriteBatch batch;
     private Texture texture;
@@ -174,7 +177,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         font = new BitmapFont();
         //create the end turn button
         endTurnButtonCreation(700, 510);
-        statBoardCreation(700, 910);
+        statBoardCreation(700, 1030);
 
         //set the position of all the cardsprites
         cardHandler.setCardSprites();
@@ -266,7 +269,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 //draw Cards
                 cardHandler.drawCards();
             }
-            statBoard0.getCardSprite().draw(batch);
+            //statBoard0.getCardSprite().draw(batch);
 
             drawStats();
 
@@ -560,16 +563,35 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     //creation og the stat-board
     public void statBoardCreation ( float x, float y){
-        Texture statTexture = new Texture(Gdx.files.internal("Models/stats.PNG"));
+        float v=y;
+        Texture statTexture = new Texture(Gdx.files.internal("Models/Topofstatboard.PNG"));
         statBoardSprite = new Sprite(statTexture);
         statBoardSprite.setPosition(x, y);
         statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
+        statBoardList.add(statBoardSprite);
+
+        if(!singlePlayerMode){
+            for(int i =0; i<clientCount; i++){
+
+            }
+        }else{
+            for(int i =0; i<AIs.length+1; i++){
+                v-=27;
+                Texture statTexture0 = new Texture(Gdx.files.internal("Models/actualstatboard.PNG"));
+                statBoardSprite = new Sprite(statTexture0);
+                statBoardSprite.setPosition(x, v);
+                //statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
+                statBoardList.add(statBoardSprite);
+            }
+        }
+
     }
 
     //draw the stat font on top of the board
     public void drawStats(){
         if (!singlePlayerMode) {
             for(int i = 0; i < clientCount; i++){
+                statBoardList.get(i).draw(batch);
                 if (robots[i] != null) {
                     int hp = 9 - robots[i].getDamage();
                     font.setColor(1, 0, 0, 1);
@@ -590,6 +612,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 }
             }
         } else {
+            for (int i=0; i<statBoardList.size(); i++){
+                statBoardList.get(i).draw(batch);
+            }
             if (robot != null) {
                 int hp = 9 - robot.getDamage();
                 font.setColor(0, 0, 0, 1);
@@ -605,10 +630,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 if (AIs[i] != null) {
                     int hpAI = 9 - AIs[i].getDamage();
                     String AI = colors[i+1] + " (AI)";
-                    font.draw(batch, AI + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 25);
-                    font.draw(batch, "" + hpAI, statBoard0.getCardSprite().getX() + 90, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 25);
-                    font.draw(batch, "" + AIs[i].getLives(), statBoard0.getCardSprite().getX() + 175, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 25);
-                    font.draw(batch, "" + AIs[i].getFlagsPassed(), statBoard0.getCardSprite().getX() + 250, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 25);
+                    font.draw(batch, AI + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
+                    font.draw(batch, "" + hpAI, statBoard0.getCardSprite().getX() + 90, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
+                    font.draw(batch, "" + AIs[i].getLives(), statBoard0.getCardSprite().getX() + 175, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
+                    font.draw(batch, "" + AIs[i].getFlagsPassed(), statBoard0.getCardSprite().getX() + 250, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
                 }
             }
         }
