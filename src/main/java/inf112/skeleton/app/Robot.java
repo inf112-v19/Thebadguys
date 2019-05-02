@@ -1,4 +1,5 @@
 package inf112.skeleton.app;
+
 import Grid.Direction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -38,12 +39,17 @@ public class Robot  implements IRobot{
     Belt belt = new Belt(gameMap);
     Spin spin = new Spin(gameMap);
     private boolean initPowerdown = false;
-    private boolean executePowerdown = false;
-
-    private boolean powerdown = false;
+    private boolean execPowerdown = false;
 
     public Robot(Sprite sprite) {
         this.sprite = sprite;
+    }
+
+    public Robot(int[] checkpoint) {
+        this.checkpoint = checkpoint;
+        this.posX = checkpoint[0];
+        this.posY = checkpoint[1];
+        //this.game = game;
     }
 
     public Robot(Sprite sprite, int[] checkpoint) {
@@ -165,14 +171,6 @@ public class Robot  implements IRobot{
         this.lives = newLives;
     }
 
-    public Boolean getPowerdown() {
-        return powerdown;
-    }
-
-    public void setPowerdown(boolean Powerdown) {
-        this.powerdown = Powerdown;
-    }
-
     public void rotate_right() {
         if (this.getDirection() == Direction.WEST) {
             this.dir = Direction.NORTH;
@@ -276,6 +274,7 @@ public class Robot  implements IRobot{
             } else if (this.damage == 1) {
                 this.damage = 0;
             }
+            else if(this.damage == 1) {this.damage = 0;}
         }
     }
 
@@ -346,7 +345,6 @@ public class Robot  implements IRobot{
         }
     }
 
-
     public int checkConveyer(Direction dir) {
         if (dir == Direction.NORTH && this.posY + 1 == 12) {
             return -1;
@@ -379,22 +377,24 @@ public class Robot  implements IRobot{
         }
     }
 
-    public void setExecutePowerdown(boolean ExecutePowerdown) {
-        this.executePowerdown = ExecutePowerdown;
-    }
 
+
+
+
+    public boolean getExecPowerdown() {return execPowerdown;}
+    public void setExecPowerdown(boolean execPowerdown) {this.execPowerdown = execPowerdown;}
+
+    public Boolean getInitPowerdown() {
+        return initPowerdown;
+    }
     public void setInitPowerdown(boolean initPowerdown) {this.initPowerdown = initPowerdown;}
-
-    public boolean getInitPowerdown() {
-        return this.initPowerdown;
-    }
 
     public void doPowerdown() {
         damage = 0;
-        cardHandler.setCardDelt(9);
+        RoboRallyDemo.getCardHandler().setCardDelt(9);
+        RoboRallyDemo.getCardHandler().powerdownCards();
         System.out.println("Powerdowning");
-        System.out.println("Current damage: " +getDamage());
-        System.out.println(cardHandler.getCardDelt());
-
+        setExecPowerdown(false);
+        setInitPowerdown(false);
     }
 }

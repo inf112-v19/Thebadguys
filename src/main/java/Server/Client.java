@@ -162,7 +162,7 @@ public class Client extends JFrame implements Runnable {
         order = new int[clientCount*5];
         for(int i = 0; i < order.length; i++){
             order[i] = Integer.parseInt(orde.split("#")[i]);
-            System.out.println(order[i]); // TODO remove
+            //System.out.println(order[i]); // TODO remove
         }
     }
 
