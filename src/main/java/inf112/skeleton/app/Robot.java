@@ -35,7 +35,7 @@ public class Robot {
     private int turn = RoboRallyDemo.getTurn();
 
     private boolean initPowerdown = false;
-    private boolean executePowerdown = false;
+    private boolean execPowerdown = false;
 
     public Robot(Sprite sprite) {
         this.sprite = sprite;
@@ -46,7 +46,6 @@ public class Robot {
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
         //this.game = game;
-        //this.cardHandler = game.getCardHandler();
     }
 
     public Robot(Sprite sprite, int[] checkpoint) {
@@ -501,27 +500,20 @@ public class Robot {
         }
     }
 
+    public boolean getExecPowerdown() {return execPowerdown;}
+    public void setExecPowerdown(boolean execPowerdown) {this.execPowerdown = execPowerdown;}
+
     public Boolean getInitPowerdown() {
         return initPowerdown;
     }
-
-
-    public Boolean getExecutePowerdown() {
-        return executePowerdown;
-    }
-
-    public void setExecutePowerdown(boolean ExecutePowerdown) {
-        this.executePowerdown = ExecutePowerdown;
-    }
-
     public void setInitPowerdown(boolean initPowerdown) {this.initPowerdown = initPowerdown;}
 
     public void doPowerdown() {
         damage = 0;
-        cardHandler.setCardDelt(9);
+        RoboRallyDemo.getCardHandler().setCardDelt(9);
+        RoboRallyDemo.getCardHandler().powerdownCards();
         System.out.println("Powerdowning");
-        System.out.println("Current damage: " +getDamage());
-        System.out.println(cardHandler.getCardDelt());
-
+        setExecPowerdown(false);
+        setInitPowerdown(false);
     }
 }

@@ -124,6 +124,12 @@ public class CardHandler {
         selectedCards[0]=null;
     }
 
+    public void powerdownCards() {
+        for (int i = 0; i < 5; i++) {
+            selectedCards[i] = new Cards(10000, 10000, "powerdown", 0);
+        }
+    }
+
     //the x cordinate at the centre of a card
     protected Float getCardCenterX(Cards card){
         return card.getCardSprite().getWidth()/2;

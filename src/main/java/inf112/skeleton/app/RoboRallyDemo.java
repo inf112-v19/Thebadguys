@@ -66,7 +66,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static Robot[] robots = new Robot[8];
     private Sprite[] sprites = new Sprite[8];
     private Texture[] textures = new Texture[8];
-    private int clientCount;
+    private static int clientCount;
     private String[] colors = {"Gold", "Cyan", "Green", "Red", "Blue", "Purple", "Basil", "Lemon"};
     private static int ID;
     private static boolean ready[] = {false, false, false, false, false, false, false, false};
@@ -372,9 +372,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return false;
     }
 
-    public Robot getRobot() {
+    public static Robot getRobot() {
         return robot;
     }
+
+    public static Robot[] getRobots() {return robots;}
 
     //if a card is inside a cardslot and it is released move it into the middle of the slot,
     //if it is outside then move it back to its default pos
@@ -549,7 +551,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
 
-
+    public static int getClientCount() {return clientCount;}
 
 
     //creation og the stat-board
@@ -634,6 +636,19 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
 
     public void doTurn () {
+        if (singlePlayerMode) {
+            if (robot.getExecPowerdown() && turn == 0) {
+                robot.doPowerdown();
+            }
+        }
+        if (!singlePlayerMode) {
+            for (int i = 0; i < clientCount; i++) {
+                if (robots[i].getExecPowerdown() && turn == 0) {
+                    robots[i].doPowerdown();
+                }
+            }
+        }
+
         selectedCards = cardHandler.getSelectedCards();
 
         if (areCardSlotsFull() && cardHandler.getisDone() && checkMode()) {
@@ -665,7 +680,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 cardHandler.setNotFirst(true);
                 cardHandler.nullyFy();
                 checkLock(selectedCards);
-                cardHandler.setisDone(false);
+                if (!robot.getInitPowerdown()) {
+                    cardHandler.setisDone(false);
+                }
                 cardHandler.setCardSprites();
 
                 System.out.println("\n");
@@ -682,6 +699,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if (tick % 40 == 0) {
                 if (singlePlayerMode) {
                     if (robot != null && robot.getAlive()) {
+                        printSelectedCards();
                         robot.move(selectedCards[turn].getName());
                     }
                     for (int i = 0; i < AIs.length; i++) {
@@ -700,6 +718,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                             AIs[i].getSprite().draw(batch);
                         }
                     }
+                    if (robot.getInitPowerdown() && turn == 5) {
+                        robot.setExecPowerdown(true);
+                    }
 
                 }
                 else if (!singlePlayerMode) {
@@ -709,7 +730,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                         }
                     }
                     turn++;
+
                     for (int i = 0; i < clientCount; i++) {
+                        if (turn == 5 && robots[i].getInitPowerdown()) {
+                            robots[i].setExecPowerdown(true);
+                        }
                         if (robots[i] != null) {
                             robots[i].getSprite().draw(batch);
                         }
