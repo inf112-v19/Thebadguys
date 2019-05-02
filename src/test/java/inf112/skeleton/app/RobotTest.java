@@ -1,21 +1,18 @@
 package inf112.skeleton.app;
 
 import Grid.Direction;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
 
 public class RobotTest {
 
     int posX = 0;
     int posY = 0;
     int[] startpos;
-    Robot robot;
+    IRobot robot;
 
 
     @Test
@@ -23,7 +20,7 @@ public class RobotTest {
         posX = 0;
         posY = 0;
         startpos = new int[]{Math.round(posX), Math.round(posY)};
-        robot = new Robot(startpos);
+        robot = new TestBot(startpos);
         assertEquals(robot.getCheckpoint(), startpos);
         assertEquals(robot.getPosX(), 0);
         assertEquals(robot.getPosY(), 0);
@@ -33,12 +30,27 @@ public class RobotTest {
         assertEquals(robot.getFlagsPassed(), 0);
     }
 
+
     @Test
-    public void damageLivesTest() {
+    public void robotGettersSettersTest(){
+
+        startpos = new int[]{Math.round(posX), Math.round(posY)};
+        robot = new TestBot(startpos);
+
         robot.setDamage(0);
+        assertEquals(robot.getDamage(), 0);
         robot.setDamage(3);
         assertEquals(robot.getDamage(), 3);
         robot.setDamage(9);
+        assertEquals(robot.getDamage(), 9);
+    }
+
+    @Test
+    public void damageLivesTest(){
+
+        startpos = new int[]{Math.round(posX), Math.round(posY)};
+        robot = new TestBot(startpos);
+
         robot.takeDamage();
         assertEquals(robot.getLives(), 2);
     }

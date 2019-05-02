@@ -14,7 +14,7 @@ public abstract class BoardElement {
 
     }
 
-    public static void rotate_right(Robot robot) {
+    public static void rotate_right(IRobot robot) {
         if (robot.getDirection() == Direction.WEST) {
             robot.setDirection(Direction.NORTH);
         } else if (robot.getDirection() == Direction.NORTH) {
@@ -24,10 +24,10 @@ public abstract class BoardElement {
         } else if (robot.getDirection() == Direction.SOUTH) {
             robot.setDirection(Direction.WEST);
         }
-        robot.sprite.rotate(-90);
+        robot.rotateSprite(-90);
     }
 
-    public static void rotate_left(Robot robot) {
+    public static void rotate_left(IRobot robot) {
         if (robot.getDirection() == Direction.NORTH) {
             robot.setDirection(Direction.WEST);
         } else if(robot.getDirection()==Direction.WEST) {
@@ -37,7 +37,7 @@ public abstract class BoardElement {
         } else if(robot.getDirection()==Direction.EAST) {
             robot.setDirection(Direction.NORTH);
         }
-        robot.sprite.rotate(90);
+        robot.rotateSprite(90);
     }
 
 

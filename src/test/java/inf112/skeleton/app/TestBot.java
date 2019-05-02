@@ -1,17 +1,13 @@
 package inf112.skeleton.app;
+
 import Grid.Direction;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
-import map.MapTile;
-import inf112.skeleton.app.ExpressBelt;
 
-public class Robot  implements IRobot{
+public class TestBot implements IRobot {
     private CardHandler cardHandler;
-    private Sprite sprite;
+    public Sprite sprite;
     private Boolean alive = true;
     private int posX = 0;
     private int posY = 0;
@@ -19,18 +15,12 @@ public class Robot  implements IRobot{
     private int flagsPassed = 0;
     private int lives = 3;
     private int damage = 0;
+    private int tilePixelWidth = 10;
+    private int tilePixelHeight = 10;
     private Direction dir = Direction.NORTH;
-    private float w = Gdx.graphics.getWidth() * 6;
-    private float h = Gdx.graphics.getHeight() * 6;
     private TiledMap tiledMap = RoboRallyDemo.getTiledMap();
     private GameMap gameMap = RoboRallyDemo.getIGameMap();
-    private MapProperties prop = tiledMap.getProperties();
-    private int mapWidth = prop.get("width", Integer.class);
-    private int mapHeight = prop.get("height", Integer.class);
-    private int tilePixelWidth = prop.get("tilewidth", Integer.class);
-    private int tilePixelHeight = prop.get("tileheight", Integer.class);
-    private int x1 = (((Math.round(w) - (tilePixelWidth * mapWidth)) / 2) + (tilePixelWidth / 2)) / 10 -100;
-    private int y1 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9 - 50;
+
     private int turn = RoboRallyDemo.getTurn();
 
     //Initiating Board element objects.
@@ -40,12 +30,7 @@ public class Robot  implements IRobot{
 
     private boolean powerdown = false;
 
-    public Robot(Sprite sprite){
-        this.sprite = sprite;
-    }
-
-    public Robot(Sprite sprite, int[] checkpoint){
-        this.sprite=sprite;
+    public TestBot(int[] checkpoint) {
         this.checkpoint = checkpoint;
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
@@ -87,30 +72,6 @@ public class Robot  implements IRobot{
         return this.damage;
     }
 
-    public int getX1(){
-        System.out.println(this.x1);
-        System.out.println(this.mapWidth);
-        System.out.println(this.mapHeight);
-        System.out.println(this.tilePixelWidth);
-        System.out.println(this.tilePixelHeight);
-        System.out.println(this.w);
-        System.out.println(this.h);
-        return this.x1;
-    }
-
-    public int getY1(){
-        System.out.println(this.y1);
-        return this.y1;
-    }
-
-    public void moveSprite(float x, float y){
-        this.sprite.setPosition(x, y);
-    }
-
-    public void rotateSprite(float z){
-        this.sprite.rotate(z);
-    }
-
     public int getTilePixelWidth(){
         return this.tilePixelWidth;
     }
@@ -119,9 +80,18 @@ public class Robot  implements IRobot{
         return this.tilePixelHeight;
     }
 
+
+    public void moveSprite(float x, float y){
+        this.sprite.setPosition(x, y);
+    }
+    public void rotateSprite(float z){
+        this.sprite.rotate(z);
+    }
+
     public void setTurn(int turn) {
         this.turn = turn;
     }
+
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
@@ -153,14 +123,6 @@ public class Robot  implements IRobot{
 
     public void setLives(int newLives) {
         this.lives = newLives;
-    }
-
-    public Boolean getPowerdown() {
-        return powerdown;
-    }
-
-    public void setPowerdown(boolean Powerdown) {
-        this.powerdown = Powerdown;
     }
 
     public void rotate_right() {
@@ -199,19 +161,15 @@ public class Robot  implements IRobot{
         Direction current_direction = this.getDirection();
         if (current_direction == Direction.NORTH) {
             this.setPosY(this.getPosY() + amount);
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + (amount * (this.tilePixelWidth / 6))); // temp moving sprite
         }
         else if (current_direction == Direction.EAST) {
             this.setPosX(this.getPosX() + amount);
-            this.sprite.setPosition(this.sprite.getX() + (amount * (this.tilePixelWidth / 6)), this.sprite.getY());
         }
         else if (current_direction == Direction.SOUTH) {
             this.setPosY(this.getPosY() - amount);
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - (amount * (this.tilePixelWidth / 6)));
         }
         else if (current_direction == Direction.WEST) {
             this.setPosX(this.getPosX() - amount);
-            this.sprite.setPosition(this.sprite.getX() - (amount * (this.tilePixelWidth / 6)), this.sprite.getY());
         }
         else {
             System.out.println("Something went terribly wrong");
@@ -293,16 +251,12 @@ public class Robot  implements IRobot{
             System.out.println("you died");
             // moves the sprite the appropriate amount in both x and y direction to the robots backup
             if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
-                this.sprite.setPosition(this.sprite.getX() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX())), this.sprite.getY() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY())));
             }
             else if(this.getPosX() >= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
-                this.sprite.setPosition(this.sprite.getX() - ((this.tilePixelWidth / 6) * (this.getPosX() - this.getCheckpoint()[0])), this.sprite.getY() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY())));
             }
             else if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() >= this.getCheckpoint()[1]) {
-                this.sprite.setPosition(this.sprite.getX() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX())), this.sprite.getY() - ((this.tilePixelWidth / 6) * (this.getPosY() - this.getCheckpoint()[1])));
             }
             else if(this.getPosX() >= this.getCheckpoint()[0] && this.getPosY() >= this.getCheckpoint()[1]) {
-                this.sprite.setPosition(this.sprite.getX() - ((this.tilePixelWidth / 6) * (this.getPosX() - this.getCheckpoint()[0])), this.sprite.getY() - ((this.tilePixelWidth / 6) * (this.getPosY() - this.getCheckpoint()[1])));
             }
             else {
                 System.out.println("Should definitely not be possible");
@@ -327,8 +281,9 @@ public class Robot  implements IRobot{
         if (this.damage < 10) {
             this.damage += 1;
             System.out.println("You now have" + this.damage);
-            cardHandler = RoboRallyDemo.getCardHandler();
-            cardHandler.lockDown();
+            //cardHandler = RoboRallyDemo.getCardHandler();
+            System.out.println(cardHandler);
+            //cardHandler.lockDown();
             System.out.println(this.damage);
         }
         else {
@@ -375,4 +330,13 @@ public class Robot  implements IRobot{
             }
         }
     }
+
+    public Boolean getPowerdown() {
+        return powerdown;
+    }
+
+    public void setPowerdown(boolean Powerdown) {
+        this.powerdown = Powerdown;
+    }
 }
+

@@ -2,7 +2,7 @@ package map;
 
 import Grid.Direction;
 import Grid.IGrid;
-import inf112.skeleton.app.Robot;
+import inf112.skeleton.app.IRobot;
 
 public class GameMap implements IGameMap {
     private IGrid<MapTile> tiles;
@@ -246,7 +246,7 @@ public class GameMap implements IGameMap {
         }
     }
 
-    public void fireLasers(Robot robot) {
+    public void fireLasers(IRobot robot) {
         for(int i = 0; i < tiles.getWidth(); i++) {
             for(int j = 0; j < tiles.getHeight(); j++) {
                 if(tiles.get(i, j) == MapTile.LASERNORTH) {
