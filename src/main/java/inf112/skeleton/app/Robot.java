@@ -1,4 +1,5 @@
 package inf112.skeleton.app;
+
 import Grid.Direction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -276,6 +277,7 @@ public class Robot  implements IRobot{
             } else if (this.damage == 1) {
                 this.damage = 0;
             }
+            else if(this.damage == 1) {this.damage = 0;}
         }
     }
 
@@ -345,7 +347,6 @@ public class Robot  implements IRobot{
             return 1;
         }
     }
-
 
     public int checkConveyer(Direction dir) {
         if (dir == Direction.NORTH && this.posY + 1 == 12) {

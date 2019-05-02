@@ -145,14 +145,11 @@ public class GameMap implements IGameMap {
         }
         else if (dir == Direction.SOUTH && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTHTOEAST) {
             return "Left";
-        }
-        else if (dir == Direction.SOUTH && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTHTOWEST) {
+        } else if (dir == Direction.SOUTH && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTSOUTHTOWEST) {
             return "Right";
-        }
-        else if (dir == Direction.WEST && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWESTTOSOUTH) {
+        } else if (dir == Direction.WEST && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWESTTOSOUTH) {
             return "Left";
-        }
-        else if (dir == Direction.WEST && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWESTTONORTH) {
+        } else if (dir == Direction.WEST && tiles.get(x, y) == MapTile.EXPRESSCONVEYERBELTWESTTONORTH) {
             return "Right";
         } else if (dir == Direction.NORTH && tiles.get(x, y) == MapTile.CONVEYERBELTNORTHTOWEST) {
             return "Left";
@@ -178,7 +175,6 @@ public class GameMap implements IGameMap {
         if (tiles.get(x, y) == MapTile.HOLE) {
             return true;
         }
-
         return false;
     }
 
@@ -224,7 +220,15 @@ public class GameMap implements IGameMap {
         return 0;
     }
 
-    public void fireLasers(IRobot robot) {
+    public Boolean isLaser(int x, int y) {
+        if (tiles.get(x, y) == MapTile.LASER) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void fireLasers(Robot robot) {
         for (int i = 0; i < tiles.getWidth(); i++) {
             for (int j = 0; j < tiles.getHeight(); j++) {
                 if (tiles.get(i, j) == MapTile.LASERNORTH) {
@@ -239,7 +243,7 @@ public class GameMap implements IGameMap {
                         }
                         tempY1++;
                     }
-                } else if(tiles.get(i, j) == MapTile.LASEREAST) {
+                } else if (tiles.get(i, j) == MapTile.LASEREAST) {
                     int targetHit = 0;
                     int tempX1 = i;
                     while (targetHit == 0 && tempX1 != 12) {
@@ -279,6 +283,7 @@ public class GameMap implements IGameMap {
             }
         }
     }
+
     public void fireLasers(AIRobot robot) {
         for (int i = 0; i < tiles.getWidth(); i++) {
             for (int j = 0; j < tiles.getHeight(); j++) {
@@ -335,7 +340,7 @@ public class GameMap implements IGameMap {
         }
     }
 
-    public Boolean wallNearby(Direction dir, int x, int y, int amount) {
+    public Boolean wallNearby(Direction dir, int x, int y) {
         if (dir == Direction.NORTH && tiles.get((double) x, y + 0.5) == MapTile.WALL) {
             return true;
         } else if (dir == Direction.EAST && tiles.get(x + 0.5, (double) y) == MapTile.WALL) {
@@ -343,30 +348,8 @@ public class GameMap implements IGameMap {
         } else if (dir == Direction.SOUTH && tiles.get((double) x, y - 0.5) == MapTile.WALL) {
             return true;
         } else if (dir == Direction.WEST && tiles.get(x - 0.5, (double) y) == MapTile.WALL) {
-            return true;
-        } else if (dir == Direction.EAST && amount == -1 && tiles.get(x - 0.5, (double) y) == MapTile.WALL){
-            return true;
-        }else if (dir == Direction.SOUTH && amount == -1 && tiles.get(x, (double) y + 0.5) == MapTile.WALL){
-            return true;
-        }else if (dir == Direction.WEST && amount == -1 && tiles.get(x + 0.5, (double) y) == MapTile.WALL){
-            return true;
-        }else if (dir == Direction.NORTH && amount == -1 && tiles.get(x, (double) y-0.5) == MapTile.WALL){
             return true;
         } else {
-            return false;
-        }
-    }
-
-    public Boolean convWallNearby(Direction dir, int x, int y) {
-        if (dir == Direction.NORTH && tiles.get((double) x, y + 0.5) == MapTile.WALL) {
-            return true;
-        } else if (dir == Direction.EAST && tiles.get(x + 0.5, (double) y) == MapTile.WALL) {
-            return true;
-        } else if (dir == Direction.SOUTH && tiles.get((double) x, y - 0.5) == MapTile.WALL) {
-            return true;
-        } else if (dir == Direction.WEST && tiles.get(x - 0.5, (double) y) == MapTile.WALL) {
-            return true;
-        }  else {
             return false;
         }
     }
@@ -436,41 +419,5 @@ public class GameMap implements IGameMap {
         return tiles.getWidth();
     }
 
-    public boolean isConveyer(int x, int y) {
-        if (tiles.get(x, y) == MapTile.CONVEYERBELTNORTH) {
-            return true;
-        }
-        else if (tiles.get(x, y) == MapTile.CONVEYERBELTSOUTH){
-            return true;
-        }
-        else if (tiles.get(x, y) == MapTile.CONVEYERBELTEAST){
-            return true;
-        }
-        else if (tiles.get(x, y) == MapTile.CONVEYERBELTWEST){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    // Useful in testing and generally visuallising the map.
-    public void printMap(){
-        for (int j = this.getHeight() - 1; j >= 0; j--){
-            for (int i = 0; i < this.getWidth(); i++){
-                System.out.print(tiles.get(i, j));
-            }
-            System.out.println();
-        }
-    }
-
-    // Creates a map with entirely random MapTile elements. Useful for testing.
-    public void randomizeMap(){
-        for(int i = 0; i < this.getHeight(); i++){
-            for(int j = 0; j < this.getWidth(); j++){
-                tiles.set(i, j, MapTile.getRandomTile());
-            }
-        }
-    }
 }
 
