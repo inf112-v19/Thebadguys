@@ -555,7 +555,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     powerdownButton = new Button(x, y, "powerDown_active", powerdownbuttonSprite);
                 }
             }
-
         }
     }
 
