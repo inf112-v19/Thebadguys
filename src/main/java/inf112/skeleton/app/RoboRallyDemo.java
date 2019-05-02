@@ -572,7 +572,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         if(!singlePlayerMode){
             for(int i =0; i<clientCount; i++){
-
+                v-=27;
+                Texture statTexture0 = new Texture(Gdx.files.internal("Models/actualstatboard.PNG"));
+                statBoardSprite = new Sprite(statTexture0);
+                statBoardSprite.setPosition(x, v);
+                //statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
+                statBoardList.add(statBoardSprite);
             }
         }else{
             for(int i =0; i<AIs.length+1; i++){
@@ -590,8 +595,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //draw the stat font on top of the board
     public void drawStats(){
         if (!singlePlayerMode) {
-            for(int i = 0; i < clientCount; i++){
+            for(int i=0; i<statBoardList.size(); i++){
                 statBoardList.get(i).draw(batch);
+            }
+            for(int i = 0; i < clientCount; i++){
                 if (robots[i] != null) {
                     int hp = 9 - robots[i].getDamage();
                     font.setColor(1, 0, 0, 1);
