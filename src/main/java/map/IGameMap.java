@@ -2,13 +2,7 @@ package map;
 
 public interface IGameMap {
 
-    /**
-     * Get labyrinth cell contents at x,y
-     *
-     * @param x
-     * @param y
-     * @return The tile at x,y
-     */
+
     /**
      * @return The number of rows.
      */
@@ -19,8 +13,4 @@ public interface IGameMap {
      */
     int getWidth();
 
-    /**
-     * @return True if the game is active
-     */
-    boolean isPlaying();
 }

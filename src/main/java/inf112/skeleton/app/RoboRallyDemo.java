@@ -463,6 +463,9 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(10, 3,MapTile.CHECKPOINT4);
 
         grid.set(2, 2, MapTile.HOLE);
+        grid.set(3,8, MapTile.HOLE);
+        grid.set(9,7, MapTile.HOLE);
+        grid.set(10,2, MapTile.HOLE);
 
         grid.set(9.0, -0.5, MapTile.WALL);
         grid.set(-0.5, 9.0, MapTile.WALL);
@@ -478,8 +481,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
         grid.set(0.0,4.5,MapTile.WALL);
         grid.set(1.0,4.5,MapTile.WALL);
-        grid.set(2.0,4.5,MapTile.WALL);
-        grid.set(3.0,4.5,MapTile.WALL);
         grid.set(4.0,4.5,MapTile.WALL);
         grid.set(5.0,4.5,MapTile.WALL);
         grid.set(6.0,4.5,MapTile.WALL);

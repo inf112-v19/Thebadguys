@@ -136,6 +136,7 @@ public class GameMap implements IGameMap {
         if (tiles.get(x, y) == MapTile.HOLE) {
             return true;
         }
+
         return false;
     }
 
@@ -181,14 +182,6 @@ public class GameMap implements IGameMap {
         return 0;
     }
 
-    public Boolean isLaser(int x, int y) {
-        if (tiles.get(x, y) == MapTile.LASER) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public void fireLasers(Robot robot) {
         for (int i = 0; i < tiles.getWidth(); i++) {
             for (int j = 0; j < tiles.getHeight(); j++) {
@@ -204,7 +197,7 @@ public class GameMap implements IGameMap {
                         }
                         tempY1++;
                     }
-                } else if (tiles.get(i, j) == MapTile.LASEREAST) {
+                } else if(tiles.get(i, j) == MapTile.LASEREAST) {
                     int targetHit = 0;
                     int tempX1 = i;
                     while (targetHit == 0 && tempX1 != 12) {
@@ -379,10 +372,41 @@ public class GameMap implements IGameMap {
         return tiles.getWidth();
     }
 
-    @Override
-    public boolean isPlaying() {
-        return true;
+    public boolean isConveyer(int x, int y) {
+        if (tiles.get(x, y) == MapTile.CONVEYERBELTNORTH) {
+            return true;
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTSOUTH){
+            return true;
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTEAST){
+            return true;
+        }
+        else if (tiles.get(x, y) == MapTile.CONVEYERBELTWEST){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
+    // Useful in testing and generally visuallising the map.
+    public void printMap(){
+        for (int j = this.getHeight() - 1; j >= 0; j--){
+            for (int i = 0; i < this.getWidth(); i++){
+                System.out.print(tiles.get(i, j));
+            }
+            System.out.println();
+        }
+    }
+
+    // Creates a map with entirely random MapTile elements. Useful for testing.
+    public void randomizeMap(){
+        for(int i = 0; i < this.getHeight(); i++){
+            for(int j = 0; j < this.getWidth(); j++){
+                tiles.set(i, j, MapTile.getRandomTile());
+            }
+        }
+    }
 }
 
