@@ -686,8 +686,15 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 cardHandler.setNotFirst(true);
                 cardHandler.nullyFy();
                 checkLock(selectedCards);
-                if (!robot.getInitPowerdown()) {
-                    cardHandler.setisDone(false);
+                if (singlePlayerMode) {
+                    if (robot != null && !robot.getInitPowerdown()) {
+                        cardHandler.setisDone(false);
+                    }
+                }
+                else {
+                    if (robots[ID] != null && !robots[ID].getInitPowerdown()) {
+                        cardHandler.setIsDone(false);
+                    }
                 }
                 cardHandler.setCardSprites();
 
