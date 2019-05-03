@@ -366,6 +366,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return robot;
     }
 
+    public static AIRobot[] getAIs() {
+        return AIs;
+    }
+
     public static Robot[] getRobots() {return robots;}
 
     //if a card is inside a cardslot and it is released move it into the middle of the slot,
