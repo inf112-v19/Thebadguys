@@ -13,7 +13,7 @@ The most important thing we have learned is that the usage of branches is very i
 Part 2: requirements
 
 One must be able to play a complete round
-We have achieved this
+We have achieved this.
 
 One must be able to win the game game by visiting the last flag (completing a game)
 When one has visited the last flag, there will be a console print with the message "You won". But you can still move around and participate in the game.
@@ -54,7 +54,6 @@ We have implented this.
 
 play against AI (single-player mode), possibly play against random robots
 We have implented a single-player mode where you can play against 3 other AIRobots. These robots do random moves using the cards that they are assigned.
-
 
 
 Part 3: Code
