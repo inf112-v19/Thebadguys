@@ -87,8 +87,8 @@ public class Client extends JFrame implements Runnable {
                         System.out.println(RoboRallyDemo.getColors(id) + " choose to power down next round!");
                     } else if (message.startsWith("/d/")) {
                         message = message.split("/d/|/e/")[1];
-                        int id = Integer.parseInt(message.substring(0,1));
-                        int count = Integer.parseInt(message.substring(1,2));
+                        int id = Integer.parseInt(message.split("-")[0]);
+                        int count = Integer.parseInt(message.split("-")[1]);
                         RoboRallyDemo.setDead(id);
                         setClientCount(count);
                         RoboRallyDemo.setClientCount(count);

@@ -211,7 +211,7 @@ public class Server implements Runnable{
         }
         else {
             message = "Client " + c.name + "(" + c.getID() + ")" + c.address.toString() + ":" + c.port + " timed out.";
-            String disc = "/d/" + c.getID()+ clientCount() + "/e/";
+            String disc = "/d/" + c.getID()+ "-" + clientCount() + "/e/";
             sendToAllButMe(disc, c.getID());
         }
         System.out.println(message);
