@@ -7,6 +7,7 @@ import Server.Server;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,8 +20,14 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import map.GameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+//import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
+
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
@@ -33,17 +40,26 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Button endTurnButton;
     private Button powerdownButton;
     private static Robot robot;
+    private AIRobot AIrobot;
     private FitViewport viewPort;
     private static CardHandler cardHandler;
     private Cards statBoard0;
+    private Cards card;
+
     private static Cards selectedCards[];
+
     private boolean firstRund = true;
     private mainMenu mainMenu;
+
+    private boolean firstround=true;
+
     private ArrayList<Sprite> statBoardList = new ArrayList<>();
 
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
+    private Sprite AIsprite;
+    private float posX, posY;
     private BitmapFont font;
     private Sprite statBoardSprite;
     private static GameMap map;
@@ -55,7 +71,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Sprite[] sprites = new Sprite[8];
     private Texture[] textures = new Texture[8];
     private static int clientCount;
-    private static String[] colors = {"Gold", "Cyan", "Green", "Red", "Blue", "Purple", "Basil", "Lemon"};
+    private  static String[] colors = {"Gold", "Cyan", "Green", "Red", "Blue", "Purple", "Basil", "Lemon"};
     private static int ID;
     private static boolean ready[] = {false, false, false, false, false, false, false, false};
     private String[][] moves;

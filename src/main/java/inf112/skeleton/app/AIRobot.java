@@ -10,7 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
 import map.MapTile;
 
-public class AIRobot{
+public class AIRobot implements IRobot{
     private int id;
     private CardHandler cardHandler;
     private Sprite sprite;
@@ -36,6 +36,11 @@ public class AIRobot{
     private int turn = RoboRallyDemo.getTurn();
     private Deck randomDeck;
     private Cards selectedCards[];
+
+    //Initiating Board element objects.
+    ExpressBelt ebelt = new ExpressBelt(gameMap);
+    Belt belt = new Belt(gameMap);
+    Spin spin = new Spin(gameMap);
 
     public int rng(Deck deck){
         return (int) (Math.random() * deck.getDeckList().size() - 1 + 1);
@@ -73,6 +78,18 @@ public class AIRobot{
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
         this.id = id;
+    }
+
+    public void setDirection(Direction dir){
+        this.dir = dir;
+    }
+
+    public void moveSprite(float x, float y){
+        this.sprite.setPosition(x, y);
+    }
+
+    public void rotateSprite(float z){
+        this.sprite.rotate(z);
     }
 
     public Boolean getAlive() {
@@ -134,6 +151,22 @@ public class AIRobot{
 
     public void setPosY(int newY) {
         this.posY = newY;
+    }
+
+    public void setDamage(int newDamage) {
+        this.damage = newDamage;
+    }
+
+    public void setLives(int newLives) {
+        this.lives = newLives;
+    }
+
+    public int getTilePixelWidth(){
+        return this.tilePixelWidth;
+    }
+
+    public int getTilePixelHeight(){
+        return this.tilePixelHeight;
     }
 
     public void rotate_right() {
@@ -221,117 +254,21 @@ public class AIRobot{
                 break;
             default:
         }
-        switch(gameMap.isExpressConveyerBelt(this.posX, this.posY)) {
-            case "northNoTurn":
-                canMoveConveyer(Direction.NORTH);
-                break;
-            case "eastNoTurn":
-                canMoveConveyer(Direction.EAST);
-                break;
-            case "southNoTurn":
-                canMoveConveyer(Direction.SOUTH);
-                break;
-            case "westNoTurn":
-                canMoveConveyer(Direction.WEST);
-                break;
-            case "northRight":
-                if (canMoveConveyer(Direction.NORTH) == 1)
-                {this.rotate_right();}
-                break;
-            case "northLeft":
-                if (canMoveConveyer(Direction.NORTH) == 1)
-                {this.rotate_left();}
-                break;
-            case "eastRight":
-                if (canMoveConveyer(Direction.EAST) == 1)
-                {this.rotate_right();}
-                break;
-            case "eastLeft":
-                if (canMoveConveyer(Direction.EAST) == 1)
-                {this.rotate_left();}
-                break;
-            case "southRight":
-                if (canMoveConveyer(Direction.SOUTH) == 1)
-                {this.rotate_right();}
-                break;
-            case "southLeft":
-                if (canMoveConveyer(Direction.SOUTH) == 1)
-                {this.rotate_left();}
-                break;
-            case "westRight":
-                if (canMoveConveyer(Direction.WEST) == 1)
-                {this.rotate_right();}
-                break;
-            case "westLeft":
-                if (canMoveConveyer(Direction.WEST) == 1)
-                {this.rotate_left();}
-                break;
-            case "noBelt":
-                break;
-        }
-        switch(gameMap.isConveyerBelt(this.posX, this.posY)) {
-            case "northNoTurn":
-                canMoveConveyer(Direction.NORTH);
-                break;
-            case "eastNoTurn":
-                canMoveConveyer(Direction.EAST);
-                break;
-            case "southNoTurn":
-                canMoveConveyer(Direction.SOUTH);
-                break;
-            case "westNoTurn":
-                canMoveConveyer(Direction.WEST);
-                break;
-            case "northRight":
-                if (canMoveConveyer(Direction.NORTH) == 1)
-                {this.rotate_right();}
-                break;
-            case "northLeft":
-                if (canMoveConveyer(Direction.NORTH) == 1)
-                {this.rotate_left();}
-                break;
-            case "eastRight":
-                if (canMoveConveyer(Direction.EAST) == 1)
-                {this.rotate_right();}
-                break;
-            case "eastLeft":
-                if (canMoveConveyer(Direction.EAST) == 1)
-                {this.rotate_left();}
-                break;
-            case "southRight":
-                if (canMoveConveyer(Direction.SOUTH) == 1)
-                {this.rotate_right();}
-                break;
-            case "southLeft":
-                if (canMoveConveyer(Direction.SOUTH) == 1)
-                {this.rotate_left();}
-                break;
-            case "westRight":
-                if (canMoveConveyer(Direction.WEST) == 1)
-                {this.rotate_right();}
-                break;
-            case "westLeft":
-                if (canMoveConveyer(Direction.WEST) == 1)
-                {this.rotate_left();}
-                break;
-            case "noBelt":
-                break;
-        }
-        if(gameMap.isSpinLeft(this.posX, this.posY)){
-            this.rotate_left();
-        }
-        if (gameMap.isSpinRight(this.posX, this.posY)) {
-            this.rotate_right();
-        }
+
+        ExpressBelt.doExpressBelt(this);
+        Belt.doBelt(this);
+        Spin.doSpin(this);
 
         //gameMap.fireLasers(this);
         //add method to fire my laser
         if (gameMap.isCheckpoint(this.posX, this.posY, this.flagsPassed)) {
             this.flagsPassed += 1;
             this.setCheckpoint(this.getPosX(), this.getPosY());
+            System.out.println("You made it to backup number " + this.flagsPassed);
         }
         if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 1) {
             this.setCheckpoint(this.posX, this.posY);
+            System.out.println("Backup on repairsite!");
         }
         else if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 2) {
             this.setCheckpoint(this.posX, this.posY);
@@ -391,7 +328,7 @@ public class AIRobot{
     }
 
     public void takeDamage() {
-        if (this.damage < 10) {
+        if (this.damage < 9) {
             this.damage += 1;
             cardHandler = RoboRallyDemo.getCardHandler();
             cardHandler.lockDown();
@@ -422,27 +359,6 @@ public class AIRobot{
         }
     }
 
-    public int checkConveyer(Direction dir) {
-        if (dir == Direction.NORTH && this.posY + 1 == 12) {
-            return -1;
-        }
-        else if (dir == Direction.EAST && this.posX + 1 == 12) {
-            return -1;
-        }
-        else if (dir == Direction.SOUTH && this.posY - 1 == -1) {
-            return -1;
-        }
-        else if (dir == Direction.WEST && this.posX - 1 == -1) {
-            return -1;
-        }
-        else if (gameMap.convWallNearby(dir, this.posX, this.posY)) {
-            return 0;
-        }
-        else {
-            return 1;
-        } // add check for a second robot on the same conveyer target, if so move them both to original possition
-    }
-
     public void canMove(int loops, int amount) {
         for (int i = 0; i < loops; i++){
             if (this.checkNext(amount) == 1) {
@@ -453,6 +369,7 @@ public class AIRobot{
                 break;
             }
             else if (this.checkNext(amount) == 0) {
+                System.out.println("You hit a wall!");
                 break;
             }
             else {
@@ -461,48 +378,9 @@ public class AIRobot{
         }
     }
 
-    public int canMoveConveyer(Direction dir) {
-        if (this.checkConveyer(dir) == 1) {
-            this.moveConveyer(dir);
-            return 1;
-        }
-        else if (this.checkConveyer(dir) == -1) {
-            this.died();
-            return 0;
-        }
-        else if (this.checkConveyer(dir) == 0) {
-            return 0;
-        }
-        else {
-            return 0;
-        }
-    }
-
-    public void moveConveyer(Direction dir) {
-        if (dir == Direction.NORTH) {
-            this.posY += 1;
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + (1 * (this.tilePixelWidth / 6)));
-        }
-        else if (dir == Direction.EAST) {
-            this.posX += 1;
-            this.sprite.setPosition(this.sprite.getX() + (1 * (this.tilePixelWidth / 6)), this.sprite.getY());
-        }
-        else if (dir == Direction.SOUTH) {
-            this.posY -= 1;
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - (1 * (this.tilePixelWidth / 6)));
-        }
-        else if (dir == Direction.WEST) {
-            this.posX -= 1;
-            this.sprite.setPosition(this.sprite.getX() - (1 * (this.tilePixelWidth / 6)), this.sprite.getY());
-        }
-        if (gameMap.isHole(this.posX, this.posY)) {
-            this.died();
-        }
-    }
-
     public void robotFireLasers(AIRobot[] robot) {
         for (int i = 0; i < robot.length; i++) {
-            if (robot[i] != null && robot[i].getAlive() && this.getDirection() == Direction.NORTH) {
+            if (this.getDirection() == Direction.NORTH) {
                 boolean targetHit = false;
                 int tempY1 = this.getPosY()+1;
                 while (targetHit == false && tempY1 < 12) {
@@ -514,7 +392,7 @@ public class AIRobot{
                     }
                     tempY1++;
                 }
-            } else if (robot[i] != null && robot[i].getAlive() && this.getDirection() == Direction.EAST) {
+            } else if (this.getDirection() == Direction.EAST) {
                 boolean targetHit = false;
                 int tempX1 = this.getPosX()+1;
                 while (targetHit == false && tempX1 != 12) {
@@ -526,7 +404,7 @@ public class AIRobot{
                     }
                     tempX1++;
                 }
-            } else if (robot[i] != null && robot[i].getAlive() && this.getDirection() == Direction.SOUTH) {
+            } else if (this.getDirection() == Direction.SOUTH) {
                 boolean targetHit = false;
                 int tempY1 = this.getPosY()-1;
                 while (targetHit == false && tempY1 != -1) {
@@ -538,7 +416,7 @@ public class AIRobot{
                     }
                     tempY1--;
                 }
-            } else if (robot[i] != null && robot[i].getAlive() && this.getDirection() == Direction.WEST) {
+            } else if (this.getDirection() == Direction.WEST) {
                 boolean targetHit = false;
                 int tempX1 = this.getPosX()-1;
                 while (targetHit == false && tempX1 != -1) {
@@ -556,7 +434,7 @@ public class AIRobot{
     }
 
     public void robotFireLasers(Robot robot) {
-            if (robot != null && robot.getAlive() && this.getDirection() == Direction.NORTH) {
+            if (this.getDirection() == Direction.NORTH) {
                 boolean targetHit = false;
                 int tempY1 = this.getPosY()+1;
                 while (targetHit == false && tempY1 < 12) {
@@ -568,7 +446,7 @@ public class AIRobot{
                     }
                     tempY1++;
                 }
-            } else if (robot != null && robot.getAlive() && this.getDirection() == Direction.EAST) {
+            } else if (this.getDirection() == Direction.EAST) {
                 boolean targetHit = false;
                 int tempX1 = this.getPosX()+1;
                 while (targetHit == false && tempX1 != 12) {
@@ -580,7 +458,7 @@ public class AIRobot{
                     }
                     tempX1++;
                 }
-            } else if (robot != null && robot.getAlive() && this.getDirection() == Direction.SOUTH) {
+            } else if (this.getDirection() == Direction.SOUTH) {
                 boolean targetHit = false;
                 int tempY1 = this.getPosY()-1;
                 while (targetHit == false && tempY1 != -1) {
@@ -592,7 +470,7 @@ public class AIRobot{
                     }
                     tempY1--;
                 }
-            } else if (robot != null && robot.getAlive() && this.getDirection() == Direction.WEST) {
+            } else if (this.getDirection() == Direction.WEST) {
                 boolean targetHit = false;
                 int tempX1 = this.getPosX()-1;
                 while (targetHit == false && tempX1 != -1) {

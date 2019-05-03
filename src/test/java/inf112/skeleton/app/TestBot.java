@@ -80,10 +80,18 @@ public class TestBot implements IRobot {
         return this.tilePixelHeight;
     }
 
+    public Boolean getPowerdown() {
+        return powerdown;
+    }
+
+    public void setPowerdown(boolean Powerdown) {
+        this.powerdown = Powerdown;
+    }
 
     public void moveSprite(float x, float y){
         this.sprite.setPosition(x, y);
     }
+
     public void rotateSprite(float z){
         this.sprite.rotate(z);
     }
@@ -138,7 +146,7 @@ public class TestBot implements IRobot {
         else if (this.getDirection() == Direction.SOUTH){
             this.dir = Direction.WEST;
         }
-        this.sprite.rotate(-90);
+        //this.sprite.rotate(-90);
     }
 
     public void rotate_left() {
@@ -154,7 +162,7 @@ public class TestBot implements IRobot {
         else if (this.getDirection() == Direction.EAST){
             this.dir = Direction.NORTH;
         }
-        this.sprite.rotate(90);
+        //this.sprite.rotate(90);
     }
 
     public void moveForward(int amount){
@@ -280,7 +288,7 @@ public class TestBot implements IRobot {
     }
 
     public void takeDamage() {
-        if (this.damage < 10) {
+        if (this.damage < 9) {
             this.damage += 1;
             System.out.println("You now have" + this.damage);
             //cardHandler = RoboRallyDemo.getCardHandler();
@@ -331,14 +339,6 @@ public class TestBot implements IRobot {
                 break;
             }
         }
-    }
-
-    public Boolean getPowerdown() {
-        return powerdown;
-    }
-
-    public void setPowerdown(boolean Powerdown) {
-        this.powerdown = Powerdown;
     }
 }
 

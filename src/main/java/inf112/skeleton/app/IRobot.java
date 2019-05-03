@@ -31,6 +31,8 @@ public interface IRobot {
 
     void canMove(int loops, int amount);
 
+    void moveForward(int amount);
+
     void setPosX(int newX);
 
     void setPosY(int newY);
@@ -50,4 +52,9 @@ public interface IRobot {
     void setCheckpoint(int x, int y);
 
     void setDirection(Direction dir);
+
+    void rotate_right();
+
+    void rotate_left();
+
 }

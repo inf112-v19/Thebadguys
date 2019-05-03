@@ -268,7 +268,7 @@ public class Robot  implements IRobot{
     }
 
     public void takeDamage() {
-        if (this.damage < 10) {
+        if (this.damage < 9) {
             this.damage += 1;
             cardHandler = RoboRallyDemo.getCardHandler();
             cardHandler.lockDown();
