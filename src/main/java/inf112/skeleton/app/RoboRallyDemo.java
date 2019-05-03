@@ -2,8 +2,11 @@ package inf112.skeleton.app;
 
 import Grid.IGrid;
 import Grid.MyGrid;
+import Server.Client;
+import Server.Server;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,84 +21,192 @@ import map.GameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+//import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
+
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera;
-    private Cards CardButton;
-    private Cards PowerdownButton;
-    private Robot robot;
+    private int i = 0;
+    private int tick = 0;
+    private static int turn = 0;
+    private static Boolean isEndOfTurn = false;
+
+    private Button endTurnButton;
+    private Button powerdownButton;
+    private static Robot robot;
+    private AIRobot AIrobot;
     private FitViewport viewPort;
     private static CardHandler cardHandler;
     private Cards statBoard0;
-    private int tick = 0;
-    private static int turn = 0;
+    private Cards card;
 
-    private boolean firstRund=true;
+    private static Cards selectedCards[];
+
+    private boolean firstRund = true;
     private mainMenu mainMenu;
+
+    private boolean firstround=true;
+
+    private ArrayList<Sprite> statBoardList = new ArrayList<>();
 
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
+    private Sprite AIsprite;
     private float posX, posY;
     private BitmapFont font;
     private Sprite statBoardSprite;
     private static GameMap map;
     private IGrid grid;
+    private int[][] starts = {{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0}, {7, 0}};
+    private Server server;
+    private static Client client;
+    private static Robot[] robots = new Robot[8];
+    private Sprite[] sprites = new Sprite[8];
+    private Texture[] textures = new Texture[8];
+    private static int clientCount;
+    private String[] colors = {"Gold", "Cyan", "Green", "Red", "Blue", "Purple", "Basil", "Lemon"};
+    private static int ID;
+    private static boolean ready[] = {false, false, false, false, false, false, false, false};
+    private String[][] moves;
+    private int[] order;
+    private static boolean singlePlayerMode = false;
+    private static AIRobot[] AIs = new AIRobot[3];
+    private int[][] AIstarts = {{3,0}, {6,0}, {9,0}};
+
+    public static boolean getSinglePlayerMode() {
+        return singlePlayerMode;
+    }
+
+    public static void setReady(int id) {
+        ready[id] = true;
+    }
+
+    public static void killMe(int id, boolean AI) {
+        if(singlePlayerMode && !AI) {
+            robot = null;
+        }
+        else if (AI){
+            AIs[id] = null;
+        }
+        else {
+            robots[id] = null;
+            String died = "/d/" + id + "/e/";
+            client.getBackendClient().send(died.getBytes());
+        }
+    }
+
+    public static boolean amIAlive() {
+        if(singlePlayerMode && robot != null) {
+            return true;
+        }
+        else if (!singlePlayerMode && robots[getID()] != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean amIAliveAI(int id) {
+        if(AIs[id] != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void setDead(int id) {
+        robots[id] = null;
+    }
+
+    public  void createv2(){
+        batch = new SpriteBatch();
+        tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        createGrid();
+        map = new GameMap(grid);
+
+        if (singlePlayerMode) {
+            texture = new Texture(Gdx.files.internal("Models/tank0.png"));
+            sprite = new Sprite(texture);
+            robot = new Robot(sprite, starts[0]);
+            for (int i = 0; i < AIs.length; i++) {
+                textures[i] = new Texture(Gdx.files.internal("Models/tank" + (i+1) + ".png"));
+                sprites[i] = new Sprite(textures[i]);
+                AIs[i] = new AIRobot(sprites[i], AIstarts[i], i);
+                System.out.println("created AI" + i);
+            }
+            for(int i = 0; i < AIs.length; i++) {
+                if (AIs[i] != null) {
+                    sprites[i].setPosition(AIs[i].getSpriteX(), AIs[i].getSpriteY());
+                }
+            }
+            if (robot != null) {
+                sprite.setPosition(robot.getSpriteX(), robot.getSpriteY());
+            }
+        }
+
+        if (!singlePlayerMode) {
+            clientCount = client.getClientCount();
+            order = new int[clientCount * 5];
+            moves = new String[clientCount][5];
+            for (int i = 0; i < clientCount; i++) {
+                textures[i] = new Texture(Gdx.files.internal("Models/tank" + (i) + ".png"));
+                sprites[i] = new Sprite(textures[i]);
+                robots[i] = new Robot(sprites[i], starts[i]);
+                System.out.println("created robot" + i);
+            }
+            for (int i = 0; i < clientCount; i++) {
+                if (robots[i] != null) {
+                    sprites[i].setPosition(robots[i].getSpriteX(), robots[i].getSpriteY());
+                }
+            }
+        }
+
+        //create the card that Is clicked
+        Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
+        if (singlePlayerMode) {
+            cardHandler = new CardHandler(batch, robot, map);
+        } else if (!singlePlayerMode) {
+            cardHandler = new CardHandler(batch, robots[ID], map);
+        }
+        font = new BitmapFont();
+        //create the end turn button
+        endTurnButtonCreation(700, 510);
+        statBoardCreation(700, 1030);
+
+        //set the position of all the cardsprites
+        cardHandler.setCardSprites();
+
+        //create the 9 cards cards
+        cardHandler.createInitialDecklist();
+
+        //creation of the 5 cardSlots
+        cardHandler.createCardSlots();
+
+        Gdx.input.setInputProcessor(this);
+    }
 
 
     //create the initial state of the game
     @Override
     public void create() {
-        if(firstRund){
+        if (firstRund) {
             batch = new SpriteBatch();
             float w = Gdx.graphics.getWidth();
             float h = Gdx.graphics.getHeight();
             //set the camera
             setCamera(w, h);
             mainMenu = new mainMenu(batch);
-            firstRund=false;
+            firstRund = false;
         }
-        if(mainMenu.getMainRunning()) {
+        if (mainMenu.getMainRunning()) {
             mainMenu.startMenu();
             //creation of the map
-        }else{
-            //creation of the map
-            batch = new SpriteBatch();
-            tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
-            tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-            createGrid();
-            texture = new Texture(Gdx.files.internal("Models/tank.png"));
-            sprite = new Sprite(texture);
-
-            map = new GameMap(grid);
-            posX = 0;
-            posY = 0;
-            int[] startpos = {Math.round(posX), Math.round(posY)};
-            robot = new Robot(sprite, startpos);
-
-            grid.set(robot.getPosX(), robot.getPosY(), MapTile.PLAYER);
-            sprite.setPosition(robot.getX1(), robot.getY1());
-
-            //create the card that Is clicked
-            Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
-            cardHandler = new CardHandler(batch, robot, map);
-
-            font = new BitmapFont();
-
-            //create the end turn button
-            buttonCreation(700, 500);
-            statBoardCreation(700,930);
-            powerdownButtonCreation(700, 800);
-
-            //set the position of all the cardsprites
-            cardHandler.setCardSprites();
-
-            //create the 9 cards cards
-            cardHandler.createInitialDecklist();
-
-            //creation of the 5 cardSlots
-            cardHandler.createCardSlots();
         }
         Gdx.input.setInputProcessor(this);
 
@@ -112,31 +223,55 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public void render() {
         Gdx.gl.glClearColor(128 / 255f, 128 / 255f, 128 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if(mainMenu.getMainRunning()){
+        if (mainMenu.getMainRunning()) {
             batch.begin();
             mainMenu.render();
         }else{
+            selectedCards = cardHandler.getSelectedCards();
+            if(selectedCards[0]!=null){
+                if(selectedCards[0].getName()=="clickedCard"){
+                    cardHandler.crushBug();
+                }
+            }
             camera.update();
             tiledMapRenderer.setView(camera);
             tiledMapRenderer.render();
-            Cards selectedCards[] = cardHandler.getSelectedCards();
+            //Cards selectedCards[] = cardHandler.getSelectedCards();
             batch.begin();
-            sprite.draw(batch);
+            if (singlePlayerMode) {
+                for (int i = 0; i < AIs.length; i++){
+                    if (AIs[i] != null) {
+                        sprites[i].draw(batch);
+                    }
+                }
+                if (robot != null) {
+                    sprite.draw(batch);
+                }
+            } else {
+                for (int i = 0; i < clientCount; i++) {
+                    if (robots[i] != null) {
+                        sprites[i].draw(batch);
+                    }
+                }
+            }
             doTurn();
             //draw the cardslots
-            cardHandler.drawCardSlots();
-            cardHandler.drawLockedList();
-            //draw button
-            CardButton.getCardSprite().draw(batch);
+            if (amIAlive()) {
+                cardHandler.drawCardSlots();
+                cardHandler.drawLockedList();
+                //draw button
+                powerdownButtonCreation(700, 710);
 
-            statBoard0.getCardSprite().draw(batch);
+                endTurnButton.getSprite().draw(batch);
+
+                powerdownButton.getSprite().draw(batch);
+
+                //draw Cards
+                cardHandler.drawCards();
+            }
+            //statBoard0.getCardSprite().draw(batch);
 
             drawStats();
-
-            PowerdownButton.getCardSprite().draw(batch);
-
-            //draw Cards
-            cardHandler.drawCards();
 
             tick++;
         }
@@ -150,6 +285,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         viewPort.update(width, height);
         camera.update();
     }
+
 
     @Override
     public void pause() {
@@ -179,39 +315,89 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     // And if you click the Execute button the it will change a boolean value
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(!mainMenu.getMainRunning()) {
-            cardHandler.click(button, screenX, screenY, CardButton);
+        if (mainMenu.getMainRunning()) {
+            if (mainMenu.getClientBtn().buttonClicked(screenX, screenY, mainMenu.getClientBtn())) {
+                System.out.println("DU TRYKKET PÅ CLIENT"); // TODO remove
+                if(client != null) {
+                    System.out.println("You can only have one client per computer.");
+                } else {
+                    System.out.println("Skriv inn host ip som streng(ipV4 || ipV6)! eks:(10.10.12.31): ");
+                    Scanner inn = new Scanner(System.in);
+                    String ip = inn.nextLine();
+                    System.out.println(ip);
+                    client = new Client("Player", ip, 55557);
+                    boolean wait = false;
+                    while (!wait) {
+                        System.out.println("Waiting for the server to start the game."); // TODO remove
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (client.getStarted()) {
+                            System.out.println("create blir callet"); // TODO remove
+                            createv2();
+                        }
+                        wait = client.getStarted();
+                    }
+                }
+            }
+            if (mainMenu.getServerBtn().buttonClicked(screenX, screenY, mainMenu.getServerBtn())) {
+                System.out.println("DU TRYKKET PÅ SERVER"); // TODO remove
+                if (server == null) {
+                    server = new Server(55557);
+                    client = new Client("Player", "localhost", 55557);
+                }
+                else {
+                    System.out.println("You already have a server running!");
+                    System.out.println("Wait for clients to connect, and start the server.");
+                    System.out.println("For singleplayer mode (with 3 AIs) please restart the game and press start directly.");
+                }
+            }
+            if (mainMenu.getStartBtn().buttonClicked(screenX, screenY, mainMenu.getStartBtn())) {
+                System.out.println("DU TRYKKET PÅ START"); // TODO remove
+                if (server != null) {
+                    System.out.println("Starting the multiplayer game!");
+                    server.setStarted(true);
+                    client.getBackendClient().send("/s//e/".getBytes());
+                    mainMenu.setMainRunning(false);
+                    createv2();
+                }
+                else if (server == null) {
+                    singlePlayerMode = true;
+                    System.out.println("Starting singleplayer game!");
+                    setID(0);
+                    createv2();
+                    mainMenu.setMainRunning(false);
+                }
+            }
+
+        } else {
+            endTurnButton.buttonClicked(screenX, screenY, endTurnButton);
+            powerdownButton.buttonClicked(screenX, screenY, powerdownButton);
+            cardHandler.click(Input.Buttons.LEFT, screenX, screenY);
         }
         return false;
     }
+
+    public static Robot getRobot() {
+        return robot;
+    }
+
+    public static Robot[] getRobots() {return robots;}
 
     //if a card is inside a cardslot and it is released move it into the middle of the slot,
     //if it is outside then move it back to its default pos
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
-        if (!mainMenu.getMainRunning()){
-            cardHandler.letGo(screenX, screenY, CardButton, PowerdownButton);
-        }else{
-            if(insideCard(screenX, screenY, mainMenu.getClientBtn())){
-                System.out.println("DU TRYKKET PÅ CLIENT");
-            }
-
-            if(insideCard(screenX, screenY, mainMenu.getServerBtn())){
-                System.out.println("DU TRYKKET PÅ SERVER");
-            }
-
-            if(insideCard(screenX, screenY, mainMenu.getStartBtn())){
-                System.out.println("DU TRYKKET PÅ START");
-                mainMenu.setMainRunning(false);
-                create();
-            }
+        if (!mainMenu.getMainRunning()) {
+            cardHandler.letGo(screenX, screenY);
         }
         return false;
     }
 
-    public boolean insideCard(float screenX, float screenY, Cards card){
-        float NewscreenY= Gdx.graphics.getHeight() - screenY;
+    public boolean insideCard(float screenX, float screenY, Cards card) {
+        float NewscreenY = Gdx.graphics.getHeight() - screenY;
         return (screenX > card.getCardSprite().getX()) && (screenX < (card.getCardSprite().getX() + card.getCardSprite().getWidth())) && (NewscreenY > card.getCardSprite().getY()) && (NewscreenY < (card.getCardSprite().getY() + card.getCardSprite().getHeight()));
     }
 
@@ -219,7 +405,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     //if a card is clicked on and draged, then move that clicked card
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if(!mainMenu.getMainRunning()){
-            cardHandler.dragged(screenX, screenY, CardButton);
+            cardHandler.dragged(screenX, screenY);
         }
         return false;
     }
@@ -331,74 +517,292 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         viewPort = new FitViewport(w * 6, h * 6);
     }
 
-    public void buttonCreation(float x, float y) {
+    public void endTurnButtonCreation(int x, int y) {
         Texture buttonTexture = new Texture(Gdx.files.internal("Models/Button.png"));
         Sprite buttonSprite = new Sprite(buttonTexture);
         buttonSprite.setPosition(x, y);
-        CardButton = new Cards(x, y, "", 0, buttonSprite);
+        endTurnButton = new Button(x, y, "endRoundButton", buttonSprite);
     }
 
+
+    public void powerdownButtonCreation(int x, int y) {
+        if (singlePlayerMode) {
+            if (robot != null && !robot.getInitPowerdown()) {
+                Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
+                Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                powerdownbuttonSprite.setPosition(x, y);
+                this.powerdownButton = new Button(x, y, "powerDown_inactive", powerdownbuttonSprite);
+
+            } else if (robot != null && robot.getInitPowerdown()){
+                Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
+                Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                powerdownbuttonSprite.setPosition(x, y);
+                this.powerdownButton = new Button(x, y, "powerDown_active", powerdownbuttonSprite);
+            }
+        }
+        if (!singlePlayerMode) {
+            for(int i = 0; i < clientCount; i++) {
+                if (robots[i] != null && !robots[i].getInitPowerdown()) {
+                    Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
+                    Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                    powerdownbuttonSprite.setPosition(x, y);
+                    powerdownButton = new Button(x, y, "powerDown_inactive", powerdownbuttonSprite);
+                }
+                else if (robots[i] != null && robots[i].getInitPowerdown()){
+                    Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
+                    Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                    powerdownbuttonSprite.setPosition(x, y);
+                    powerdownButton = new Button(x, y, "powerDown_active", powerdownbuttonSprite);
+                }
+            }
+        }
+    }
+
+
+    public static int getClientCount() {return clientCount;}
+
+
     //creation og the stat-board
-    public void statBoardCreation(float x, float y){
-        Texture statTexture = new Texture(Gdx.files.internal("Models/stats.PNG"));
+    public void statBoardCreation ( float x, float y){
+        float v=y;
+        Texture statTexture = new Texture(Gdx.files.internal("Models/Topofstatboard.PNG"));
         statBoardSprite = new Sprite(statTexture);
-        statBoardSprite.setPosition(x,y);
-        statBoard0= new Cards(x,y, "statBoard",0, statBoardSprite);
+        statBoardSprite.setPosition(x, y);
+        statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
+        statBoardList.add(statBoardSprite);
+
+        if(!singlePlayerMode){
+            for(int i =0; i<clientCount; i++){
+                v-=27;
+                Texture statTexture0 = new Texture(Gdx.files.internal("Models/actualstatboard.PNG"));
+                statBoardSprite = new Sprite(statTexture0);
+                statBoardSprite.setPosition(x, v);
+                //statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
+                statBoardList.add(statBoardSprite);
+            }
+        }else{
+            for(int i =0; i<AIs.length+1; i++){
+                v-=27;
+                Texture statTexture0 = new Texture(Gdx.files.internal("Models/actualstatboard.PNG"));
+                statBoardSprite = new Sprite(statTexture0);
+                statBoardSprite.setPosition(x, v);
+                //statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
+                statBoardList.add(statBoardSprite);
+            }
+        }
+
     }
 
     //draw the stat font on top of the board
     public void drawStats(){
-        int hp= 9-robot.getDamage();
-        font.setColor(0,0,0,1);
-        font.draw(batch, "Player1:", statBoard0.getCardSprite().getX()+10,  statBoard0.getCardSprite().getY()+statBoard0.getCardSprite().getHeight()-30);
-        font.draw(batch, ""+hp, statBoard0.getCardSprite().getX()+90,  statBoard0.getCardSprite().getY()+statBoard0.getCardSprite().getHeight()-30);
-        font.draw(batch, ""+robot.getLives(), statBoard0.getCardSprite().getX()+175,  statBoard0.getCardSprite().getY()+statBoard0.getCardSprite().getHeight()-30);
-        font.draw(batch, ""+robot.getFlagsPassed(), statBoard0.getCardSprite().getX()+250,  statBoard0.getCardSprite().getY()+statBoard0.getCardSprite().getHeight()-30);
+        if (!singlePlayerMode) {
+            for(int i=0; i<statBoardList.size(); i++){
+                statBoardList.get(i).draw(batch);
+            }
+            for(int i = 0; i < clientCount; i++){
+                if (robots[i] != null) {
+                    int hp = 9 - robots[i].getDamage();
+                    font.setColor(1, 0, 0, 1);
+                    if(ready[i]) {
+                        drawReady(i, ID);
+                    }
+                    else if (i == ID) {
+                        String you = colors[i]+ " (you)";
+                        font.draw(batch, you + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
+                    }
+                    else {
+                        font.draw(batch, colors[i] + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
+                    }
+                    font.setColor(0,0,0,1);
+                    font.draw(batch, "" + hp, statBoard0.getCardSprite().getX() + 90, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
+                    font.draw(batch, "" + robots[i].getLives(), statBoard0.getCardSprite().getX() + 175, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
+                    font.draw(batch, "" + robots[i].getFlagsPassed(), statBoard0.getCardSprite().getX() + 250, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
+                }
+            }
+        } else {
+            for (int i=0; i<statBoardList.size(); i++){
+                statBoardList.get(i).draw(batch);
+            }
+            if (robot != null) {
+                int hp = 9 - robot.getDamage();
+                font.setColor(0, 0, 0, 1);
+
+                String you = colors[0]+ " (you)";
+                font.draw(batch, you + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30);
+                font.draw(batch, "" + hp, statBoard0.getCardSprite().getX() + 90, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30);
+                font.draw(batch, "" + robot.getLives(), statBoard0.getCardSprite().getX() + 175, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30);
+                font.draw(batch, "" + robot.getFlagsPassed(), statBoard0.getCardSprite().getX() + 250, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30);
+            }
+
+            for(int i = 0; i < AIs.length; i++) {
+                if (AIs[i] != null) {
+                    int hpAI = 9 - AIs[i].getDamage();
+                    String AI = colors[i+1] + " (AI)";
+                    font.draw(batch, AI + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
+                    font.draw(batch, "" + hpAI, statBoard0.getCardSprite().getX() + 90, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
+                    font.draw(batch, "" + AIs[i].getLives(), statBoard0.getCardSprite().getX() + 175, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
+                    font.draw(batch, "" + AIs[i].getFlagsPassed(), statBoard0.getCardSprite().getX() + 250, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25 - 35);
+                }
+            }
+        }
     }
 
-    public void powerdownButtonCreation(float x, float y) {
-        if (!robot.getPowerdown()) {
-            Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
-            Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
-            powerdownbuttonSprite.setPosition(x, y);
-            PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
-        }
-        else {
-            Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
-            Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
-            powerdownbuttonSprite.setPosition(x, y);
-            PowerdownButton = new Cards(x, y, "", 0, powerdownbuttonSprite);
+
+    public void drawReady(int i, int ID){
+        font.setColor(0, 1, 0, 1);
+        if (i == ID) {
+            String you = colors[i] + " (you)";
+            font.draw(batch, you + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
+        } else {
+            font.draw(batch, colors[i] + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
         }
     }
+
+
+    //support metode
+    public void printSelectedCards() {
+        selectedCards = cardHandler.getSelectedCards();
+        for (int i = 0; i < selectedCards.length; i++) {
+            if (selectedCards[i] != null) {
+                System.out.println("Card in cardslot" + i + " " + selectedCards[i].getName());
+            }
+        }
+    }
+
+
+
 
     public void doTurn () {
-        Cards selectedCards[] = cardHandler.getSelectedCards();
-        robot.setAlive(true);
-        if (selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && cardHandler.getisDone()) {
+        if (singlePlayerMode) {
+            if (robot.getExecPowerdown() && turn == 0) {
+                robot.doPowerdown();
+            }
+        }
+        if (!singlePlayerMode) {
+            for (int i = 0; i < clientCount; i++) {
+                if (robots[i].getExecPowerdown() && turn == 0) {
+                    robots[i].doPowerdown();
+                }
+            }
+        }
+
+        selectedCards = cardHandler.getSelectedCards();
+
+        if (areCardSlotsFull() && cardHandler.getisDone() && checkMode()) {
+            if (!singlePlayerMode) {
+                client.getBackendClient().send("/o//e/".getBytes());
+                moves = client.getMoves();
+                order = client.getOrder();
+            }
             if (turn >= 5) {
                 System.out.println("Ferdig med ein heil runde!");
-                for (int h = 0; h < 5; h++) {
-                    //cardHandler.lockDown();
+                if (!singlePlayerMode) {
+                    for (int i = 0; i < clientCount; i++) {
+                        if (robots[i] != null) {
+                            robots[i].setAlive(true);
+                        }
+                    }
+                }
+                else {
+                    if (robot != null) {
+                        robot.setAlive(true);
+                    }
+                    for(int i = 0; i < AIs.length; i++) {
+                        if (AIs[i] != null) {
+                            AIs[i].setAlive(true);
+                        }
+                    }
                 }
                 turn = 0;
                 cardHandler.setNotFirst(true);
                 cardHandler.nullyFy();
                 checkLock(selectedCards);
-                cardHandler.setisDone(false);
+                if (singlePlayerMode) {
+                    if (robot != null && !robot.getInitPowerdown()) {
+                        cardHandler.setisDone(false);
+                    }
+                }
+                else {
+                    if (robots[ID] != null && !robots[ID].getInitPowerdown()) {
+                        cardHandler.setIsDone(false);
+                    }
+                }
                 cardHandler.setCardSprites();
 
                 System.out.println("\n");
+                if (!singlePlayerMode ) {
+                    for(int i = 0; i < clientCount; i++) {
+                        ready[i] = false;
+                    }
+                    if (server != null) {
+                        server.roundStart();
+                    }
+                    drawStats();
+                }
             }
             if (tick % 40 == 0) {
-                if (robot.getAlive()) {
-                robot.move(selectedCards[turn]);
+                if (singlePlayerMode) {
+                    if (robot != null && robot.getAlive()) {
+                        printSelectedCards();
+                        robot.move(selectedCards[turn].getName());
+                    }
+                    for (int i = 0; i < AIs.length; i++) {
+                        if (AIs[i] != null && AIs[i].getAlive()) {
+                            AIs[i].doTurn(turn);
+                        }
+                    }
+                    for (int i=0; i<AIs.length; i++){
+                        AIs[i].robotFireLasers(AIs);
+                    }
+                    System.out.println("AIDOINGMOVE!: " + turn);
+                    System.out.println("DidTURN " + (turn));
+                    turn++;
+                    if (robot != null) {
+                        robot.getSprite().draw(batch);
+                    }
+                    for (int i = 0; i < AIs.length; i++) {
+                        if (AIs[i] != null) {
+                            AIs[i].getSprite().draw(batch);
+                        }
+                    }
+                    if (robot.getInitPowerdown() && turn == 5) {
+                        robot.setExecPowerdown(true);
+                    }
+
                 }
-                turn++;
-                System.out.println("DidTURN "+(turn));
-                robot.getSprite().draw(batch);
+                else if (!singlePlayerMode) {
+                    for (int j = 0; j < clientCount; j++) {
+                        if (robots[order[turn + j]] != null && robots[order[turn + j]].getAlive()) {
+                            robots[order[turn + j]].move(moves[order[turn + j]][turn]);
+                        }
+                    }
+                    
+                    turn++;
+
+                    for (int i = 0; i < clientCount; i++) {
+                        if (turn == 5 && robots[i].getInitPowerdown()) {
+                            robots[i].setExecPowerdown(true);
+                        }
+                        if (robots[i] != null) {
+                            robots[i].getSprite().draw(batch);
+                        }
+                    }
+                    System.out.println("DidTURN " + (turn));
+                }
             }
         }
     }
+
+    public static boolean areCardSlotsFull() {
+        if(selectedCards[0] != null && selectedCards[1] != null && selectedCards[2] != null && selectedCards[3] != null && selectedCards[4] != null && amIAlive()) {
+            return true;
+        }
+        else if(!amIAlive()) {
+            return true;
+        }
+        return false;
+    }
+
     public static CardHandler getCardHandler(){
         return cardHandler;
     }
@@ -421,7 +825,48 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
     }
 
+    public static boolean getEndOfTurn() {
+        return isEndOfTurn;
+    }
+
+
     public static int getTurn() {
         return turn;
     }
+
+    public static void setID(int id){
+        ID = id;
+    }
+
+    public static int getID() {
+        return ID;
+    }
+
+    public static Client getClient() {
+        return client;
+    }
+
+    public boolean checkMode() {
+        if(singlePlayerMode) {
+            return true;
+        } else {
+            return client.askReady();
+        }
+    }
+
+    /*private void createWindow() {
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                String disconnect = "/d/" + client.getID() + "/e/";
+                client.send(disconnect.getBytes());
+                client.setRunning(false);
+                client.getBackendClient().close();
+
+            }
+        });
+    }*/
 }
+
+
+
+

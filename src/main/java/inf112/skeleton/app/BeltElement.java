@@ -28,7 +28,7 @@ public abstract class BeltElement extends BoardElement{
         else if (dir == Direction.WEST && posX - 1 == -1) {
             return -1;
         }
-        else if (map.wallNearby(dir, posX, posY)) {
+        else if (map.convWallNearby(dir, posX, posY)) {
             return 0;
         }
         else {

@@ -39,7 +39,7 @@ public class RobotTest {
         assertEquals(robot.getSprite(), null);
         assertEquals(robot.getTilePixelWidth(), 10);
         assertEquals(robot.getTilePixelHeight(), 10);
-        assertEquals(robot.getPowerdown(), false);
+
     }
 
 
@@ -66,8 +66,6 @@ public class RobotTest {
 
             robot.setAlive(randBool);
             assertEquals(robot.getAlive(), randBool);
-            robot.setPowerdown(randBool);
-            assertEquals(robot.getPowerdown(), randBool);
 
             randDir = Direction.getRandomDir();
 

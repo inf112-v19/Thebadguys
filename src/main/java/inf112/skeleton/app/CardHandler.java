@@ -7,9 +7,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+//import com.sun.istack.internal.Nullable;
 import map.IGameMap;
 
-import javax.smartcardio.Card;
 import java.util.ArrayList;
 
 public class CardHandler {
@@ -17,11 +18,12 @@ public class CardHandler {
     private SpriteBatch batch;
     private Sprite cardSprite10;
     private BitmapFont font;
+    private Button powerdownButton;
+    private Button endTurnButton;
 
     private ArrayList<CardSlots> cardSlotPos;
     private ArrayList<Sprite> randomSpriteList;
     private ArrayList<Sprite> spritePos;
-
     private Deck Deck;
     private Deck lockedDeck;
     private Cards[] selectedCards;
@@ -39,7 +41,7 @@ public class CardHandler {
     private Robot robot;
     private IGameMap map;
     private int cardDelt=9;
-    private int cardSlotLock=0;;
+    private int cardSlotLock=0;
     private ArrayList<Sprite> lockedList;
     private int pri;
     private String name;
@@ -60,33 +62,48 @@ public class CardHandler {
         //create the card that Is clicked
         Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         cardSprite10 = new Sprite(cardTexture);
-        clickedCard=new Cards(0,0, "",0, cardSprite10);
+        clickedCard=new Cards(10000,10000, "clickedCard",0, cardSprite10);
         font = new BitmapFont();
     }
 
-    public void dragged(int screenX, int screenY, Cards CardButton){
+    public void dragged(int screenX, int screenY){
         clickedCard.getCardSprite().setPosition(screenX - clickedCard.getCardSprite().getWidth() / 2, Gdx.graphics.getHeight() - screenY - clickedCard.getCardSprite().getHeight() / 2);
     }
 
-    public void letGo(int screenX, int screenY, Cards endTurnBtn, Cards powerDownBtn){
-        isInside=false;
-        if (!mainMenu.getMainRunning()){
-            if (insideCard(screenX, screenY, powerDownBtn)){
-                robot.setPowerdown(true);
-            }
-            if(insideCard(screenX, screenY, endTurnBtn)){
-                isDone=true;
-            }
-
-            //method that ajusts a cards location on the screen if it is let go of. the position wil depend if it is inside or outside a cardslot
+    public void letGo(int screenX, int screenY){
+        isInside = false;
+        if (!mainMenu.getMainRunning()) {
+            //method that adjusts a cards location on the screen if it is let go of. the position wil depend if it is inside or outside a cardslot
             adjustCardLocation();
 
             //create a new clickedCard so that a card does not stick to the mouse when let go of
-            clickedCard=new Cards(0,0, "",0, cardSprite10);
+            clickedCard = new Cards(10000, 10000, "clickedCard", 0, cardSprite10);
         }
     }
 
-    public void click(int button, int screenX, int screenY, Cards CardButton){
+    /*
+    public void letGo(int screenX, int screenY, Cards endTurnBtn){
+        isInside=false;
+        String sendCards = "";
+        if (!mainMenu.getMainRunning()){
+            //if (insideCard(screenX, screenY, powerDownBtn)){
+            //    robot.setPowerdown(true);
+            //}
+            if(insideCard(screenX, screenY, endTurnBtn)){
+                if (!RoboRallyDemo.getSinglePlayerMode()) {
+                    for(int i = 0; i < 5; i++) {
+                        if (selectedCards[i] != null) {
+                            sendCards += selectedCards[i].getName() + "~" + selectedCards[i].getPriority() + "~";
+                        }
+                    }
+                    String string = "/r/"+RoboRallyDemo.getID()+ sendCards + "/e/";
+                    System.out.println(sendCards);
+                    RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
+                }
+                isDone=true;
+            }*/
+
+    public void click(int button, int screenX, int screenY){
         counter=0;
         for(int i=0; i<cardDelt; i++){
             if(insideCard(screenX, screenY,Deck.getDeckList().get(i)) && button == Input.Buttons.LEFT){
@@ -100,6 +117,16 @@ public class CardHandler {
                 }
                 break;
             }
+        }
+    }
+
+    public void crushBug(){
+        selectedCards[0]=null;
+    }
+
+    public void powerdownCards() {
+        for (int i = 0; i < 5; i++) {
+            selectedCards[i] = new Cards(10000, 10000, "powerdown", 0);
         }
     }
 
@@ -305,12 +332,14 @@ public class CardHandler {
     }
 
     public void lockDown(){
-        if(cardDelt>5){
-            cardDelt--;
+        if(robot.getDamage() < 5){
+            cardDelt = 9 - robot.getDamage();
         }else{
-            if(cardSlotLock<5){
+            cardDelt = 9 - robot.getDamage();
+            cardSlotLock = robot.getDamage() - 4;
+            /*if(cardSlotLock<5){
                 cardSlotLock++;
-            }
+            }*/
         }
     }
 
@@ -339,6 +368,14 @@ public class CardHandler {
     }
 
     public boolean getisDone(){
+        if (RoboRallyDemo.amIAlive()) {
+            return isDone;
+        }
+        else {
+            return true;
+        }
+    }
+    public boolean newTurn(){
         return isDone;
     }
 
@@ -347,5 +384,10 @@ public class CardHandler {
             sprite.draw(batch);
         }
     }
+    public int getCardDelt(){return cardDelt;}
+
+    public void setCardDelt(int cardDelt) {this.cardDelt = cardDelt;}
+
+    public void setIsDone(boolean isDone) {this.isDone = isDone;}
 }
 

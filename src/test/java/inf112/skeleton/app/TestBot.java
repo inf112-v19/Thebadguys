@@ -188,29 +188,29 @@ public class TestBot implements IRobot {
         }
     }
 
-    public void move(Cards card){ // gets the command from a card and figures out which command to execute
-        String command = card.getCardSprite().getTexture().toString();
-        switch (command){
-            case "Models/AlleBevegelseKortUtenPrioritet/BackUp.png":
-                canMove(1,-1);
+    public void move(String move) { // gets the command from a card and figures out which command to execute
+        //String command = card.getCardSprite().getTexture().toString();
+        switch (move) {
+            case "BACKUP":
+                canMove(1, -1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-1.png":
-                canMove(1,1);
+            case "MOVE1":
+                canMove(1, 1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-2.png":
-                canMove(2,1);
+            case "MOVE2":
+                canMove(2, 1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Move-3.png":
-                canMove(3,1);
+            case "MOVE3":
+                canMove(3, 1);
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-90.png":
+            case "ROTATE90":
                 this.rotate_right();
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-180.png":
+            case "ROTATE180":
                 this.rotate_right();
                 this.rotate_right();
                 break;
-            case "Models/AlleBevegelseKortUtenPrioritet/Rotate-C90.png":
+            case "ROTATEC90":
                 this.rotate_left();
                 break;
             default:
@@ -230,19 +230,21 @@ public class TestBot implements IRobot {
         if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 1) {
             this.setCheckpoint(this.posX, this.posY);
             System.out.println("Backup on repairsite!");
-        }
-        else if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 2) {
+        } else if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 2) {
             this.setCheckpoint(this.posX, this.posY);
-            if(this.damage != 0) {this.damage -=1;}
-        }
-        else if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 3) {
-            this.setCheckpoint(this.posX, this.posY);
-            if(this.damage > 1) {
-                this.damage -= 2; // put in choice for option cards.
+            if (this.damage != 0) {
+                this.damage -= 1;
             }
-            else if(this.damage == 1) {this.damage = 0;}
+        } else if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 3) {
+            this.setCheckpoint(this.posX, this.posY);
+            if (this.damage > 1) {
+                this.damage -= 2; // put in choice for option cards.
+            } else if (this.damage == 1) {
+                this.damage = 0;
+            }
         }
     }
+
 
     public void died() {
         this.lives -= 1; // loose an option card of the players choice
@@ -312,7 +314,7 @@ public class TestBot implements IRobot {
         else if (this.dir == Direction.WEST && (this.posX - amount == -1 || this.posX - amount == 12)) {
             return -1;
         }
-        else if (gameMap.wallNearby(this.dir, this.posX, this.posY)) {
+        else if (gameMap.convWallNearby(this.dir, this.posX, this.posY)) {
             return 0;
         }
         else {
