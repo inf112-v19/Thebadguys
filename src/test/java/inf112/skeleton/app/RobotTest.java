@@ -91,6 +91,15 @@ public class RobotTest {
             }
             assertEquals(robot.getDamage(), randInt);
         }
+    }
+
+    @Test
+    public void damageTest2(){
+
+        startpos = new int[]{Math.round(posX), Math.round(posY)};
+        robot = new TestBot(startpos);
+
+        assertEquals(robot.getDamage(), 0);
 
         for(int i = 0; i < 10; i++){
             robot.setDamage(0);
@@ -99,10 +108,8 @@ public class RobotTest {
             for(int j = 0; j < randInt; j++){
                 robot.takeDamage();
             }
-            assertEquals(robot.getDamage(), randInt);
+            assertEquals(robot.getDamage(), 2);
         }
-
-
     }
 
     @Test

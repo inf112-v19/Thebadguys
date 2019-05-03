@@ -34,12 +34,13 @@ public class Robot  implements IRobot{
     private int y0 = (((Math.round(h) - (tilePixelHeight * mapHeight)) / 2) + (tilePixelHeight / 2)) / 10 * 3 - 9;
     private int turn = RoboRallyDemo.getTurn();
 
+    private boolean initPowerdown = false;
+    private boolean execPowerdown = false;
+
     //Initiating Board element objects.
     ExpressBelt ebelt = new ExpressBelt(gameMap);
     Belt belt = new Belt(gameMap);
     Spin spin = new Spin(gameMap);
-    private boolean initPowerdown = false;
-    private boolean execPowerdown = false;
 
     public Robot(Sprite sprite) {
         this.sprite = sprite;
@@ -318,7 +319,7 @@ public class Robot  implements IRobot{
     }
 
     public void takeDamage() {
-        if (this.damage < 10) {
+        if (this.damage < 9) {
             this.damage += 1;
             System.out.println("You now have" + this.damage);
             cardHandler = RoboRallyDemo.getCardHandler();

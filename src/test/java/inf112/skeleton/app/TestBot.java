@@ -288,7 +288,7 @@ public class TestBot implements IRobot {
     }
 
     public void takeDamage() {
-        if (this.damage < 10) {
+        if (this.damage < 9) {
             this.damage += 1;
             System.out.println("You now have" + this.damage);
             //cardHandler = RoboRallyDemo.getCardHandler();

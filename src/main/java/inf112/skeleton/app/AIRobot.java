@@ -10,7 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
 import map.MapTile;
 
-public class AIRobot{
+public class AIRobot implements IRobot{
     private int id;
     private CardHandler cardHandler;
     private Sprite sprite;
@@ -36,6 +36,11 @@ public class AIRobot{
     private int turn = RoboRallyDemo.getTurn();
     private Deck randomDeck;
     private Cards selectedCards[];
+
+    //Initiating Board element objects.
+    ExpressBelt ebelt = new ExpressBelt(gameMap);
+    Belt belt = new Belt(gameMap);
+    Spin spin = new Spin(gameMap);
 
     public int rng(Deck deck){
         return (int) (Math.random() * deck.getDeckList().size() - 1 + 1);
@@ -83,6 +88,18 @@ public class AIRobot{
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
         this.id = id;
+    }
+
+    public void setDirection(Direction dir){
+        this.dir = dir;
+    }
+
+    public void moveSprite(float x, float y){
+        this.sprite.setPosition(x, y);
+    }
+
+    public void rotateSprite(float z){
+        this.sprite.rotate(z);
     }
 
     public Boolean getAlive() {
@@ -164,6 +181,14 @@ public class AIRobot{
 
     public void setLives(int newLives) {
         this.lives = newLives;
+    }
+
+    public int getTilePixelWidth(){
+        return this.tilePixelWidth;
+    }
+
+    public int getTilePixelHeight(){
+        return this.tilePixelHeight;
     }
 
     public void rotate_right() {
@@ -253,6 +278,11 @@ public class AIRobot{
             default:
                 System.out.println("Something went wrong");
         }
+
+        ExpressBelt.doExpressBelt(this);
+        Belt.doBelt(this);
+        Spin.doSpin(this);
+        /*
         switch(gameMap.isExpressConveyerBelt(this.posX, this.posY)) {
             case "northNoTurn":
                 canMoveConveyer(Direction.NORTH);
@@ -348,7 +378,7 @@ public class AIRobot{
                 break;
             case "noBelt":
                 break;
-        }
+        }*/
         if(gameMap.isSpinLeft(this.posX, this.posY)){
             System.out.println("SPIN!");
             this.rotate_left();
@@ -428,7 +458,7 @@ public class AIRobot{
     }
 
     public void takeDamage() {
-        if (this.damage < 10) {
+        if (this.damage < 9) {
             this.damage += 1;
             System.out.println("You now have" + this.damage);
             cardHandler = RoboRallyDemo.getCardHandler();
@@ -461,27 +491,6 @@ public class AIRobot{
         }
     }
 
-    public int checkConveyer(Direction dir) {
-        if (dir == Direction.NORTH && this.posY + 1 == 12) {
-            return -1;
-        }
-        else if (dir == Direction.EAST && this.posX + 1 == 12) {
-            return -1;
-        }
-        else if (dir == Direction.SOUTH && this.posY - 1 == -1) {
-            return -1;
-        }
-        else if (dir == Direction.WEST && this.posX - 1 == -1) {
-            return -1;
-        }
-        else if (gameMap.convWallNearby(dir, this.posX, this.posY)) {
-            return 0;
-        }
-        else {
-            return 1;
-        } // add check for a second robot on the same conveyer target, if so move them both to original possition
-    }
-
     public void canMove(int loops, int amount) {
         for (int i = 0; i < loops; i++){
             if (this.checkNext(amount) == 1) {
@@ -498,48 +507,6 @@ public class AIRobot{
             else {
                 break;
             }
-        }
-    }
-
-    public int canMoveConveyer(Direction dir) {
-        if (this.checkConveyer(dir) == 1) {
-            this.moveConveyer(dir);
-            return 1;
-        }
-        else if (this.checkConveyer(dir) == -1) {
-            this.died();
-            System.out.println("Moved off the map");
-            return 0;
-        }
-        else if (this.checkConveyer(dir) == 0) {
-            System.out.println("You hit a wall!");
-            return 0;
-        }
-        else {
-            return 0;
-        }
-    }
-
-    public void moveConveyer(Direction dir) {
-        if (dir == Direction.NORTH) {
-            this.posY += 1;
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + (1 * (this.tilePixelWidth / 6)));
-        }
-        else if (dir == Direction.EAST) {
-            this.posX += 1;
-            this.sprite.setPosition(this.sprite.getX() + (1 * (this.tilePixelWidth / 6)), this.sprite.getY());
-        }
-        else if (dir == Direction.SOUTH) {
-            this.posY -= 1;
-            this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - (1 * (this.tilePixelWidth / 6)));
-        }
-        else if (dir == Direction.WEST) {
-            this.posX -= 1;
-            this.sprite.setPosition(this.sprite.getX() - (1 * (this.tilePixelWidth / 6)), this.sprite.getY());
-        }
-        if (gameMap.isHole(this.posX, this.posY)) {
-            System.out.println("You fell into a hole!");
-            this.died();
         }
     }
 
