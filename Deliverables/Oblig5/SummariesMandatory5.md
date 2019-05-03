@@ -30,3 +30,6 @@ Videre jobbet vi med å merge.
 
 ### Arbeiddssammendrag 02.05
 I dag var alle tilstede, Christian og Erlend jobbet med multiplayer og server, Tord jobbet med powerdown, André jobbet med at robot og AI kunne skyte laser på hverandre, Wim jobbet med tester. Vi merget også alt arbeidet vi hadde gjort på hver vår branch slik at programmet skulle fungere med alle funksjonene.
+
+### Arbeidssammendrag 03.05
+I dag var alle tilstede, vi jobbet med å endeliggjøre programmet slik at det ble klar for den endelige innleveringen. Vi testet programmet for å finne ut hvilke bugs som oppstod, og jobbet med å fikse disse. Vi lagde også noen flere tester til flere funksjoner av spillet. Vi jobbet også med å diskutere og svare på spørsmålene fra oblig 5. 
