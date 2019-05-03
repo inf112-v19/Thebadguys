@@ -740,6 +740,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                         }
                     }
                     mapElements(singlePlayerMode);
+
                     turn++;
 
                     for (int i = 0; i < clientCount; i++) {
@@ -825,7 +826,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 } else if (robots[i] != null && map.isRepairSite(robots[i].getPosX(), robots[i].getPosY(), turn) == 3) {
                     robots[i].setCheckpoint(robots[i].getPosX(), robots[i].getPosY());
                     if (robots[i].getDamage() > 1) {
-                        robots[i].setDamage(robots[i].getDamage() - 2); // put in choice for option cards.
+                        robots[i].setDamage(robots[i].getDamage() - 2);
                     } else if (robots[i].getDamage() == 1) {
                         robots[i].setDamage(0);
                     }

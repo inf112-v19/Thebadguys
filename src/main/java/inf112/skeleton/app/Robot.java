@@ -262,6 +262,8 @@ public class Robot  implements IRobot{
             this.dir = Direction.NORTH;
             this.setPosX(this.getCheckpoint()[0]); //update internal numbers of robot location
             this.setPosY(this.getCheckpoint()[1]);
+            this.initPowerdown = false;
+            this.execPowerdown = false;
         }
     }
 
@@ -348,87 +350,7 @@ public class Robot  implements IRobot{
         setInitPowerdown(false);
     }
 
-    public boolean PlayerCollidesWithAI(int amount) {
-        // Player checks for AI:
-        for (int i = 0; i < RoboRallyDemo.getAIs().length; i++) {
-            if (RoboRallyDemo.getAIs()[i] != null) {
-                if ((this.dir == Direction.NORTH && amount == 1) || (this.dir == Direction.SOUTH && amount == -1)) {
-                    if (amount == 1) {
-                        if (this.posY + amount == RoboRallyDemo.getAIs()[i].getPosY() && this.posX == RoboRallyDemo.getAIs()[i].getPosX()) {
-                            System.out.println("player collided in AI");
-                            indexToBePushed = i;
-                            dirToBePushed = dir;
-                            return true;
-                        }
-                    }
-                    if (amount == -1) {
-                        if (this.posY - amount == RoboRallyDemo.getAIs()[i].getPosY() && this.posX == RoboRallyDemo.getAIs()[i].getPosX()) {
-                            System.out.println("player collided in AI");
-                            indexToBePushed = i;
-                            dirToBePushed = dir;
-                            return true;
-                        }
-                    }
-                }
-                if ((this.dir == Direction.WEST && amount == 1) || (this.dir == Direction.EAST && amount == -1)) {
-                    if (amount == 1) {
-                        if (this.posX + amount == RoboRallyDemo.getAIs()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
-                            System.out.println("player collided with AI");
-                            indexToBePushed = i;
-                            dirToBePushed = dir;
-                            return true;
-                        }
-                    }
-                    if (amount == -1) {
-                        if (this.posX - amount == RoboRallyDemo.getAIs()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
-                            System.out.println("player collided with AI");
-                            indexToBePushed = i;
-                            dirToBePushed = dir;
-                            return true;
-                        }
-                    }
-                }
-                if ((this.dir == Direction.SOUTH && amount == 1) || (this.dir == Direction.NORTH && amount == -1)) {
-                    if (amount == 1) {
-                        if (this.posY - amount == RoboRallyDemo.getAIs()[i].getPosY() && this.posX == RoboRallyDemo.getRobots()[i].getPosX()) {
-                            System.out.println("player collided with AI");
-                            indexToBePushed = i;
-                            dirToBePushed = dir;
-                            return true;
-                        }
-                    }
-                    if (amount == -1) {
-                        if (this.posY + amount == RoboRallyDemo.getAIs()[i].getPosY() && this.posX == RoboRallyDemo.getRobots()[i].getPosX()) {
-                            System.out.println("player collided with AI");
-                            indexToBePushed = i;
-                            dirToBePushed = dir;
-                            return true;
-                        }
-                    }
-                }
-                if ((this.dir == Direction.WEST && amount == 1) || (this.dir == Direction.EAST && amount == -1)) {
-                    if (amount == 1) {
-                        if (this.posX - amount == RoboRallyDemo.getAIs()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
-                            System.out.println("player collided with AI");
-                            indexToBePushed = i;
-                            dirToBePushed = dir;
-                            return true;
-                        }
-                    }
-                    if (amount == -1) {
-                        if (this.posX + amount == RoboRallyDemo.getAIs()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
-                            System.out.println("player collided with AI");
-                            indexToBePushed = i;
-                            dirToBePushed = dir;
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        // Checking for other players
-        return false;
-    }
+
 
 
     public boolean playerCollidesWithPlayer(int amount) {
@@ -542,16 +464,6 @@ public class Robot  implements IRobot{
         // If the move in a direction gives this robot and another robot the same location, then the other robot will be pushed in that direction for the same distance
         // Single player first:
 
-        else if (RoboRallyDemo.getSinglePlayerMode()) {
-            if (PlayerCollidesWithAI(amount)) {
-                if (canPush(this.dir,amount)) {
-                    return 2;
-                }
-                else {
-                    return 0;
-                }
-            }
-        }
         else if (!RoboRallyDemo.getSinglePlayerMode()) {
             if (playerCollidesWithPlayer(amount)) {
                 if (canPush(this.dir, amount)) {
@@ -613,48 +525,6 @@ public class Robot  implements IRobot{
                 }
             }
         }
-        else {
-            if (dir == Direction.NORTH) {
-                if ((this.posY == 10 && amount > 0) || (this.posY == 1 && amount < 0) ||
-                        (gameMap.isHole(RoboRallyDemo.getAIs()[indexToBePushed].getPosX(), RoboRallyDemo.getAIs()[indexToBePushed].getPosY() + amount))) {
-                    willDie = true;
-                    return true;
-                }
-                if (gameMap.wallNearby(Direction.NORTH, this.posX, this.posY + amount, amount)) {
-                    return false;
-                }
-            }
-            if (dir == Direction.EAST) {
-                if ((this.posX == 10 && amount > 0) || (this.posX == 1 && amount < 0) ||
-                        (gameMap.isHole(RoboRallyDemo.getAIs()[indexToBePushed].getPosX() + amount, RoboRallyDemo.getRobots()[indexToBePushed].getPosY()))) {
-                    willDie = true;
-                    return true;
-                }
-                if (gameMap.wallNearby(Direction.EAST, this.posX + amount, this.posY, amount)) {
-                    return false;
-                }
-            }
-            if (dir == Direction.SOUTH) {
-                if ((this.posY == 10 && amount < 0) || (this.posY == 1 && amount > 0) ||
-                        (gameMap.isHole(RoboRallyDemo.getAIs()[indexToBePushed].getPosX(), RoboRallyDemo.getRobots()[indexToBePushed].getPosY() - amount))) {
-                    willDie = true;
-                    return true;
-                }
-                if (gameMap.wallNearby(Direction.SOUTH, this.posX, this.posY - amount, amount)) {
-                    return false;
-                }
-            }
-            if (dir == Direction.WEST) {
-                if ((this.posX == 10 && amount < 0) || (this.posX == 1 && amount > 0) ||
-                        (gameMap.isHole(RoboRallyDemo.getAIs()[indexToBePushed].getPosX() - amount, RoboRallyDemo.getRobots()[indexToBePushed].getPosY()))) {
-                    willDie = true;
-                    return true;
-                }
-                if (gameMap.wallNearby(Direction.WEST, this.posX - amount, this.posY, amount)) {
-                    return false;
-                }
-            }
-        }
         return true;
     }
 
@@ -665,7 +535,7 @@ public class Robot  implements IRobot{
                     RoboRallyDemo.getRobots()[indexToBePushed].died();
                 } else {
                     RoboRallyDemo.getRobots()[indexToBePushed].setPosY(RoboRallyDemo.getRobots()[indexToBePushed].getPosY() + amount);
-                    updateMe(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.NORTH);
+                    updateMeOnline(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.NORTH);
                 }
             }
             if (dir == Direction.EAST) {
@@ -673,7 +543,7 @@ public class Robot  implements IRobot{
                     RoboRallyDemo.getRobots()[indexToBePushed].died();
                 } else {
                     RoboRallyDemo.getRobots()[indexToBePushed].setPosY(RoboRallyDemo.getRobots()[indexToBePushed].getPosX() + amount);
-                    updateMe(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.EAST);
+                    updateMeOnline(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.EAST);
                 }
             }
             if (dir == Direction.SOUTH) {
@@ -681,7 +551,7 @@ public class Robot  implements IRobot{
                     RoboRallyDemo.getRobots()[indexToBePushed].died();
                 } else {
                     RoboRallyDemo.getRobots()[indexToBePushed].setPosY(RoboRallyDemo.getRobots()[indexToBePushed].getPosY() - amount);
-                    updateMe(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.SOUTH);
+                    updateMeOnline(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.SOUTH);
                 }
             }
             if (dir == Direction.WEST) {
@@ -689,55 +559,23 @@ public class Robot  implements IRobot{
                     RoboRallyDemo.getRobots()[indexToBePushed].died();
                 } else {
                     RoboRallyDemo.getRobots()[indexToBePushed].setPosX(RoboRallyDemo.getRobots()[indexToBePushed].getPosX() - amount);
-                    updateMe(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.EAST);
+                    updateMeOnline(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.EAST);
                 }
             }
         }
-        else {
-            if (dir == Direction.NORTH) {
-                if (willDie) {
-                    RoboRallyDemo.getAIs()[indexToBePushed].died();
-                } else {
-                    RoboRallyDemo.getAIs()[indexToBePushed].setPosY(RoboRallyDemo.getAIs()[indexToBePushed].getPosY() + amount);
-                }
-            }
-            if (dir == Direction.EAST) {
-                if (willDie) {
-                    RoboRallyDemo.getRobots()[indexToBePushed].died();
-                } else {
-                    RoboRallyDemo.getRobots()[indexToBePushed].setPosX(RoboRallyDemo.getAIs()[indexToBePushed].getPosX() + amount);;
-                }
-            }
-            if (dir == Direction.SOUTH) {
-                if (willDie) {
-                    RoboRallyDemo.getRobots()[indexToBePushed].died();
-                } else {
-                    RoboRallyDemo.getAIs()[indexToBePushed].setPosY(RoboRallyDemo.getAIs()[indexToBePushed].getPosY() - amount);
-                }
-            }
-            if (dir == Direction.WEST) {
-                if (willDie) {
-                    RoboRallyDemo.getRobots()[indexToBePushed].died();
-                } else {
-                    RoboRallyDemo.getAIs()[indexToBePushed].setPosY(RoboRallyDemo.getAIs()[indexToBePushed].getPosY() - amount);
-                }
-            }
-        }
-
     }
 
-    private void updateMe(Robot robot, int amount, Direction dir) {
-        if (dir == Direction.NORTH) {
-            robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX(), robot.sprite.getY() + (amount * (tilePixelWidth / 6)));
-        }
-        else if(dir == Direction.EAST) {
-            robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX() + (amount * (tilePixelWidth / 6)), robot.sprite.getY());
-        }
-        else if(dir == Direction.SOUTH) {
-            robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX(), robot.sprite.getY() - (amount * (tilePixelWidth / 6)));
-        }
-        else if(dir == Direction.WEST) {
-            robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX() - (amount * (tilePixelWidth / 6)), robot.sprite.getY());
+    private void updateMeOnline(Robot robot, int amount, Direction dir) {
+        if (!RoboRallyDemo.getSinglePlayerMode()) {
+            if (dir == Direction.NORTH) {
+                robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX(), robot.sprite.getY() + (amount * (tilePixelWidth / 6)));
+            } else if (dir == Direction.EAST) {
+                robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX() + (amount * (tilePixelWidth / 6)), robot.sprite.getY());
+            } else if (dir == Direction.SOUTH) {
+                robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX(), robot.sprite.getY() - (amount * (tilePixelWidth / 6)));
+            } else if (dir == Direction.WEST) {
+                robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX() - (amount * (tilePixelWidth / 6)), robot.sprite.getY());
+            }
         }
     }
 
@@ -750,10 +588,6 @@ public class Robot  implements IRobot{
                 this.died();
                 break;
             } else if (this.checkNext(amount) == 0) {
-                break;
-            } else if (this.checkNext(amount) == 2) {
-                System.out.println("player collides with AI"); // TODO remove
-                this.moveForward(amount);
                 break;
             } else if (this.checkNext(amount) == 3) {
                 System.out.println("player collides with player"); // TODO remove
