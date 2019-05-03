@@ -72,16 +72,6 @@ public class AIRobot implements IRobot{
         }
     }
 
-    public AIRobot(Sprite sprite){
-        this.sprite = sprite;
-    }
-
-    public AIRobot(int[] checkpoint) {
-        this.checkpoint = checkpoint;
-        this.posX = checkpoint[0];
-        this.posY = checkpoint[1];
-    }
-
     public AIRobot(Sprite sprite, int[] checkpoint, int id){
         this.sprite=sprite;
         this.checkpoint = checkpoint;
@@ -138,14 +128,6 @@ public class AIRobot implements IRobot{
         return this.damage;
     }
 
-    public int getX1(){
-        return this.x0;
-    }
-
-    public int getY1(){
-        return this.y0;
-    }
-
     public int getSpriteX() {
         return this.x0 + (this.posX * (this.tilePixelWidth / 6));
     }
@@ -161,10 +143,6 @@ public class AIRobot implements IRobot{
     public void setCheckpoint(int x, int y){
         this.checkpoint[0] = x;
         this.checkpoint[1] = y;
-    }
-
-    public void setFlagsPassed(int flagsPassed){
-        this.flagsPassed = flagsPassed;
     }
 
     public void setPosX(int newX) {
@@ -245,7 +223,6 @@ public class AIRobot implements IRobot{
             System.out.println("Something went terribly wrong");
         }
         if (gameMap.isHole(this.posX, this.posY)) {
-            System.out.println("You fell into a hole!");
             this.died();
         }
     }
@@ -276,7 +253,6 @@ public class AIRobot implements IRobot{
                 this.rotate_left();
                 break;
             default:
-                System.out.println("Something went wrong");
         }
 
         ExpressBelt.doExpressBelt(this);
@@ -379,13 +355,7 @@ public class AIRobot implements IRobot{
             case "noBelt":
                 break;
         }*/
-        if(gameMap.isSpinLeft(this.posX, this.posY)){
-            System.out.println("SPIN!");
-            this.rotate_left();
-        }
-        if (gameMap.isSpinRight(this.posX, this.posY)) {
-            this.rotate_right();
-        }
+
 
         //gameMap.fireLasers(this);
         //add method to fire my laser
@@ -419,12 +389,10 @@ public class AIRobot implements IRobot{
         this.alive = false;
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
-            System.out.println("You lost the game");
-            //System.exit(0);
+            System.out.println("AI " + id + " died.");
             RoboRallyDemo.killMe(id, true);
         }
         else {
-            System.out.println("you died");
             // moves the sprite the appropriate amount in both x and y direction to the robots backup
             if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
                 this.sprite.setPosition(this.sprite.getX() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX())), this.sprite.getY() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY())));
@@ -460,10 +428,8 @@ public class AIRobot implements IRobot{
     public void takeDamage() {
         if (this.damage < 9) {
             this.damage += 1;
-            System.out.println("You now have" + this.damage);
             cardHandler = RoboRallyDemo.getCardHandler();
             cardHandler.lockDown();
-            System.out.println(this.damage);
         }
         else {
             this.died();

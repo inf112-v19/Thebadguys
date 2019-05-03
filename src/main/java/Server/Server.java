@@ -1,30 +1,11 @@
 package Server;
 
-
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import inf112.skeleton.app.CardHandler;
-import inf112.skeleton.app.Robot;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Server implements Runnable{
-    //private static int clientCount = 0;
-    private static boolean listening = true;
-    private static ObjectOutputStream out;
-    private static ObjectInputStream in;
-    private static Socket s;
-    private static Texture[] textures;
-    private static Sprite[] sprites;
-    private static Robot[] robots;
-    private static CardHandler[] cardHandlers;
-
-    private static Player[] players;
-    private static boolean start = false;
-
     private DatagramSocket socket;
     private int port;
     private Thread run, manage, send, receive;
@@ -34,7 +15,6 @@ public class Server implements Runnable{
     private List<ServerClient> clients = new ArrayList<ServerClient>();
     private List<Integer> clientResponse = new ArrayList<Integer>();
 
-    private int[][] positions;
     private boolean[] ready = {false, false, false, false, false, false, false, false};
     private String[][] clientCards = new String[8][10];
     private String moves;
@@ -169,9 +149,6 @@ public class Server implements Runnable{
             System.out.println("player " + id + " is ready");
             String[] cards = string.substring(1).split("~");
             clientCards[id] = cards;
-            /*for(int i = 0; i < cards.length; i++){
-                System.out.println(clientCards[id][i]);
-            }*/
             string = "/r/" + id + "/e/";
             sendToAll(string);
         }
@@ -192,7 +169,7 @@ public class Server implements Runnable{
             clientResponse.add(Integer.parseInt(string.split("/i/|/e/")[1]));
 
         }
-        else if (string.startsWith("/x/")) { // may remove
+        else if (string.startsWith("/x/")) {
             if(started) {
                 sendToAllButMe("/s/" + clientCount() + "/e/", 0);
             }
@@ -204,6 +181,10 @@ public class Server implements Runnable{
             int id = Integer.parseInt(string.split("/d/|/e/")[1]);
             sendToAllButMe("/d/" + id + "/e/", id);
         }
+        else if(string.startsWith("/p/")) {
+            int id = Integer.parseInt(string.split("/p/|/e/")[1]);
+            sendToAllButMe("/p/" + id + "/e/", id);
+        }
         else if (string.startsWith("/c/") && (started || clientCount() == 8)) { // a connection handler for full server
             string = "/f/" + "server is full or started" + "/e/";
             send(string.getBytes(), packet.getAddress(), packet.getPort());
@@ -211,14 +192,6 @@ public class Server implements Runnable{
         else {
             System.out.println(string);
         }
-    }
-
-    public int[][] getPositions() {
-        for(int i = 0; i < clients.size(); i++) {
-            ServerClient client = clients.get(i);
-            positions[i] = client.getPos();
-        }
-        return positions;
     }
 
     private void disconnect(int id, boolean status) {
@@ -233,9 +206,13 @@ public class Server implements Runnable{
         String message = "";
         if (status) {
             message = "Client " + c.name + "(" + c.getID() + ")" + c.address.toString() + ":" + c.port + " disconnected.";
+            String disc = "/d/" + c.getID() + "/e/";
+            sendToAllButMe(disc, c.getID());
         }
         else {
             message = "Client " + c.name + "(" + c.getID() + ")" + c.address.toString() + ":" + c.port + " timed out.";
+            String disc = "/d/" + c.getID() + "/e/";
+            sendToAllButMe(disc, c.getID());
         }
         System.out.println(message);
     }
@@ -255,13 +232,6 @@ public class Server implements Runnable{
             }
         }
         return true;
-    }
-
-    public boolean getReadyClient(int i) {
-        if (ready[i]) {
-            return true;
-        }
-        return false;
     }
 
     public void roundStart() {
@@ -324,22 +294,3 @@ public class Server implements Runnable{
         socket.close();
     }
 }
-    
-    /*public static void main(String []args) {
-        while (listening && !start) {
-            try {
-                ServerSocket ss = new ServerSocket(5556);
-                Socket s = ss.accept();
-                System.out.println("client connected!");
-                new Player(clientCount, s).start();
-
-                clientCount++;
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (clientCount == 7) {
-                listening = false;
-            }
-        }
-    }*/

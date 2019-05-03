@@ -50,7 +50,6 @@ public class Robot  implements IRobot{
         this.checkpoint = checkpoint;
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
-        //this.game = game;
     }
 
     public Robot(Sprite sprite, int[] checkpoint) {
@@ -96,22 +95,6 @@ public class Robot  implements IRobot{
         return this.damage;
     }
 
-    public int getX0() {
-        System.out.println(this.x0);
-        System.out.println(this.mapWidth);
-        System.out.println(this.mapHeight);
-        System.out.println(this.tilePixelWidth);
-        System.out.println(this.tilePixelHeight);
-        System.out.println(this.w);
-        System.out.println(this.h);
-        return this.x0;
-    }
-
-    public int getY0() {
-        System.out.println(this.y0);
-        return this.y0;
-    }
-
     public int getSpriteX() {
         return this.x0 + (this.posX * (this.tilePixelWidth / 6));
     }
@@ -136,9 +119,6 @@ public class Robot  implements IRobot{
         return this.tilePixelHeight;
     }
 
-    public void setTurn(int turn) {
-        this.turn = turn;
-    }
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
@@ -216,7 +196,6 @@ public class Robot  implements IRobot{
             System.out.println("Something went terribly wrong");
         }
         if (gameMap.isHole(this.posX, this.posY)) {
-            System.out.println("You fell into a hole!");
             this.died();
         }
     }
@@ -287,11 +266,9 @@ public class Robot  implements IRobot{
         this.alive = false;
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
-            System.out.println("You lost the game");
-            //System.exit(0); // TODO if an AI dies this closes the game for everybody
+            System.out.println("Player " + RoboRallyDemo.getID() + " died.");
             RoboRallyDemo.killMe(RoboRallyDemo.getID(), false);
         } else {
-            System.out.println("you died");
             // moves the sprite the appropriate amount in both x and y direction to the robots backup
             if (this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
                 this.sprite.setPosition(this.sprite.getX() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX())), this.sprite.getY() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY())));
@@ -321,10 +298,8 @@ public class Robot  implements IRobot{
     public void takeDamage() {
         if (this.damage < 9) {
             this.damage += 1;
-            System.out.println("You now have" + this.damage);
             cardHandler = RoboRallyDemo.getCardHandler();
             cardHandler.lockDown();
-            System.out.println(this.damage);
         } else {
             this.died();
         }
@@ -346,22 +321,6 @@ public class Robot  implements IRobot{
         }
     }
 
-    public int checkConveyer(Direction dir) {
-        if (dir == Direction.NORTH && this.posY + 1 == 12) {
-            return -1;
-        } else if (dir == Direction.EAST && this.posX + 1 == 12) {
-            return -1;
-        } else if (dir == Direction.SOUTH && this.posY - 1 == -1) {
-            return -1;
-        } else if (dir == Direction.WEST && this.posX - 1 == -1) {
-            return -1;
-        } else if (gameMap.convWallNearby(dir, this.posX, this.posY)) {
-            return 0;
-        } else {
-            return 1;
-        } // add check for a second robot on the same conveyer target, if so move them both to original possition
-    }
-
     public void canMove(int loops, int amount) {
         for (int i = 0; i < loops; i++) {
             if (this.checkNext(amount) == 1) {
@@ -370,7 +329,6 @@ public class Robot  implements IRobot{
                 this.died();
                 break;
             } else if (this.checkNext(amount) == 0) {
-                System.out.println("You hit a wall!");
                 break;
             } else {
                 break;

@@ -2,38 +2,11 @@ package Server;
 
 import inf112.skeleton.app.RoboRallyDemo;
 import inf112.skeleton.app.mainMenu;
-
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Arrays;
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.DefaultCaret;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 
 public class Client extends JFrame implements Runnable {
     private static final long serialVersionUID = 1L;
 
-    private JPanel contentPane;
-    private JTextField txtMessage;
-    private JTextArea history;
-    private DefaultCaret caret;
     private Thread run, listen;
     private ClientBackend client;
     private boolean ready = false;
@@ -44,13 +17,7 @@ public class Client extends JFrame implements Runnable {
     private int clientCount;
     public boolean started = false;
 
-    private boolean running = false;
-    private JMenuBar menuBar;
-    private JMenu mnFile;
-    private JMenuItem mntmOnlineUsers;
-    private JMenuItem mntmExit; // TODO cleanup imports and constructor
-
-    //private OnlineUsers users;
+    private boolean running;
 
     public Client(String name, String address, int port) {
         client = new ClientBackend(name, address, port);
@@ -58,19 +25,14 @@ public class Client extends JFrame implements Runnable {
         if (!connect) {
             System.err.println("Connection failed!");
         }
-        //createWindow();
         String connection = "/c/" + name + "/e/";
         client.send(connection.getBytes());
         System.out.println("Attempting a connection to " + address + ":" + port + ", user: " + client.getName());
-        //users = new OnlineUsers();
         running = true;
         run = new Thread(this, "Running");
         run.start();
     }
 
-    public int getID() {
-        return client.getID();
-    }
 
     public void run() {
         listen();
@@ -120,10 +82,13 @@ public class Client extends JFrame implements Runnable {
                         clientCount = Integer.parseInt(message);
                         mainMenu.setMainRunning(false);
                         started = true;
+                    } else if (message.startsWith("/p/")) {
+                        int id = Integer.parseInt(message.split("/p/|/e/")[1]);
+                        System.out.println(RoboRallyDemo.getColors(id) + " choose to power down next round!");
                     } else if (message.startsWith("/d/")) {
                         int id = Integer.parseInt(message.split("/d/|/e/")[1]);
                         RoboRallyDemo.setDead(id);
-                    } else if (message.startsWith("/w/")) { // TODO may remove
+                    } else if (message.startsWith("/w/")) {
                         try {
                             Thread.sleep(200);
                         } catch (InterruptedException e) {
@@ -162,7 +127,6 @@ public class Client extends JFrame implements Runnable {
         order = new int[clientCount*5];
         for(int i = 0; i < order.length; i++){
             order[i] = Integer.parseInt(orde.split("#")[i]);
-            //System.out.println(order[i]); // TODO remove
         }
     }
 
@@ -177,10 +141,6 @@ public class Client extends JFrame implements Runnable {
     public int[] getOrder() {
         return order;
     }
-
-    public void setRunning(boolean running) {
-        this.running = running;
-    } // TODO remove?
 
     public boolean getStarted() {
         return started;
