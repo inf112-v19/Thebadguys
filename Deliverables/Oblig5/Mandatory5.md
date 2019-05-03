@@ -63,6 +63,7 @@ different machines against each other)
 We have implemented multiplayer with up to 8 other players over LAN
 
 Error handling by disconnect. (The very minimum should be that the game does not crash)
+If the host of the server disconnects the program will shut down, without finding a new host. If one of the other players disconnect the program will continue to run.
 
 power down
 Each player has the option of going into powerdown-mode by pressing the powerdown button.
