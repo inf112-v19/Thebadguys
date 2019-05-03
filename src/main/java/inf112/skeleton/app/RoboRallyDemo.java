@@ -741,7 +741,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     drawStats();
                 }
             }
-            if (tick % 500 == 0) {
+            if (tick % 40 == 0) {
                 if (singlePlayerMode) {
                     if (robot != null && robot.getAlive()) {
                         printSelectedCards();
