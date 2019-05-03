@@ -37,7 +37,7 @@ Error handling by disconnect. (The very minimum should be that the game does not
 
 power down: Each player has the option of going into powerdown-mode by pressing the powerdown button.
 
-assembly line that runs at double speed: We have implented this.
+assembly line that runs at double speed: We have implemented this.
 
 play against AI (single-player mode), possibly play against random robots:We have implented a single-player mode where you can play against 3 other AIRobots. These robots do random moves using the cards that they are assigned.
 
