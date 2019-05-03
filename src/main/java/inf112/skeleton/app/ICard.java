@@ -13,6 +13,4 @@ public interface ICard {
     float getDefaultPosX();
 
     float getDefaultPosY();
-
-    void setCardSprite(Sprite sprite);
 }
