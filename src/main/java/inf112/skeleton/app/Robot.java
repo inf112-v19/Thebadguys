@@ -672,6 +672,7 @@ public class Robot  implements IRobot{
                 if (willDie) {
                     RoboRallyDemo.getRobots()[indexToBePushed].died();
                 } else {
+                    RoboRallyDemo.getRobots()[indexToBePushed].setPosY(RoboRallyDemo.getRobots()[indexToBePushed].getPosX() + amount);
                     updateMe(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.EAST);
                 }
             }
@@ -680,6 +681,7 @@ public class Robot  implements IRobot{
                     RoboRallyDemo.getRobots()[indexToBePushed].died();
                 } else {
                     RoboRallyDemo.getRobots()[indexToBePushed].setPosY(RoboRallyDemo.getRobots()[indexToBePushed].getPosY() - amount);
+                    updateMe(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.SOUTH);
                 }
             }
             if (dir == Direction.WEST) {
@@ -687,6 +689,7 @@ public class Robot  implements IRobot{
                     RoboRallyDemo.getRobots()[indexToBePushed].died();
                 } else {
                     RoboRallyDemo.getRobots()[indexToBePushed].setPosX(RoboRallyDemo.getRobots()[indexToBePushed].getPosX() - amount);
+                    updateMe(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.EAST);
                 }
             }
         }
