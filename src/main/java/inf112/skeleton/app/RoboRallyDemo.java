@@ -555,6 +555,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     powerdownButton = new Button(x, y, "powerDown_active", powerdownbuttonSprite);
                 }
             }
+
         }
     }
 
@@ -745,14 +746,16 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     if (robot != null && robot.getAlive()) {
                         printSelectedCards();
                         robot.move(selectedCards[turn].getName());
+                        if(robot.getExecPowerdown() == false) {
+                            robot.robotFireLasers(AIs);
+                        }
                     }
                     for (int i = 0; i < AIs.length; i++) {
                         if (AIs[i] != null && AIs[i].getAlive()) {
                             AIs[i].doTurn(turn);
+                            AIs[i].robotFireLasers(AIs);
+                            AIs[i].robotFireLasers(robot);
                         }
-                    }
-                    for (int i=0; i<AIs.length; i++){
-                        AIs[i].robotFireLasers(AIs);
                     }
                     System.out.println("AIDOINGMOVE!: " + turn);
                     System.out.println("DidTURN " + (turn));
@@ -776,7 +779,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                             robots[order[turn + j]].move(moves[order[turn + j]][turn]);
                         }
                     }
-                    
+                    for(int x = 0; x < clientCount; x++){
+                        if(robots[x].getExecPowerdown() == false) {
+                            robots[x].robotFireLasers(robots);
+                        }
+                    }
+
                     turn++;
 
                     for (int i = 0; i < clientCount; i++) {
