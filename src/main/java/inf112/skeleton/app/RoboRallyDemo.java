@@ -426,10 +426,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         grid.set(6, 9, MapTile.EXPRESSCONVEYERBELTWESTTONORTH);
         grid.set(6, 10,MapTile.EXPRESSCONVEYERBELTNORTH);
 
-        grid.set(2, 5, MapTile.EXPRESSCONVEYERBELTEAST);
-        grid.set(3, 5, MapTile.EXPRESSCONVEYERBELTEAST);
-        grid.set(4, 5, MapTile.EXPRESSCONVEYERBELTEASTTONORTH);
-
         grid.set(4, 6, MapTile.EXPRESSCONVEYERBELTEASTTONORTH);
         grid.set(4, 7, MapTile.EXPRESSCONVEYERBELTNORTHTOWEST);
         grid.set(3, 7, MapTile.EXPRESSCONVEYERBELTWESTTOSOUTH);
