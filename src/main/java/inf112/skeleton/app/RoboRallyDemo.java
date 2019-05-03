@@ -215,12 +215,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             batch.begin();
             mainMenu.render();
         }else{
-            selectedCards = cardHandler.getSelectedCards();
-            if(selectedCards[0]!=null){
-                if(selectedCards[0].getName()=="clickedCard"){
-                    cardHandler.crushBug();
-                }
-            }
+            cardHandler.crushBug();
             camera.update();
             tiledMapRenderer.setView(camera);
             tiledMapRenderer.render();
@@ -737,8 +732,11 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
                         if (robots[currentOrderdMove] != null && robots[currentOrderdMove].getAlive()) {
                             robots[currentOrderdMove].move(moves[currentOrderdMove][turn]);
-                            System.out.println(currentOrderdMove);
-                            System.out.println(moves[currentOrderdMove][turn]);
+                            for (int k = 0; k < clientCount; k++) {
+                                if (robots[k] != null) {
+                                    robots[k].getSprite().draw(batch);
+                                }
+                            }
                         }
                     }
                     mapElements(singlePlayerMode);
@@ -747,9 +745,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     for (int i = 0; i < clientCount; i++) {
                         if (turn == 5 && robots[i] != null && robots[i].getInitPowerdown()) {
                             robots[i].setExecPowerdown(true);
-                        }
-                        if (robots[i] != null) {
-                            robots[i].getSprite().draw(batch);
                         }
                     }
                 }

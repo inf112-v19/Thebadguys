@@ -40,6 +40,10 @@ public class Robot  implements IRobot{
     private boolean initPowerdown = false;
     private boolean execPowerdown = false;
 
+    private int indexToBePushed;
+    private Direction dirToBePushed;
+    private Boolean willDie;
+
     public Robot(Sprite sprite) {
         this.sprite = sprite;
     }
@@ -55,6 +59,7 @@ public class Robot  implements IRobot{
         this.checkpoint = checkpoint;
         this.posX = checkpoint[0];
         this.posY = checkpoint[1];
+        this.willDie = false;
     }
 
     public Boolean getAlive() {
@@ -270,37 +275,6 @@ public class Robot  implements IRobot{
         }
     }
 
-    public int checkNext(int amount) {
-        if (this.dir == Direction.NORTH && (this.posY + amount == 12 || this.posY + amount == -1)) {
-            return -1;
-        } else if (this.dir == Direction.EAST && (this.posX + amount == 12 || this.posX + amount == -1)) {
-            return -1;
-        } else if (this.dir == Direction.SOUTH && (this.posY - amount == -1 || this.posY - amount == 12)) {
-            return -1;
-        } else if (this.dir == Direction.WEST && (this.posX - amount == -1 || this.posX - amount == 12)) {
-            return -1;
-        } else if (gameMap.wallNearby(this.dir, this.posX, this.posY, amount)) {
-            return 0;
-        } else {
-            return 1;
-        }
-    }
-
-    public void canMove(int loops, int amount) {
-        for (int i = 0; i < loops; i++) {
-            if (this.checkNext(amount) == 1) {
-                this.moveForward(amount);
-            } else if (this.checkNext(amount) == -1) {
-                this.died();
-                break;
-            } else if (this.checkNext(amount) == 0) {
-                break;
-            } else {
-                break;
-            }
-        }
-    }
-
     public boolean getExecPowerdown() {return execPowerdown;}
 
     public void setExecPowerdown(boolean execPowerdown) {this.execPowerdown = execPowerdown;}
@@ -372,5 +346,419 @@ public class Robot  implements IRobot{
         RoboRallyDemo.getCardHandler().powerdownCards();
         setExecPowerdown(false);
         setInitPowerdown(false);
+    }
+
+    public boolean PlayerCollidesWithAI(int amount) {
+        // Player checks for AI:
+        for (int i = 0; i < RoboRallyDemo.getAIs().length; i++) {
+            if (RoboRallyDemo.getAIs()[i] != null) {
+                if ((this.dir == Direction.NORTH && amount == 1) || (this.dir == Direction.SOUTH && amount == -1)) {
+                    if (amount == 1) {
+                        if (this.posY + amount == RoboRallyDemo.getAIs()[i].getPosY() && this.posX == RoboRallyDemo.getAIs()[i].getPosX()) {
+                            System.out.println("player collided in AI");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
+                            return true;
+                        }
+                    }
+                    if (amount == -1) {
+                        if (this.posY - amount == RoboRallyDemo.getAIs()[i].getPosY() && this.posX == RoboRallyDemo.getAIs()[i].getPosX()) {
+                            System.out.println("player collided in AI");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
+                            return true;
+                        }
+                    }
+                }
+                if ((this.dir == Direction.WEST && amount == 1) || (this.dir == Direction.EAST && amount == -1)) {
+                    if (amount == 1) {
+                        if (this.posX + amount == RoboRallyDemo.getAIs()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
+                            System.out.println("player collided with AI");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
+                            return true;
+                        }
+                    }
+                    if (amount == -1) {
+                        if (this.posX - amount == RoboRallyDemo.getAIs()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
+                            System.out.println("player collided with AI");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
+                            return true;
+                        }
+                    }
+                }
+                if ((this.dir == Direction.SOUTH && amount == 1) || (this.dir == Direction.NORTH && amount == -1)) {
+                    if (amount == 1) {
+                        if (this.posY - amount == RoboRallyDemo.getAIs()[i].getPosY() && this.posX == RoboRallyDemo.getRobots()[i].getPosX()) {
+                            System.out.println("player collided with AI");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
+                            return true;
+                        }
+                    }
+                    if (amount == -1) {
+                        if (this.posY + amount == RoboRallyDemo.getAIs()[i].getPosY() && this.posX == RoboRallyDemo.getRobots()[i].getPosX()) {
+                            System.out.println("player collided with AI");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
+                            return true;
+                        }
+                    }
+                }
+                if ((this.dir == Direction.WEST && amount == 1) || (this.dir == Direction.EAST && amount == -1)) {
+                    if (amount == 1) {
+                        if (this.posX - amount == RoboRallyDemo.getAIs()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
+                            System.out.println("player collided with AI");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
+                            return true;
+                        }
+                    }
+                    if (amount == -1) {
+                        if (this.posX + amount == RoboRallyDemo.getAIs()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
+                            System.out.println("player collided with AI");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        // Checking for other players
+        return false;
+    }
+
+
+    public boolean playerCollidesWithPlayer(int amount) {
+        for (int i = 0; i < RoboRallyDemo.getRobots().length; i++) {
+            if (RoboRallyDemo.getRobots()[i] != null) {
+                if (i != RoboRallyDemo.getID()) {
+                    if ((this.dir == Direction.NORTH && amount == 1) || (this.dir == Direction.SOUTH && amount == -1)) {
+                        if (amount == 1) {
+                            if (this.posY + amount == RoboRallyDemo.getRobots()[i].getPosY() && this.posX == RoboRallyDemo.getRobots()[i].getPosX()) {
+                                System.out.println("player collided with another player");
+                                indexToBePushed = i;
+                                dirToBePushed = dir;
+                                System.out.println("push robot " + i + " Direction: " + dir);
+                                return true;
+                            }
+                        }
+                        if (amount == -1) {
+                            if (this.posY - amount == RoboRallyDemo.getRobots()[i].getPosY() && this.posX == RoboRallyDemo.getRobots()[i].getPosX()) {
+                                System.out.println("player collided with another player");
+                                indexToBePushed = i;
+                                dirToBePushed = dir;
+                                System.out.println("push robot " + i + " Direction: " + dir);
+                                return true;
+                            }
+                        }
+                    }
+                    if ((this.dir == Direction.WEST && amount == 1) || (this.dir == Direction.EAST && amount == 1)) {
+                        if (amount == 1) {
+                            if (this.posX + amount == RoboRallyDemo.getRobots()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
+                                System.out.println("player collided with another player");
+                                indexToBePushed = i;
+                                dirToBePushed = dir;
+                                System.out.println("push robot " + i + " Direction: " + dir);
+                                return true;
+                            }
+                        }
+                        if (amount == -1) {
+                            if (this.posX - amount == RoboRallyDemo.getRobots()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
+                                System.out.println("player collided with another player");
+                                indexToBePushed = i;
+                                dirToBePushed = dir;
+                                System.out.println("push robot " + i + " Direction: " + dir);
+                                return true;
+                            }
+                        }
+                    }
+                    if ((this.dir == Direction.SOUTH && amount == 1) || (this.dir == Direction.NORTH && amount == -1)) {
+                        if (amount == 1) {
+                            if (this.posY - amount == RoboRallyDemo.getRobots()[i].getPosY() && this.posX == RoboRallyDemo.getRobots()[i].getPosX()) {
+                                System.out.println("player collided with another player");
+                                indexToBePushed = i;
+                                dirToBePushed = dir;
+                                System.out.println("push robot " + i + " Direction: " + dir);
+                                return true;
+                            }
+                        }
+                        if (amount == -1) {
+                            if (this.posY + amount == RoboRallyDemo.getRobots()[i].getPosY() && this.posX == RoboRallyDemo.getRobots()[i].getPosX()) {
+                                System.out.println("player collided with another player");
+                                indexToBePushed = i;
+                                dirToBePushed = dir;
+                                System.out.println("push robot " + i + " Direction: " + dir);
+                                return true;
+                            }
+                        }
+                    }
+                    if ((this.dir == Direction.WEST && amount == 1) || (this.dir == Direction.EAST && amount == -1)) {
+                        if (amount == 1) {
+                            if (this.posX - amount == RoboRallyDemo.getRobots()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
+                                System.out.println("player collided with another player");
+                                indexToBePushed = i;
+                                dirToBePushed = dir;
+                                System.out.println("push robot " + i + " Direction: " + dir);
+                                return true;
+                            }
+                        }
+                        if (amount == -1) {
+                            if (this.posX + amount == RoboRallyDemo.getRobots()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
+                                System.out.println("player collided with another player");
+                                indexToBePushed = i;
+                                dirToBePushed = dir;
+                                System.out.println("push robot " + i + " Direction: " + dir);
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // Amount: 1 means move forward, -1 move backwards
+    public int checkNext(int amount) {
+        if (this.dir == Direction.NORTH && (this.posY + amount == 12 || this.posY + amount == -1)) {
+            return -1;
+        }
+        if (this.dir == Direction.EAST && (this.posX + amount == 12 || this.posX + amount == -1)) {
+            return -1;
+        }
+        if (this.dir == Direction.SOUTH && (this.posY - amount == -1 || this.posY - amount == 12)) {
+            return -1;
+        }
+        if (this.dir == Direction.WEST && (this.posX - amount == -1 || this.posX - amount == 12)) {
+            return -1;
+        }
+        if (gameMap.wallNearby(this.dir, this.posX, this.posY, amount)) {
+            return 0;
+        }
+
+        // If the move in a direction gives this robot and another robot the same location, then the other robot will be pushed in that direction for the same distance
+        // Single player first:
+
+        else if (RoboRallyDemo.getSinglePlayerMode()) {
+            if (PlayerCollidesWithAI(amount)) {
+                if (canPush(this.dir,amount)) {
+                    return 2;
+                }
+                else {
+                    return 0;
+                }
+            }
+        }
+        else if (!RoboRallyDemo.getSinglePlayerMode()) {
+            if (playerCollidesWithPlayer(amount)) {
+                if (canPush(this.dir, amount)) {
+                    System.out.println("Can push");
+                    return 3;
+                }
+                else {
+                    return 0;
+                }
+            }
+        }
+        else {
+            System.out.println("Boring");
+            return 1;
+        }
+        return 1;
+    }
+
+    public boolean canPush(Direction dir, int amount) {
+        if (!RoboRallyDemo.getSinglePlayerMode()) {
+            if (dir == Direction.NORTH) {
+                if ((this.posY == 10 && amount > 0) || (this.posY == 1 && amount < 0) ||
+                        (gameMap.isHole(RoboRallyDemo.getRobots()[indexToBePushed].posX, RoboRallyDemo.getRobots()[indexToBePushed].posY + amount))) {
+                    willDie = true;
+                    return true;
+                }
+                if (gameMap.wallNearby(Direction.NORTH, this.posX, this.posY + amount, amount)) {
+                    return false;
+                }
+            }
+            if (dir == Direction.EAST) {
+                if ((this.posX == 10 && amount > 0) || (this.posX == 1 && amount < 0) ||
+                        (gameMap.isHole(RoboRallyDemo.getRobots()[indexToBePushed].posX + amount, RoboRallyDemo.getRobots()[indexToBePushed].posY))) {
+                    willDie = true;
+                    return true;
+                }
+                if (gameMap.wallNearby(Direction.EAST, this.posX + amount, this.posY, amount)) {
+                    return false;
+                }
+            }
+            if (dir == Direction.SOUTH) {
+                if ((this.posY == 10 && amount < 0) || (this.posY == 1 && amount > 0) ||
+                        (gameMap.isHole(RoboRallyDemo.getRobots()[indexToBePushed].posX, RoboRallyDemo.getRobots()[indexToBePushed].posY - amount))) {
+                    willDie = true;
+                    return true;
+                }
+                if (gameMap.wallNearby(Direction.SOUTH, this.posX, this.posY - amount, amount)) {
+                    return false;
+                }
+            }
+            if (dir == Direction.WEST) {
+                if ((this.posX == 10 && amount < 0) || (this.posX == 1 && amount > 0) ||
+                        (gameMap.isHole(RoboRallyDemo.getRobots()[indexToBePushed].posX - amount, RoboRallyDemo.getRobots()[indexToBePushed].posY))) {
+                    willDie = true;
+                    return true;
+                }
+                if (gameMap.wallNearby(Direction.WEST, this.posX - amount, this.posY, amount)) {
+                    return false;
+                }
+            }
+        }
+        else {
+            if (dir == Direction.NORTH) {
+                if ((this.posY == 10 && amount > 0) || (this.posY == 1 && amount < 0) ||
+                        (gameMap.isHole(RoboRallyDemo.getAIs()[indexToBePushed].getPosX(), RoboRallyDemo.getAIs()[indexToBePushed].getPosY() + amount))) {
+                    willDie = true;
+                    return true;
+                }
+                if (gameMap.wallNearby(Direction.NORTH, this.posX, this.posY + amount, amount)) {
+                    return false;
+                }
+            }
+            if (dir == Direction.EAST) {
+                if ((this.posX == 10 && amount > 0) || (this.posX == 1 && amount < 0) ||
+                        (gameMap.isHole(RoboRallyDemo.getAIs()[indexToBePushed].getPosX() + amount, RoboRallyDemo.getRobots()[indexToBePushed].getPosY()))) {
+                    willDie = true;
+                    return true;
+                }
+                if (gameMap.wallNearby(Direction.EAST, this.posX + amount, this.posY, amount)) {
+                    return false;
+                }
+            }
+            if (dir == Direction.SOUTH) {
+                if ((this.posY == 10 && amount < 0) || (this.posY == 1 && amount > 0) ||
+                        (gameMap.isHole(RoboRallyDemo.getAIs()[indexToBePushed].getPosX(), RoboRallyDemo.getRobots()[indexToBePushed].getPosY() - amount))) {
+                    willDie = true;
+                    return true;
+                }
+                if (gameMap.wallNearby(Direction.SOUTH, this.posX, this.posY - amount, amount)) {
+                    return false;
+                }
+            }
+            if (dir == Direction.WEST) {
+                if ((this.posX == 10 && amount < 0) || (this.posX == 1 && amount > 0) ||
+                        (gameMap.isHole(RoboRallyDemo.getAIs()[indexToBePushed].getPosX() - amount, RoboRallyDemo.getRobots()[indexToBePushed].getPosY()))) {
+                    willDie = true;
+                    return true;
+                }
+                if (gameMap.wallNearby(Direction.WEST, this.posX - amount, this.posY, amount)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void pushRobot(Direction dir, int amount) {
+        if (!RoboRallyDemo.getSinglePlayerMode()) {
+            if (dir == Direction.NORTH) {
+                if (willDie) {
+                    RoboRallyDemo.getRobots()[indexToBePushed].died();
+                } else {
+                    RoboRallyDemo.getRobots()[indexToBePushed].setPosY(RoboRallyDemo.getRobots()[indexToBePushed].getPosY() + amount);
+                    updateMe(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.NORTH);
+                }
+            }
+            if (dir == Direction.EAST) {
+                if (willDie) {
+                    RoboRallyDemo.getRobots()[indexToBePushed].died();
+                } else {
+                    updateMe(RoboRallyDemo.getRobots()[indexToBePushed], amount, Direction.EAST);
+                }
+            }
+            if (dir == Direction.SOUTH) {
+                if (willDie) {
+                    RoboRallyDemo.getRobots()[indexToBePushed].died();
+                } else {
+                    RoboRallyDemo.getRobots()[indexToBePushed].setPosY(RoboRallyDemo.getRobots()[indexToBePushed].getPosY() - amount);
+                }
+            }
+            if (dir == Direction.WEST) {
+                if (willDie) {
+                    RoboRallyDemo.getRobots()[indexToBePushed].died();
+                } else {
+                    RoboRallyDemo.getRobots()[indexToBePushed].setPosX(RoboRallyDemo.getRobots()[indexToBePushed].getPosX() - amount);
+                }
+            }
+        }
+        else {
+            if (dir == Direction.NORTH) {
+                if (willDie) {
+                    RoboRallyDemo.getAIs()[indexToBePushed].died();
+                } else {
+                    RoboRallyDemo.getAIs()[indexToBePushed].setPosY(RoboRallyDemo.getAIs()[indexToBePushed].getPosY() + amount);
+                }
+            }
+            if (dir == Direction.EAST) {
+                if (willDie) {
+                    RoboRallyDemo.getRobots()[indexToBePushed].died();
+                } else {
+                    RoboRallyDemo.getRobots()[indexToBePushed].setPosX(RoboRallyDemo.getAIs()[indexToBePushed].getPosX() + amount);;
+                }
+            }
+            if (dir == Direction.SOUTH) {
+                if (willDie) {
+                    RoboRallyDemo.getRobots()[indexToBePushed].died();
+                } else {
+                    RoboRallyDemo.getAIs()[indexToBePushed].setPosY(RoboRallyDemo.getAIs()[indexToBePushed].getPosY() - amount);
+                }
+            }
+            if (dir == Direction.WEST) {
+                if (willDie) {
+                    RoboRallyDemo.getRobots()[indexToBePushed].died();
+                } else {
+                    RoboRallyDemo.getAIs()[indexToBePushed].setPosY(RoboRallyDemo.getAIs()[indexToBePushed].getPosY() - amount);
+                }
+            }
+        }
+
+    }
+
+    private void updateMe(Robot robot, int amount, Direction dir) {
+        if (dir == Direction.NORTH) {
+            robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX(), robot.sprite.getY() + (amount * (tilePixelWidth / 6)));
+        }
+        else if(dir == Direction.EAST) {
+            robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX() + (amount * (tilePixelWidth / 6)), robot.sprite.getY());
+        }
+        else if(dir == Direction.SOUTH) {
+            robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX(), robot.sprite.getY() - (amount * (tilePixelWidth / 6)));
+        }
+        else if(dir == Direction.WEST) {
+            robot.sprite.setPosition(RoboRallyDemo.getRobots()[indexToBePushed].sprite.getX() - (amount * (tilePixelWidth / 6)), robot.sprite.getY());
+        }
+    }
+
+
+    public void canMove(int loops, int amount) {
+        for (int i = 0; i < loops; i++) {
+            if (this.checkNext(amount) == 1) {
+                this.moveForward(amount);
+            } else if (this.checkNext(amount) == -1) {
+                this.died();
+                break;
+            } else if (this.checkNext(amount) == 0) {
+                break;
+            } else if (this.checkNext(amount) == 2) {
+                System.out.println("player collides with AI"); // TODO remove
+                this.moveForward(amount);
+                break;
+            } else if (this.checkNext(amount) == 3) {
+                System.out.println("player collides with player"); // TODO remove
+                pushRobot(dirToBePushed, amount);
+                this.moveForward(amount);
+            } else {
+                break;
+            }
+        }
     }
 }
