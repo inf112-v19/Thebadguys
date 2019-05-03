@@ -71,7 +71,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Sprite[] sprites = new Sprite[8];
     private Texture[] textures = new Texture[8];
     private static int clientCount;
-    private String[] colors = {"Gold", "Cyan", "Green", "Red", "Blue", "Purple", "Basil", "Lemon"};
+    private static String[] colors = {"Gold", "Cyan", "Green", "Red", "Blue", "Purple", "Basil", "Lemon"};
     private static int ID;
     private static boolean ready[] = {false, false, false, false, false, false, false, false};
     private String[][] moves;
@@ -121,6 +121,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public static void setDead(int id) {
         robots[id] = null;
+    }
+
+    public static String getColors(int id) {
+        return colors[id];
     }
 
     public  void createv2(){
@@ -206,7 +210,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
         if (mainMenu.getMainRunning()) {
             mainMenu.startMenu();
-            //creation of the map
         }
         Gdx.input.setInputProcessor(this);
 
@@ -317,7 +320,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (mainMenu.getMainRunning()) {
             if (mainMenu.getClientBtn().buttonClicked(screenX, screenY, mainMenu.getClientBtn())) {
-                System.out.println("DU TRYKKET PÅ CLIENT"); // TODO remove
                 if(client != null) {
                     System.out.println("You can only have one client per computer.");
                 } else {
@@ -328,14 +330,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     client = new Client("Player", ip, 55557);
                     boolean wait = false;
                     while (!wait) {
-                        System.out.println("Waiting for the server to start the game."); // TODO remove
+                        System.out.println("Waiting for the server to start the game.");
                         try {
                             Thread.sleep(300);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         if (client.getStarted()) {
-                            System.out.println("create blir callet"); // TODO remove
                             createv2();
                         }
                         wait = client.getStarted();
@@ -343,7 +344,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 }
             }
             if (mainMenu.getServerBtn().buttonClicked(screenX, screenY, mainMenu.getServerBtn())) {
-                System.out.println("DU TRYKKET PÅ SERVER"); // TODO remove
                 if (server == null) {
                     server = new Server(55557);
                     client = new Client("Player", "localhost", 55557);
@@ -355,7 +355,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 }
             }
             if (mainMenu.getStartBtn().buttonClicked(screenX, screenY, mainMenu.getStartBtn())) {
-                System.out.println("DU TRYKKET PÅ START"); // TODO remove
                 if (server != null) {
                     System.out.println("Starting the multiplayer game!");
                     server.setStarted(true);
@@ -541,19 +540,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             }
         }
         if (!singlePlayerMode) {
-            for(int i = 0; i < clientCount; i++) {
-                if (robots[i] != null && !robots[i].getInitPowerdown()) {
-                    Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
-                    Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
-                    powerdownbuttonSprite.setPosition(x, y);
-                    powerdownButton = new Button(x, y, "powerDown_inactive", powerdownbuttonSprite);
-                }
-                else if (robots[i] != null && robots[i].getInitPowerdown()){
-                    Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
-                    Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
-                    powerdownbuttonSprite.setPosition(x, y);
-                    powerdownButton = new Button(x, y, "powerDown_active", powerdownbuttonSprite);
-                }
+            if (robots[ID] != null && !robots[ID].getInitPowerdown()) {
+                Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_inactive.jpg"));
+                Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                powerdownbuttonSprite.setPosition(x, y);
+                powerdownButton = new Button(x, y, "powerDown_inactive", powerdownbuttonSprite);
+            }
+            else if (robots[ID] != null && robots[ID].getInitPowerdown()){
+                Texture powerdownbuttonTexture = new Texture(Gdx.files.internal("Models/Powerdown_active.jpg"));
+                Sprite powerdownbuttonSprite = new Sprite(powerdownbuttonTexture);
+                powerdownbuttonSprite.setPosition(x, y);
+                powerdownButton = new Button(x, y, "powerDown_active", powerdownbuttonSprite);
             }
         }
     }
@@ -695,7 +692,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 order = client.getOrder();
             }
             if (turn >= 5) {
-                System.out.println("Ferdig med ein heil runde!");
                 if (!singlePlayerMode) {
                     for (int i = 0; i < clientCount; i++) {
                         if (robots[i] != null) {
@@ -745,17 +741,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     if (robot != null && robot.getAlive()) {
                         printSelectedCards();
                         robot.move(selectedCards[turn].getName());
+                        mapElements(singlePlayerMode);
                     }
                     for (int i = 0; i < AIs.length; i++) {
                         if (AIs[i] != null && AIs[i].getAlive()) {
                             AIs[i].doTurn(turn);
+                            AIs[i].robotFireLasers(AIs);
+                            if (robot != null) {
+                                AIs[i].robotFireLasers(robot);
+                            }
                         }
                     }
-                    for (int i=0; i<AIs.length; i++){
-                        AIs[i].robotFireLasers(AIs);
-                    }
-                    System.out.println("AIDOINGMOVE!: " + turn);
-                    System.out.println("DidTURN " + (turn));
                     turn++;
                     if (robot != null) {
                         robot.getSprite().draw(batch);
@@ -776,7 +772,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                             robots[order[turn + j]].move(moves[order[turn + j]][turn]);
                         }
                     }
-                    
+                    mapElements(singlePlayerMode);
                     turn++;
 
                     for (int i = 0; i < clientCount; i++) {
@@ -787,7 +783,85 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                             robots[i].getSprite().draw(batch);
                         }
                     }
-                    System.out.println("DidTURN " + (turn));
+                }
+            }
+        }
+    }
+
+    private void mapElements(boolean singlePlayerMode) {
+        if(singlePlayerMode) {
+            ExpressBelt.doExpressBelt(robot);
+            Belt.doBelt(robot);
+            Spin.doSpin(robot);
+            map.fireLasers(robot);
+            robot.robotFireLasers(AIs);
+            if (robot != null && map.isCheckpoint(robot.getPosX(), robot.getPosY(), robot.getFlagsPassed())) {
+                robot.setFlagsPassed(robot.getFlagsPassed() +1 );
+                robot.setCheckpoint(robot.getPosX(), robot.getPosY());
+                System.out.println(colors[0] + " made it to backup number " + robot.getFlagsPassed());
+            }
+            if (robot != null && map.isRepairSite(robot.getPosX(), robot.getPosY(), turn) == 1) {
+                robot.setCheckpoint(robot.getPosX(), robot.getPosY());
+            } else if (robot != null && map.isRepairSite(robot.getPosX(), robot.getPosY(), turn) == 2) {
+                robot.setCheckpoint(robot.getPosX(), robot.getPosY());
+                if (robot.getDamage() != 0) {
+                    robot.setDamage(robot.getDamage() - 1);
+                }
+            } else if (robot != null && map.isRepairSite(robot.getPosX(), robot.getPosY(), turn) == 3) {
+                robot.setCheckpoint(robot.getPosX(), robot.getPosY());
+                if (robot.getDamage() > 1) {
+                    robot.setDamage(robot.getDamage() - 2); // put in choice for option cards.
+                } else if (robot.getDamage() == 1) {
+                    robot.setDamage(0);
+                }
+                else if(robot.getDamage() == 1) {robot.setDamage(0);}
+            }
+
+        }
+        else {
+            for (int i = 0; i < clientCount; i++) {
+                if (robots[i] != null) {
+                    ExpressBelt.doExpressBelt(robots[i]);
+                    Belt.doBelt(robots[i]);
+                    Spin.doSpin(robots[i]);
+                }
+            }
+
+            for (int i = 0; i < clientCount; i++) {
+                if (robots[i] != null) {
+                    map.fireLasers(robots[i]);
+                }
+            }
+
+            for (int i = 0; i < clientCount; i++) {
+                if (robots[i] != null) {
+                    map.robotFireLasers(robots, robots[i], i);
+                }
+            }
+
+            for (int i = 0; i < clientCount; i++) {
+                if (robots[i] != null && map.isCheckpoint(robots[i].getPosX(), robots[i].getPosY(), robots[i].getFlagsPassed())) {
+                    robots[i].setFlagsPassed(robots[i].getFlagsPassed() +1 );
+                    robots[i].setCheckpoint(robots[i].getPosX(), robots[i].getPosY());
+                    System.out.println(colors[i] + " made it to backup number " + robots[i].getFlagsPassed());
+                }
+            }
+            for (int i = 0; i < clientCount; i++) {
+                if (robots[i] != null && map.isRepairSite(robots[i].getPosX(), robots[i].getPosY(), turn) == 1) {
+                    robots[i].setCheckpoint(robots[i].getPosX(), robots[i].getPosY());
+                } else if (robots[i] != null && map.isRepairSite(robots[i].getPosX(), robots[i].getPosY(), turn) == 2) {
+                    robots[i].setCheckpoint(robots[i].getPosX(), robots[i].getPosY());
+                    if (robots[i].getDamage() != 0) {
+                        robots[i].setDamage(robots[i].getDamage() - 1);
+                    }
+                } else if (robots[i] != null && map.isRepairSite(robots[i].getPosX(), robots[i].getPosY(), turn) == 3) {
+                    robots[i].setCheckpoint(robots[i].getPosX(), robots[i].getPosY());
+                    if (robots[i].getDamage() > 1) {
+                        robots[i].setDamage(robots[i].getDamage() - 2); // put in choice for option cards.
+                    } else if (robots[i].getDamage() == 1) {
+                        robots[i].setDamage(0);
+                    }
+                    else if(robots[i].getDamage() == 1) {robots[i].setDamage(0);}
                 }
             }
         }
@@ -853,18 +927,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             return client.askReady();
         }
     }
-
-    /*private void createWindow() {
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                String disconnect = "/d/" + client.getID() + "/e/";
-                client.send(disconnect.getBytes());
-                client.setRunning(false);
-                client.getBackendClient().close();
-
-            }
-        });
-    }*/
 }
 
 

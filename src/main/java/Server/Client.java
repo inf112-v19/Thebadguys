@@ -30,10 +30,6 @@ import javax.swing.JMenuItem;
 public class Client extends JFrame implements Runnable {
     private static final long serialVersionUID = 1L;
 
-    private JPanel contentPane;
-    private JTextField txtMessage;
-    private JTextArea history;
-    private DefaultCaret caret;
     private Thread run, listen;
     private ClientBackend client;
     private boolean ready = false;
@@ -45,12 +41,6 @@ public class Client extends JFrame implements Runnable {
     public boolean started = false;
 
     private boolean running = false;
-    private JMenuBar menuBar;
-    private JMenu mnFile;
-    private JMenuItem mntmOnlineUsers;
-    private JMenuItem mntmExit; // TODO cleanup imports and constructor
-
-    //private OnlineUsers users;
 
     public Client(String name, String address, int port) {
         client = new ClientBackend(name, address, port);
@@ -120,10 +110,13 @@ public class Client extends JFrame implements Runnable {
                         clientCount = Integer.parseInt(message);
                         mainMenu.setMainRunning(false);
                         started = true;
+                    } else if (message.startsWith("/p/")) {
+                        int id = Integer.parseInt(message.split("/p/|/e/")[1]);
+                        System.out.println(RoboRallyDemo.getColors(id) + " choose to power down next round!");
                     } else if (message.startsWith("/d/")) {
                         int id = Integer.parseInt(message.split("/d/|/e/")[1]);
                         RoboRallyDemo.setDead(id);
-                    } else if (message.startsWith("/w/")) { // TODO may remove
+                    } else if (message.startsWith("/w/")) {
                         try {
                             Thread.sleep(200);
                         } catch (InterruptedException e) {
@@ -162,7 +155,6 @@ public class Client extends JFrame implements Runnable {
         order = new int[clientCount*5];
         for(int i = 0; i < order.length; i++){
             order[i] = Integer.parseInt(orde.split("#")[i]);
-            //System.out.println(order[i]); // TODO remove
         }
     }
 
@@ -180,7 +172,7 @@ public class Client extends JFrame implements Runnable {
 
     public void setRunning(boolean running) {
         this.running = running;
-    } // TODO remove?
+    }
 
     public boolean getStarted() {
         return started;

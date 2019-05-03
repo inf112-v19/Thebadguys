@@ -220,7 +220,6 @@ public class AIRobot{
             System.out.println("Something went terribly wrong");
         }
         if (gameMap.isHole(this.posX, this.posY)) {
-            System.out.println("You fell into a hole!");
             this.died();
         }
     }
@@ -251,7 +250,6 @@ public class AIRobot{
                 this.rotate_left();
                 break;
             default:
-                System.out.println("Something went wrong");
         }
         switch(gameMap.isExpressConveyerBelt(this.posX, this.posY)) {
             case "northNoTurn":
@@ -362,11 +360,9 @@ public class AIRobot{
         if (gameMap.isCheckpoint(this.posX, this.posY, this.flagsPassed)) {
             this.flagsPassed += 1;
             this.setCheckpoint(this.getPosX(), this.getPosY());
-            System.out.println("You made it to backup number " + this.flagsPassed);
         }
         if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 1) {
             this.setCheckpoint(this.posX, this.posY);
-            System.out.println("Backup on repairsite!");
         }
         else if (gameMap.isRepairSite(this.posX, this.posY, this.turn) == 2) {
             this.setCheckpoint(this.posX, this.posY);
@@ -389,12 +385,10 @@ public class AIRobot{
         this.alive = false;
         if (this.lives == 0) {
             // the robot needs to be deleted from the game.
-            System.out.println("You lost the game");
-            //System.exit(0);
+            System.out.println("AI " + id + " died.");
             RoboRallyDemo.killMe(id, true);
         }
         else {
-            System.out.println("you died");
             // moves the sprite the appropriate amount in both x and y direction to the robots backup
             if(this.getPosX() <= this.getCheckpoint()[0] && this.getPosY() <= this.getCheckpoint()[1]) {
                 this.sprite.setPosition(this.sprite.getX() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[0] - this.getPosX())), this.sprite.getY() + ((this.tilePixelWidth / 6) * (this.getCheckpoint()[1] - this.getPosY())));
@@ -430,7 +424,6 @@ public class AIRobot{
     public void takeDamage() {
         if (this.damage < 10) {
             this.damage += 1;
-            System.out.println("You now have" + this.damage);
             cardHandler = RoboRallyDemo.getCardHandler();
             cardHandler.lockDown();
             System.out.println(this.damage);
@@ -492,7 +485,6 @@ public class AIRobot{
                 break;
             }
             else if (this.checkNext(amount) == 0) {
-                System.out.println("You hit a wall!");
                 break;
             }
             else {
@@ -508,11 +500,9 @@ public class AIRobot{
         }
         else if (this.checkConveyer(dir) == -1) {
             this.died();
-            System.out.println("Moved off the map");
             return 0;
         }
         else if (this.checkConveyer(dir) == 0) {
-            System.out.println("You hit a wall!");
             return 0;
         }
         else {
@@ -538,29 +528,27 @@ public class AIRobot{
             this.sprite.setPosition(this.sprite.getX() - (1 * (this.tilePixelWidth / 6)), this.sprite.getY());
         }
         if (gameMap.isHole(this.posX, this.posY)) {
-            System.out.println("You fell into a hole!");
             this.died();
         }
     }
 
     public void robotFireLasers(AIRobot[] robot) {
         for (int i = 0; i < robot.length; i++) {
-            if (this.getDirection() == Direction.NORTH) {
+            if (robot[i] != null && robot[i].getAlive() && this.getDirection() == Direction.NORTH) {
                 boolean targetHit = false;
-                int tempY1 = this.getPosY();
+                int tempY1 = this.getPosY()+1;
                 while (targetHit == false && tempY1 < 12) {
                     if (robot[i].getPosX() == this.getPosX() && robot[i].getPosY() == tempY1) {
                         robot[i].takeDamage();
-                        System.out.println("robot has received damage" + robot[i].getDamage());
                         targetHit = true;
                     } else if (gameMap.getTiles().get((double) this.getPosX(), tempY1 + 0.5) == MapTile.WALL) {
                         targetHit = true;
                     }
                     tempY1++;
                 }
-            } else if (this.getDirection() == Direction.EAST) {
+            } else if (robot[i] != null && robot[i].getAlive() && this.getDirection() == Direction.EAST) {
                 boolean targetHit = false;
-                int tempX1 = i;
+                int tempX1 = this.getPosX()+1;
                 while (targetHit == false && tempX1 != 12) {
                     if (robot[i].getPosX() == tempX1 && robot[i].getPosY() == this.getPosY()) {
                         robot[i].takeDamage();
@@ -570,9 +558,9 @@ public class AIRobot{
                     }
                     tempX1++;
                 }
-            } else if (this.getDirection() == Direction.SOUTH) {
+            } else if (robot[i] != null && robot[i].getAlive() && this.getDirection() == Direction.SOUTH) {
                 boolean targetHit = false;
-                int tempY1 = this.getPosY();
+                int tempY1 = this.getPosY()-1;
                 while (targetHit == false && tempY1 != -1) {
                     if (robot[i].getPosX() == this.getPosX() && robot[i].getPosY() == tempY1) {
                         robot[i].takeDamage();
@@ -582,9 +570,9 @@ public class AIRobot{
                     }
                     tempY1--;
                 }
-            } else if (this.getDirection() == Direction.WEST) {
+            } else if (robot[i] != null && robot[i].getAlive() && this.getDirection() == Direction.WEST) {
                 boolean targetHit = false;
-                int tempX1 = this.getPosX();
+                int tempX1 = this.getPosX()-1;
                 while (targetHit == false && tempX1 != -1) {
                     if (robot[i].getPosX() == tempX1 && robot[i].getPosY() == this.getPosY()) {
                         robot[i].takeDamage();
@@ -597,5 +585,57 @@ public class AIRobot{
             }
 
         }
+    }
+
+    public void robotFireLasers(Robot robot) {
+            if (robot != null && robot.getAlive() && this.getDirection() == Direction.NORTH) {
+                boolean targetHit = false;
+                int tempY1 = this.getPosY()+1;
+                while (targetHit == false && tempY1 < 12) {
+                    if (robot.getPosX() == this.getPosX() && robot.getPosY() == tempY1) {
+                        robot.takeDamage();
+                        targetHit = true;
+                    } else if (gameMap.getTiles().get((double) this.getPosX(), tempY1 + 0.5) == MapTile.WALL) {
+                        targetHit = true;
+                    }
+                    tempY1++;
+                }
+            } else if (robot != null && robot.getAlive() && this.getDirection() == Direction.EAST) {
+                boolean targetHit = false;
+                int tempX1 = this.getPosX()+1;
+                while (targetHit == false && tempX1 != 12) {
+                    if (robot.getPosX() == tempX1 && robot.getPosY() == this.getPosY()) {
+                        robot.takeDamage();
+                        targetHit = true;
+                    } else if (gameMap.getTiles().get(tempX1 + 0.5, this.getPosY()) == MapTile.WALL) {
+                        targetHit = true;
+                    }
+                    tempX1++;
+                }
+            } else if (robot != null && robot.getAlive() && this.getDirection() == Direction.SOUTH) {
+                boolean targetHit = false;
+                int tempY1 = this.getPosY()-1;
+                while (targetHit == false && tempY1 != -1) {
+                    if (robot.getPosX() == this.getPosX() && robot.getPosY() == tempY1) {
+                        robot.takeDamage();
+                        targetHit = true;
+                    } else if (gameMap.getTiles().get(this.getPosX(), tempY1 - 0.5) == MapTile.WALL) {
+                        targetHit = true;
+                    }
+                    tempY1--;
+                }
+            } else if (robot != null && robot.getAlive() && this.getDirection() == Direction.WEST) {
+                boolean targetHit = false;
+                int tempX1 = this.getPosX()-1;
+                while (targetHit == false && tempX1 != -1) {
+                    if (robot.getPosX() == tempX1 && robot.getPosY() == this.getPosY()) {
+                        robot.takeDamage();
+                        targetHit = true;
+                    } else if (gameMap.getTiles().get(tempX1 - 0.5, this.getPosY()) == MapTile.WALL) {
+                        targetHit = true;
+                    }
+                    tempX1--;
+                }
+            }
     }
 }

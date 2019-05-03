@@ -47,34 +47,27 @@ public class Button implements IButton {
         return buttonSprite;
     }
 
-    public boolean buttonClicked(int screenX, int screenY, Button button) { // TODO add parameters for id and singleplayermode boolean
+    public boolean buttonClicked(int screenX, int screenY, Button button) {
 
         float NewScreenY = Gdx.graphics.getHeight() - screenY;
         if ((screenX > getPosX()) && (screenX < (getPosX() + buttonSprite.getWidth()) && (NewScreenY > getPosY())) && (NewScreenY < (getPosY() + buttonSprite.getHeight()))) {
-            System.out.println("*click*"); // TODO remove
             switch (name) {
-
                 case "powerDown_inactive":
-                    System.out.println("powerdown initiated");
                     if (!RoboRallyDemo.getSinglePlayerMode()) {
-                        for (int i = 0; i < RoboRallyDemo.getClientCount(); i++) {
-                            if (!RoboRallyDemo.getRobots()[i].getInitPowerdown()) {
-                                RoboRallyDemo.getRobots()[i].setInitPowerdown(true);
-                                System.out.println("Powerdown initiated for a robot"); // TODO remove
-                            }
+                        if (!RoboRallyDemo.getRobots()[RoboRallyDemo.getID()].getInitPowerdown()) {
+                            RoboRallyDemo.getRobots()[RoboRallyDemo.getID()].setInitPowerdown(true);
+                            String message = "/p/" + RoboRallyDemo.getID() + "/e/";
+                            RoboRallyDemo.getClient().getBackendClient().send(message.getBytes());
                         }
                     }
 
                     else if (!robot.getInitPowerdown()) { // perform check if single or multiplayer
-                        System.out.println("in singleplayer");
                         robot.setInitPowerdown(true);
-                        System.out.println("Powerdown initiated for player"); // TODO remove
                         return true;
                     }
 
                 case "endRoundButton":
                     if (RoboRallyDemo.areCardSlotsFull()) {
-                        System.out.println("isDone true");
                         cardHandler.setisDone(true);
                         if (!RoboRallyDemo.getSinglePlayerMode()) {
                             Cards selectedCards[] = cardHandler.getSelectedCards();
@@ -85,7 +78,6 @@ public class Button implements IButton {
                                 }
                             }
                             String string = "/r/" + RoboRallyDemo.getID() + sendCards + "/e/";
-                            System.out.println(sendCards); // TODO remove
                             RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
                         }
                     }

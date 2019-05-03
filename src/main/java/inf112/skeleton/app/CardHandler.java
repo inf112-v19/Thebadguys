@@ -337,9 +337,6 @@ public class CardHandler {
         }else{
             cardDelt = 9 - robot.getDamage();
             cardSlotLock = robot.getDamage() - 4;
-            /*if(cardSlotLock<5){
-                cardSlotLock++;
-            }*/
         }
     }
 
