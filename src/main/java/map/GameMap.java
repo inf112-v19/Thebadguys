@@ -10,7 +10,7 @@ public class GameMap implements IGameMap {
     private IGrid<MapTile> tiles;
 
     public GameMap(IGrid<MapTile> tiles) {
-        //tiles.copy();
+        tiles.copy();
         this.tiles = tiles;
     }
 
