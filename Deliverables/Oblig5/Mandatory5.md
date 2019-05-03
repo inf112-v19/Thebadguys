@@ -60,7 +60,9 @@ Part 3: Code
 
 List of of faults and weaknesses:
 Collision is only handled once (can only push another robot 1 tile, then pass through)
+
 Robots behind another robot take damage from lasers even if another robot is blocking it
+
 Priority of cards does not work for singleplayer mode
 
 
