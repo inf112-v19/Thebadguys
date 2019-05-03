@@ -742,10 +742,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     for (int i = 0; i < AIs.length; i++) {
                         if (AIs[i] != null && AIs[i].getAlive()) {
                             AIs[i].doTurn(turn);
-                            if (AIs[i] != null) {
+                            if (AIs[i] != null && AIs[i].getAlive()) {
                                 AIs[i].robotFireLasers(AIs);
                             }
-                            if (robot != null && AIs[i] != null) {
+                            if (robot != null && robot.getAlive() && AIs[i] != null) {
                                 AIs[i].robotFireLasers(robot);
                             }
                         }
@@ -791,8 +791,12 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             ExpressBelt.doExpressBelt(robot);
             Belt.doBelt(robot);
             Spin.doSpin(robot);
-            map.fireLasers(robot);
-            robot.robotFireLasers(AIs);
+            if (robot != null && robot.getAlive()) {
+                map.fireLasers(robot);
+            }
+            if (robot != null && robot.getAlive() && !robot.getExecPowerdown()) {
+                robot.robotFireLasers(AIs);
+            }
             if (robot != null && map.isCheckpoint(robot.getPosX(), robot.getPosY(), robot.getFlagsPassed())) {
                 robot.setFlagsPassed(robot.getFlagsPassed() +1 );
                 robot.setCheckpoint(robot.getPosX(), robot.getPosY());
@@ -826,13 +830,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             }
 
             for (int i = 0; i < clientCount; i++) {
-                if (robots[i] != null) {
+                if (robots[i] != null && robots[i].getAlive()) {
                     map.fireLasers(robots[i]);
                 }
             }
 
             for (int i = 0; i < clientCount; i++) {
-                if (robots[i] != null) {
+                if (robots[i] != null && robots[i].getAlive() && !robots[i].getExecPowerdown()) {
                     map.robotFireLasers(robots, robots[i], i);
                 }
             }
