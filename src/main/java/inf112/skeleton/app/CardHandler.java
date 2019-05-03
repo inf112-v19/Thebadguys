@@ -92,8 +92,29 @@ public class CardHandler {
         }
     }
 
+    //this method fixes a bug where a cardSlot is filled wit a clickedCard
     public void crushBug(){
-        selectedCards[0]=null;
+        if(selectedCards[0]!=null){
+            if(selectedCards[0].getName()=="clickedCard"){
+                selectedCards[0]=null;
+            }
+        }if(selectedCards[1]!=null){
+            if(selectedCards[1].getName()=="clickedCard"){
+                selectedCards[1]=null;
+            }
+        }if(selectedCards[2]!=null){
+            if(selectedCards[2].getName()=="clickedCard"){
+                selectedCards[2]=null;
+            }
+        }if(selectedCards[3]!=null){
+            if(selectedCards[3].getName()=="clickedCard"){
+                selectedCards[3]=null;
+            }
+        }if(selectedCards[4]!=null){
+            if(selectedCards[4].getName()=="clickedCard"){
+                selectedCards[4]=null;
+            }
+        }
     }
 
     public void powerdownCards() {

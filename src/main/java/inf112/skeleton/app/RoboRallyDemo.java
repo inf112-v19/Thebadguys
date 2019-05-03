@@ -215,12 +215,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             batch.begin();
             mainMenu.render();
         }else{
-            selectedCards = cardHandler.getSelectedCards();
-            if(selectedCards[0]!=null){
-                if(selectedCards[0].getName()=="clickedCard"){
-                    cardHandler.crushBug();
-                }
-            }
+            cardHandler.crushBug();
             camera.update();
             tiledMapRenderer.setView(camera);
             tiledMapRenderer.render();
