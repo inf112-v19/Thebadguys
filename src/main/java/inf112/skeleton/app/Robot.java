@@ -308,33 +308,32 @@ public class Robot  implements IRobot{
                 System.out.println("Should definitely not be possible");
             }
             if (this.dir == Direction.EAST) {
-                this.rotate_left();
-            }
+        this.rotate_left();
+    }
             else if (this.dir == Direction.SOUTH) {
-                this.rotate_right();
-                this.rotate_right();
-            }
+        this.rotate_right();
+        this.rotate_right();
+    }
             else if (this.dir == Direction.WEST) {
-                this.rotate_right();
-            }
+        this.rotate_right();
+    }
             this.dir = Direction.NORTH;
             this.setPosX(this.getCheckpoint()[0]); //update internal numbers of robot location
             this.setPosY(this.getCheckpoint()[1]);
-        }
+}
     }
-
     public void takeDamage() {
         if (this.damage < 10) {
-            this.damage += 1;
-            System.out.println("You now have" + this.damage);
-            cardHandler = RoboRallyDemo.getCardHandler();
-            cardHandler.lockDown();
-            System.out.println(this.damage);
+        this.damage += 1;
+        System.out.println("You now have" + this.damage);
+        cardHandler = RoboRallyDemo.getCardHandler();
+        cardHandler.lockDown();
+        System.out.println(this.damage);
         }
         else {
-            this.died();
+        this.died();
         }
-    }
+        }
 
     public int checkNext(int amount) {
         if (this.dir == Direction.NORTH && (this.posY + amount == 12 || this.posY + amount == -1)) {

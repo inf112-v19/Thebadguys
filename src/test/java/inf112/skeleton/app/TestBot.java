@@ -80,6 +80,14 @@ public class TestBot implements IRobot {
         return this.tilePixelHeight;
     }
 
+    public Boolean getPowerdown() {
+        return powerdown;
+    }
+
+    public void setPowerdown(boolean Powerdown) {
+        this.powerdown = Powerdown;
+    }
+
     public void moveSprite(float x, float y){
         this.sprite.setPosition(x, y);
     }
@@ -329,14 +337,6 @@ public class TestBot implements IRobot {
                 break;
             }
         }
-    }
-
-    public Boolean getPowerdown() {
-        return powerdown;
-    }
-
-    public void setPowerdown(boolean Powerdown) {
-        this.powerdown = Powerdown;
     }
 }
 
