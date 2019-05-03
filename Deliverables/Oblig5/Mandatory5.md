@@ -45,7 +45,7 @@ play against AI (single-player mode), possibly play against random robots:We hav
 **Part 3: Code**
 
 List of of faults and weaknesses:
-Collision is only handled once (can only push another robot 1 tile, then pass through), robots behind another robot take damage from lasers even if another robot is blocking it, priority of cards does not work for singleplayer mode
+Collision works partly in multiplayer but not at all in singleplayer, robots behind another robot take damage from lasers even if another robot is blocking it, priority of cards does not work for singleplayer mode, firelasers does not work with powerdown.
 
 
 To run the program you need to open your preferred IDE, and access the main class. From here you select "run". This feature varies from IDE to IDE, but in IntelliJ you can do this by pressing the green arrow in the top right corner of the window, or by selecting Run -> Run... -> Main. To play singleplayer mode you press the start button in the main menu, then you will play against 3 other AI's. To play multiplayer, one person has to host by pressing server, and the other players must press client, and get the IP from the host (cmd -> ipconfig -> IPv4 adress) and type the IP into the IDE terminal. The host then has to press start to initialize the game for all players.
