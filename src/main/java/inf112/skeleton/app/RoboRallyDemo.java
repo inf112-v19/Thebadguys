@@ -383,6 +383,8 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public static Robot[] getRobots() {return robots;}
 
+    public static AIRobot[] getAIs() {return AIs;}
+
     //if a card is inside a cardslot and it is released move it into the middle of the slot,
     //if it is outside then move it back to its default pos
     @Override
@@ -712,7 +714,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if (tick % 40 == 0) {
                 if (singlePlayerMode) {
                     if (robot != null && robot.getAlive()) {
-                        printSelectedCards();
+                        //printSelectedCards();
                         robot.move(selectedCards[turn].getName());
                     }
                     for (int i = 0; i < AIs.length; i++) {
@@ -791,10 +793,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
     }
 
-    public static boolean getEndOfTurn() {
-        return isEndOfTurn;
-    }
-
 
     public static int getTurn() {
         return turn;
@@ -819,18 +817,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             return client.askReady();
         }
     }
-
-    /*private void createWindow() {
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                String disconnect = "/d/" + client.getID() + "/e/";
-                client.send(disconnect.getBytes());
-                client.setRunning(false);
-                client.getBackendClient().close();
-
-            }
-        });
-    }*/
 }
 
 

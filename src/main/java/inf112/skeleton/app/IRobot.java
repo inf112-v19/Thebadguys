@@ -50,4 +50,10 @@ public interface IRobot {
     void setCheckpoint(int x, int y);
 
     void setDirection(Direction dir);
+
+    void doPowerdown();
+
+    boolean getExecPowerdown();
+
+    void pushRobot(Direction dir, int amount);
 }

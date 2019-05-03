@@ -460,6 +460,26 @@ public class AIRobot{
         }
     }
 
+    public void pushAI(Direction dir, int amount) {
+        if (dir == Direction.NORTH) {
+            this.posY += amount;
+            return;
+        }
+        if (dir == Direction.EAST) {
+            this.posX += amount;
+            return;
+        }
+        if (dir == Direction.SOUTH) {
+            this.posY -= amount;
+            return;
+        }
+        if (dir == Direction.WEST) {
+            this.posX -= amount;
+            return;
+        }
+    }
+
+
     public int checkConveyer(Direction dir) {
         if (dir == Direction.NORTH && this.posY + 1 == 12) {
             return -1;

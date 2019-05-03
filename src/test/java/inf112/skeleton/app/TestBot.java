@@ -4,7 +4,7 @@ import Grid.Direction;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
-
+/*
 public class TestBot implements IRobot {
     private CardHandler cardHandler;
     public Sprite sprite;
@@ -341,4 +341,4 @@ public class TestBot implements IRobot {
         this.powerdown = Powerdown;
     }
 }
-
+*/
