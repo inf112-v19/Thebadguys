@@ -40,6 +40,9 @@ public class Robot  implements IRobot{
     private boolean initPowerdown = false;
     private boolean execPowerdown = false;
 
+    private int indexToBePushed;
+    private Direction dirToBePushed;
+
     public Robot(Sprite sprite) {
         this.sprite = sprite;
     }
@@ -369,24 +372,32 @@ public class Robot  implements IRobot{
                     if ((this.dir == Direction.NORTH && amount == 1) || (this.dir == Direction.SOUTH && amount == -1)) {
                         if (this.posY + amount == RoboRallyDemo.getRobots()[i].getPosY() && this.posX == RoboRallyDemo.getRobots()[i].getPosX()) {
                             System.out.println("player collided with another player");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
                             return true;
                         }
                     }
                     if ((this.dir == Direction.WEST && amount == 1) || (this.dir == Direction.EAST && amount == 1)) {
                         if (this.posX + amount == RoboRallyDemo.getRobots()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
                             System.out.println("player collided with another player");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
                             return true;
                         }
                     }
                     if ((this.dir == Direction.SOUTH && amount == 1) || (this.dir == Direction.NORTH && amount == -1)) {
                         if (this.posY - amount == RoboRallyDemo.getRobots()[i].getPosY() && this.posX == RoboRallyDemo.getRobots()[i].getPosX()) {
                             System.out.println("player collided with another player");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
                             return true;
                         }
                     }
                     if ((this.dir == Direction.WEST && amount == 1) || (this.dir == Direction.EAST && amount == -1)) {
                         if (this.posX - amount == RoboRallyDemo.getRobots()[i].getPosX() && this.posY == RoboRallyDemo.getRobots()[i].getPosY()) {
                             System.out.println("player collided with another player");
+                            indexToBePushed = i;
+                            dirToBePushed = dir;
                             return true;
                         }
                     }
@@ -430,6 +441,7 @@ public class Robot  implements IRobot{
         else if (!RoboRallyDemo.getSinglePlayerMode()) {
             if (playerCollidesWithPlayer(amount)) {
                 if (canPush(this.dir, amount)) {
+                    System.out.println("Can push");
                     return 3;
                 }
                 else {
@@ -470,19 +482,19 @@ public class Robot  implements IRobot{
 
     public void pushRobot(Direction dir, int amount) {
         if (dir == Direction.NORTH) {
-            this.posY += amount;
+            RoboRallyDemo.getRobots()[indexToBePushed].posY += amount;
             return;
         }
         if (dir == Direction.EAST) {
-            this.posX += amount;
+            RoboRallyDemo.getRobots()[indexToBePushed].posX += amount;
             return;
         }
         if (dir == Direction.SOUTH) {
-            this.posY -= amount;
+            RoboRallyDemo.getRobots()[indexToBePushed].posY -= amount;
             return;
         }
         if (dir == Direction.WEST) {
-            this.posX -= amount;
+            RoboRallyDemo.getRobots()[indexToBePushed].posX -= amount;
             return;
         }
 
@@ -520,6 +532,7 @@ public class Robot  implements IRobot{
                 break;
             } else if (this.checkNext(amount) == 3) {
                 System.out.println("player collides with player");
+                pushRobot(dirToBePushed, amount);
                 this.moveForward(amount);
             } else {
                 break;
