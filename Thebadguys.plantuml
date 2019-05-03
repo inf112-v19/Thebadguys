@@ -3,6 +3,36 @@
 title __MVN-APP's Class Diagram__\n
 
   package inf112.skeleton.app {
+    class AIRobot {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Belt {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    abstract class BeltElement {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    abstract class BoardElement {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Button {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
     class CardHandler {
     }
   }
@@ -44,6 +74,18 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
+  package Server {
+    class Client {
+    }
+  }
+  
+
+  package Server {
+    class ClientBackend {
+    }
+  }
+  
+
   package inf112.skeleton.app {
     class Deck {
     }
@@ -64,6 +106,12 @@ title __MVN-APP's Class Diagram__\n
 
   package Grid {
     enum Direction {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class ExpressBelt {
     }
   }
   
@@ -94,6 +142,12 @@ title __MVN-APP's Class Diagram__\n
 
   package inf112.skeleton.app {
     class HelloWorld {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IButton {
     }
   }
   
@@ -153,12 +207,6 @@ title __MVN-APP's Class Diagram__\n
   
 
   package inf112.skeleton.app {
-    interface IItem {
-    }
-  }
-  
-
-  package inf112.skeleton.app {
     interface IRobot {
     }
   }
@@ -166,6 +214,12 @@ title __MVN-APP's Class Diagram__\n
 
   package inf112.skeleton.app {
     interface IRobot {
+    }
+  }
+  
+
+  package Server {
+    class Identifier {
     }
   }
   
@@ -260,21 +314,64 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
+  package Server {
+    class Server {
+    }
+  }
+  
+
+  package Server {
+    class ServerClient {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Spin {
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class mainMenu {
+    }
+  }
+  
+
+  AIRobot -up-|> IRobot
+  AIRobot o-- CardHandler : cardHandler
+  AIRobot o-- Direction : dir
+  AIRobot o-- GameMap : gameMap
+  AIRobot o-- Deck : randomDeck
+  AIRobot o-- ExpressBelt : ebelt
+  AIRobot o-- Belt : belt
+  AIRobot o-- Spin : spin
+  Belt -up-|> BeltElement
+  BeltElement -up-|> BoardElement
+  Button -up-|> IButton
+  Button o-- CardHandler : cardHandler
+  Button o-- Robot : robot
   CardHandler o-- Deck : Deck
+  CardHandler o-- Deck : lockedDeck
   CardHandler o-- Cards : clickedCard
   CardHandler o-- Cards : listCard
   CardHandler o-- CardSlots : temp
   CardHandler o-- Robot : robot
   CardHandler o-- IGameMap : map
   CardSlots -up-|> ICardSlot
-  Cards -up-|> ICard
+  CardValues -up-|> Serializable
   Cards -up-|> ICard
   Cards o-- Cards : Dummycard0
+  Cards -up-|> ICard
+  Cards -up-|> Serializable
+  Client -up-|> Runnable
+  Client -up-|> JFrame
+  Client o-- ClientBackend : client
   Deck -up-|> IDeck
   Deck -up-|> IDeck
+  ExpressBelt -up-|> BeltElement
   GameMap -up-|> IGameMap
   GameMap -up-|> IGameMap
-  GameMap o-- Direction : dir
   HelloWorld -up-|> ApplicationListener
   HelloWorld -up-|> InputProcessor
   HelloWorld -up-|> ApplicationListener
@@ -283,16 +380,31 @@ title __MVN-APP's Class Diagram__\n
   MyGrid -up-|> IGrid
   RoboRallyDemo -up-|> ApplicationListener
   RoboRallyDemo -up-|> InputProcessor
-  RoboRallyDemo o-- Cards : CardButton
-  RoboRallyDemo o-- Robot : robot
+  RoboRallyDemo -up-|> ApplicationListener
+  RoboRallyDemo -up-|> InputProcessor
+  RoboRallyDemo -up-|> ApplicationListener
+  RoboRallyDemo -up-|> InputProcessor
+  RoboRallyDemo o-- Button : endTurnButton
+  RoboRallyDemo o-- Button : powerdownButton
+  RoboRallyDemo o-- AIRobot : AIrobot
+  RoboRallyDemo o-- Cards : statBoard0
+  RoboRallyDemo o-- Cards : card
+  RoboRallyDemo o-- mainMenu : mainMenu
   RoboRallyDemo o-- IGrid : grid
-  RoboRallyDemo -up-|> ApplicationListener
-  RoboRallyDemo -up-|> InputProcessor
-  RoboRallyDemo -up-|> ApplicationListener
-  RoboRallyDemo -up-|> InputProcessor
+  RoboRallyDemo o-- Server : server
+  Robot -up-|> IRobot
   Robot o-- CardHandler : cardHandler
   Robot o-- Direction : dir
   Robot o-- GameMap : gameMap
+  Robot o-- ExpressBelt : ebelt
+  Robot o-- Belt : belt
+  Robot o-- Spin : spin
+  Robot o-- Direction : dirToBePushed
+  Server -up-|> Runnable
+  Spin -up-|> BoardElement
+  mainMenu o-- Button : serverButton
+  mainMenu o-- Button : clientButton
+  mainMenu o-- Button : startButton
 
 
 right footer

@@ -5,49 +5,30 @@ title __MAP's Class Diagram__\n
   package map {
     class GameMap {
         - tiles : IGrid<MapTile>
-        - x : int
-        - y : int
         + GameMap()
+        + isExpressConveyerBelt()
+        + isConveyerBelt()
+        + nextConveyerBelt()
         + isHole()
         + isSpinLeft()
+        + isSpinRight()
         + isCheckpoint()
-        + isLaser()
-        + getCell()
-        + setCell()
+        + isRepairSite()
+        + fireLasers()
+        + robotFireLasers()
+        + wallNearby()
+        + convWallNearby()
         + getHeight()
-        + getPlayerGold()
-        + getPlayerHitPoints()
         + getWidth()
-        + isPlaying()
-        + movePlayer()
-        + playerCanGo()
-        + isValidPosition()
-        + isOutsideMap()
-        + getPosX()
-        + getPosY()
-        + setPosX()
-        + setPosY()
-        + getDirection()
-        + rotate_right()
-        + rotate_left()
-        + moveForward()
-        + move()
-        + isConveyer()
+        + getTiles()
     }
   }
   
 
   package map {
     interface IGameMap {
-        {abstract} + getCell()
         {abstract} + getHeight()
-        {abstract} + getPlayerGold()
-        {abstract} + getPlayerHitPoints()
         {abstract} + getWidth()
-        {abstract} + isPlaying()
-        {abstract} + movePlayer()
-        {abstract} + playerCanGo()
-        {abstract} + move()
     }
   }
   
@@ -57,17 +38,13 @@ title __MAP's Class Diagram__\n
       WALL
       OPEN
       PLAYER
-      MONSTER
-      FLAG
       LASER
-      CONVEYERBELT
-      EXPRESSCONVEYERBELT
-      GEAR
       CHECKPOINT1
       CHECKPOINT2
       CHECKPOINT3
       CHECKPOINT4
       REPAIRSITE
+      REPAIRSITE2
       HOLE
       SPINRIGHT
       SPINLEFT
@@ -75,6 +52,30 @@ title __MAP's Class Diagram__\n
       CONVEYERBELTSOUTH
       CONVEYERBELTEAST
       CONVEYERBELTWEST
+      CONVEYERBELTNORTHTOEAST
+      CONVEYERBELTNORTHTOWEST
+      CONVEYERBELTEASTTONORTH
+      CONVEYERBELTEASTTOSOUTH
+      CONVEYERBELTSOUTHTOEAST
+      CONVEYERBELTSOUTHTOWEST
+      CONVEYERBELTWESTTONORTH
+      CONVEYERBELTWESTTOSOUTH
+      EXPRESSCONVEYERBELTNORTH
+      EXPRESSCONVEYERBELTSOUTH
+      EXPRESSCONVEYERBELTWEST
+      EXPRESSCONVEYERBELTEAST
+      EXPRESSCONVEYERBELTNORTHTOEAST
+      EXPRESSCONVEYERBELTNORTHTOWEST
+      EXPRESSCONVEYERBELTEASTTONORTH
+      EXPRESSCONVEYERBELTEASTTOSOUTH
+      EXPRESSCONVEYERBELTSOUTHTOEAST
+      EXPRESSCONVEYERBELTSOUTHTOWEST
+      EXPRESSCONVEYERBELTWESTTONORTH
+      EXPRESSCONVEYERBELTWESTTOSOUTH
+      LASERNORTH
+      LASEREAST
+      LASERSOUTH
+      LASERWEST
     }
   }
   
@@ -88,7 +89,6 @@ title __MAP's Class Diagram__\n
   
 
   GameMap -up-|> IGameMap
-  GameMap o-- Direction : dir
 
 
 right footer

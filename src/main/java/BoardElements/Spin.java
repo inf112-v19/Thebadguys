@@ -1,10 +1,11 @@
-package inf112.skeleton.app;
+package BoardElements;
 
+import inf112.skeleton.app.IRobot;
 import map.GameMap;
 
 public class Spin extends BoardElement {
 
-    Spin(GameMap map){
+    public Spin(GameMap map){
         super(map);
     }
 

@@ -1,6 +1,8 @@
 package inf112.skeleton.app;
 
+import Cards.*;
 import org.junit.Test;
+
 
 import static org.junit.Assert.assertEquals;
 

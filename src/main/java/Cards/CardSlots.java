@@ -1,10 +1,11 @@
-package inf112.skeleton.app;
+package Cards;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import Cards.ICardSlot;
 
-public class CardSlots implements ICardSlot{
+public class CardSlots implements ICardSlot {
     private Sprite cardSlotSprite1;
     private float posX, posY;
 

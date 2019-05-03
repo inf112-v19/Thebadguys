@@ -1,10 +1,11 @@
-package inf112.skeleton.app;
+package BoardElements;
 
 import Grid.Direction;
+import inf112.skeleton.app.IRobot;
 import map.GameMap;
 
 
-public abstract class BeltElement extends BoardElement{
+public abstract class BeltElement extends BoardElement {
 
 
     public BeltElement(GameMap map){

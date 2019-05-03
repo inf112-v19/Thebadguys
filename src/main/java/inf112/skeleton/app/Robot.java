@@ -1,5 +1,8 @@
 package inf112.skeleton.app;
 
+import BoardElements.Belt;
+import BoardElements.ExpressBelt;
+import BoardElements.Spin;
 import Grid.Direction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,6 +10,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
 import map.MapTile;
+import Cards.*;
 
 
 public class Robot  implements IRobot{

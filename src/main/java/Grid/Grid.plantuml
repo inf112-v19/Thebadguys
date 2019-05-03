@@ -17,6 +17,8 @@ title __GRID's Class Diagram__\n
         {abstract} + getHeight()
         {abstract} + getWidth()
         {abstract} + set()
+        {abstract} + set()
+        {abstract} + get()
         {abstract} + get()
         {abstract} + copy()
     }
@@ -32,6 +34,8 @@ title __GRID's Class Diagram__\n
         + getHeight()
         + getWidth()
         + set()
+        + set()
+        + get()
         + get()
         + copy()
     }

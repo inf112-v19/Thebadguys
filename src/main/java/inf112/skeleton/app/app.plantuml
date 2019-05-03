@@ -3,6 +3,114 @@
 title __APP's Class Diagram__\n
 
   package inf112.skeleton.app {
+    class AIRobot {
+        - id : int
+        - sprite : Sprite
+        - alive : Boolean
+        - posX : int
+        - posY : int
+        - checkpoint : int[]
+        - flagsPassed : int
+        - lives : int
+        - damage : int
+        - w : float
+        - h : float
+        - tiledMap : TiledMap
+        - prop : MapProperties
+        - mapWidth : int
+        - mapHeight : int
+        - tilePixelWidth : int
+        - tilePixelHeight : int
+        - x0 : int
+        - y0 : int
+        - turn : int
+        - selectedCards : Cards[]
+        + rng()
+        + makeDeck()
+        + fillDeck()
+        + doTurn()
+        + AIRobot()
+        + setDirection()
+        + moveSprite()
+        + rotateSprite()
+        + getAlive()
+        + getPosX()
+        + getPosY()
+        + getSprite()
+        + getCheckpoint()
+        + getFlagsPassed()
+        + getDirection()
+        + getLives()
+        + getDamage()
+        + getSpriteX()
+        + getSpriteY()
+        + setAlive()
+        + setCheckpoint()
+        + setPosX()
+        + setPosY()
+        + setDamage()
+        + setLives()
+        + getTilePixelWidth()
+        + getTilePixelHeight()
+        + rotate_right()
+        + rotate_left()
+        + moveForward()
+        + move()
+        + died()
+        + takeDamage()
+        + checkNext()
+        + canMove()
+        + robotFireLasers()
+        + robotFireLasers()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Belt {
+        + Belt()
+        {static} + doBelt()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    abstract class BeltElement {
+        + BeltElement()
+        {static} + checkConveyor()
+        {static} + canMoveConveyor()
+        {static} + moveConveyor()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    abstract class BoardElement {
+        {static} # map : GameMap
+        + BoardElement()
+        {static} + rotate_right()
+        {static} + rotate_left()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class Button {
+        - posX : int
+        - posY : int
+        - name : String
+        - buttonSprite : Sprite
+        + Button()
+        + createButton()
+        + getPosX()
+        + getPosY()
+        + getSprite()
+        + buttonClicked()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
     class CardHandler {
         - batch : SpriteBatch
         - cardSprite10 : Sprite
@@ -15,13 +123,19 @@ title __APP's Class Diagram__\n
         - isDone : boolean
         - notFirst : boolean
         - isClicked : boolean
+        - isInside : boolean
         - cardDelt : int
         - cardSlotLock : int
+        - lockedList : ArrayList<Sprite>
+        - pri : int
+        - name : String
+        - x : int
         + CardHandler()
         + dragged()
         + letGo()
         + click()
-        + printCardSlots()
+        + crushBug()
+        + powerdownCards()
         # getCardCenterX()
         # getCardCenterY()
         # getCardSlotCenterX()
@@ -29,7 +143,12 @@ title __APP's Class Diagram__\n
         # insideCardSlot()
         + insideCard()
         # setCardSprites()
-        # createDecklist()
+        + adjustCardLocation()
+        - spriteToPri()
+        - spriteToName()
+        # createInitialDecklist()
+        - updateDeckList()
+        + extraxtLockedCards()
         # drawCards()
         # createCardSlots()
         # drawCardSlots()
@@ -38,13 +157,14 @@ title __APP's Class Diagram__\n
         - addSprites()
         # nullyFy()
         + lockDown()
-        + getCardSlotLock()
         + getSelectedCards()
         + getSpritePos()
         + setNotFirst()
-        + getNotFirst()
         + setisDone()
         + getisDone()
+        + drawLockedList()
+        + setCardDelt()
+        + setIsDone()
     }
   }
   
@@ -65,15 +185,7 @@ title __APP's Class Diagram__\n
 
   package inf112.skeleton.app {
     enum CardValues {
-      BACKUP1
-      MOVE12
-      BACKUP
-      MOVE1
-      MOVE2
-      MOVE3
-      ROTATE90
-      ROTATE180
-      ROTATEC90
+      - create cards
       spr
       priority
       name
@@ -100,8 +212,6 @@ title __APP's Class Diagram__\n
         + getDefaultPosX()
         + getDefaultPosY()
         + setCardSprite()
-        + setCardName()
-        + setPriority()
     }
   }
   
@@ -116,13 +226,27 @@ title __APP's Class Diagram__\n
   
 
   package inf112.skeleton.app {
+    class ExpressBelt {
+        + ExpressBelt()
+        {static} + doExpressBelt()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    interface IButton {
+        {abstract} + buttonClicked()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
     interface ICard {
         {abstract} + getCardSprite()
         {abstract} + getPosX()
         {abstract} + getPosY()
         {abstract} + getDefaultPosX()
         {abstract} + getDefaultPosY()
-        {abstract} + setCardSprite()
     }
   }
   
@@ -144,23 +268,33 @@ title __APP's Class Diagram__\n
   
 
   package inf112.skeleton.app {
-    interface IItem {
-        {abstract} + getDamage()
-        {abstract} + getSize()
-        {abstract} + getName()
-        {abstract} + getSymbol()
-        {abstract} + handleDamage()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
     interface IRobot {
+        {abstract} + getAlive()
         {abstract} + getPosX()
         {abstract} + getPosY()
-        {abstract} + getTextureStr()
-        {abstract} + getTexture()
         {abstract} + getSprite()
+        {abstract} + getCheckpoint()
+        {abstract} + getFlagsPassed()
+        {abstract} + getDirection()
+        {abstract} + getLives()
+        {abstract} + getDamage()
+        {abstract} + died()
+        {abstract} + takeDamage()
+        {abstract} + checkNext()
+        {abstract} + canMove()
+        {abstract} + moveForward()
+        {abstract} + setPosX()
+        {abstract} + setPosY()
+        {abstract} + moveSprite()
+        {abstract} + rotateSprite()
+        {abstract} + getTilePixelWidth()
+        {abstract} + getTilePixelHeight()
+        {abstract} + setDamage()
+        {abstract} + setAlive()
+        {abstract} + setCheckpoint()
+        {abstract} + setDirection()
+        {abstract} + rotate_right()
+        {abstract} + rotate_left()
     }
   }
   
@@ -178,16 +312,48 @@ title __APP's Class Diagram__\n
         - tiledMapRenderer : TiledMapRenderer
         - camera : OrthographicCamera
         - i : int
+        - tick : int
+        {static} - turn : int
+        {static} - isEndOfTurn : Boolean
+        {static} - robot : Robot
         - viewPort : FitViewport
         {static} - cardHandler : CardHandler
+        {static} - selectedCards : Cards[]
+        - firstRund : boolean
+        - firstround : boolean
+        - statBoardList : ArrayList<Sprite>
         - batch : SpriteBatch
         - texture : Texture
         - sprite : Sprite
+        - AIsprite : Sprite
         - posX : float
         - posY : float
-        - mapSet : TiledMapTileSet
         - font : BitmapFont
+        - statBoardSprite : Sprite
         {static} - map : GameMap
+        - starts : int[][]
+        {static} - client : Client
+        {static} - robots : Robot[]
+        - sprites : Sprite[]
+        - textures : Texture[]
+        {static} - clientCount : int
+        {static} - colors : String[]
+        {static} - ID : int
+        {static} - ready : boolean[]
+        - moves : String[][]
+        - order : int[]
+        {static} - singlePlayerMode : boolean
+        {static} - AIs : AIRobot[]
+        - AIstarts : int[][]
+        {static} + getSinglePlayerMode()
+        {static} + setReady()
+        {static} + killMe()
+        {static} + amIAlive()
+        {static} + amIAliveAI()
+        {static} + setDead()
+        {static} + getColors()
+        {static} + setClientCount()
+        + createv2()
         + create()
         + dispose()
         + render()
@@ -198,6 +364,9 @@ title __APP's Class Diagram__\n
         + keyUp()
         + keyTyped()
         + touchDown()
+        {static} + getRobot()
+        {static} + getAIs()
+        {static} + getRobots()
         + touchUp()
         + touchDragged()
         + mouseMoved()
@@ -206,9 +375,22 @@ title __APP's Class Diagram__\n
         {static} + getTiledMap()
         {static} + getIGameMap()
         + setCamera()
-        + buttonCreation()
+        + endTurnButtonCreation()
+        + powerdownButtonCreation()
+        + statBoardCreation()
+        + drawStats()
+        + drawReady()
         + doTurn()
+        - mapElements()
+        {static} + areCardSlotsFull()
         {static} + getCardHandler()
+        + checkLock()
+        {static} + getEndOfTurn()
+        {static} + getTurn()
+        {static} + setID()
+        {static} + getID()
+        {static} + getClient()
+        + checkMode()
     }
   }
   
@@ -216,6 +398,7 @@ title __APP's Class Diagram__\n
   package inf112.skeleton.app {
     class Robot {
         - sprite : Sprite
+        - alive : Boolean
         - posX : int
         - posY : int
         - checkpoint : int[]
@@ -230,10 +413,17 @@ title __APP's Class Diagram__\n
         - mapHeight : int
         - tilePixelWidth : int
         - tilePixelHeight : int
-        - x1 : int
-        - y1 : int
+        - x0 : int
+        - y0 : int
+        - turn : int
+        - initPowerdown : boolean
+        - execPowerdown : boolean
+        - indexToBePushed : int
+        - willDie : Boolean
         + Robot()
         + Robot()
+        + Robot()
+        + getAlive()
         + getPosX()
         + getPosY()
         + getSprite()
@@ -242,42 +432,115 @@ title __APP's Class Diagram__\n
         + getDirection()
         + getLives()
         + getDamage()
-        + getX1()
-        + getY1()
+        + getSpriteX()
+        + getSpriteY()
+        + moveSprite()
+        + rotateSprite()
+        + getTilePixelWidth()
+        + getTilePixelHeight()
+        + setAlive()
         + setCheckpoint()
         + setFlagsPassed()
+        + setDirection()
         + setPosX()
         + setPosY()
         + setDamage()
-        + setLives()
         + rotate_right()
         + rotate_left()
         + moveForward()
         + move()
         + died()
         + takeDamage()
+        + getExecPowerdown()
+        + setExecPowerdown()
+        + getInitPowerdown()
+        + robotFireLasers()
+        + setInitPowerdown()
+        + doPowerdown()
+        + playerCollidesWithPlayer()
         + checkNext()
+        + canPush()
+        + pushRobot()
+        - updateMeOnline()
+        + canMove()
     }
   }
   
 
+  package inf112.skeleton.app {
+    class Spin {
+        ~ Spin()
+        {static} + doSpin()
+    }
+  }
+  
+
+  package inf112.skeleton.app {
+    class mainMenu {
+        {static} - mainRunning : boolean
+        ~ batch : SpriteBatch
+        - font : BitmapFont
+        + mainMenu()
+        + startMenu()
+        + render()
+        # getCenterY()
+        # getClientBtn()
+        # getServerBtn()
+        # getStartBtn()
+        {static} + getMainRunning()
+        {static} + setMainRunning()
+    }
+  }
+  
+
+  AIRobot -up-|> IRobot
+  AIRobot o-- CardHandler : cardHandler
+  AIRobot o-- Direction : dir
+  AIRobot o-- GameMap : gameMap
+  AIRobot o-- Deck : randomDeck
+  AIRobot o-- ExpressBelt : ebelt
+  AIRobot o-- Belt : belt
+  AIRobot o-- Spin : spin
+  Belt -up-|> BeltElement
+  BeltElement -up-|> BoardElement
+  Button -up-|> IButton
+  Button o-- CardHandler : cardHandler
+  Button o-- Robot : robot
   CardHandler o-- Deck : Deck
+  CardHandler o-- Deck : lockedDeck
   CardHandler o-- Cards : clickedCard
   CardHandler o-- Cards : listCard
   CardHandler o-- CardSlots : temp
   CardHandler o-- Robot : robot
   CardHandler o-- IGameMap : map
   CardSlots -up-|> ICardSlot
+  CardValues -up-|> Serializable
   Cards -up-|> ICard
+  Cards -up-|> Serializable
   Deck -up-|> IDeck
+  ExpressBelt -up-|> BeltElement
   RoboRallyDemo -up-|> ApplicationListener
   RoboRallyDemo -up-|> InputProcessor
-  RoboRallyDemo o-- Cards : CardButton
-  RoboRallyDemo o-- Robot : robot
+  RoboRallyDemo o-- Button : endTurnButton
+  RoboRallyDemo o-- Button : powerdownButton
+  RoboRallyDemo o-- AIRobot : AIrobot
+  RoboRallyDemo o-- Cards : statBoard0
+  RoboRallyDemo o-- Cards : card
+  RoboRallyDemo o-- mainMenu : mainMenu
   RoboRallyDemo o-- IGrid : grid
+  RoboRallyDemo o-- Server : server
+  Robot -up-|> IRobot
   Robot o-- CardHandler : cardHandler
   Robot o-- Direction : dir
   Robot o-- GameMap : gameMap
+  Robot o-- ExpressBelt : ebelt
+  Robot o-- Belt : belt
+  Robot o-- Spin : spin
+  Robot o-- Direction : dirToBePushed
+  Spin -up-|> BoardElement
+  mainMenu o-- Button : serverButton
+  mainMenu o-- Button : clientButton
+  mainMenu o-- Button : startButton
 
 
 right footer

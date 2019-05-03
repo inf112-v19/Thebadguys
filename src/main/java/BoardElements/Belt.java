@@ -1,6 +1,7 @@
-package inf112.skeleton.app;
+package BoardElements;
 
 import Grid.Direction;
+import inf112.skeleton.app.IRobot;
 import map.GameMap;
 
 public class Belt extends BeltElement {

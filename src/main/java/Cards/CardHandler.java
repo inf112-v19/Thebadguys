@@ -1,4 +1,4 @@
-package inf112.skeleton.app;
+package Cards;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import inf112.skeleton.app.*;
 import map.IGameMap;
 
 import java.util.ArrayList;
@@ -155,7 +156,7 @@ public class CardHandler {
 
     //method to set the position of sprites, if it is the first turn then just set the position of the sprites,
     //if it is not the first turn then I use this method to change the sprites of the cards to get new random cards
-    protected void setCardSprites() {
+    public void setCardSprites() {
         int x=0;
         randomSpriteList.clear();
         addSprites();
@@ -219,7 +220,7 @@ public class CardHandler {
     }
 
     //method to create the card-Objects
-    protected void createInitialDecklist(){
+    public void createInitialDecklist(){
         int x=0;
         for(Sprite sprite: spritePos){
             name=spriteToName(sprite);
@@ -259,7 +260,7 @@ public class CardHandler {
     }
 
     //method to draw the cards
-    protected void drawCards(){
+    public void drawCards(){
         for(Cards card: Deck.getDeckList()){
             card.getCardSprite().draw(batch);
             font.draw(batch,""+card.getPriority(),card.getCardSprite().getX()+card.getCardSprite().getWidth()-30,card.getCardSprite().getY()+card.getCardSprite().getHeight()-10);
@@ -267,7 +268,7 @@ public class CardHandler {
     }
 
     //method to create and place cardslots
-    protected void createCardSlots(){
+    public void createCardSlots(){
         int x=0;
         for(int i=0; i<5; i++){
             temp = new CardSlots(x, 0);
@@ -277,7 +278,7 @@ public class CardHandler {
     }
 
     //method to draw the cardslots
-    protected void drawCardSlots(){
+    public void drawCardSlots(){
         for(int i=0; i<5; i++){
             temp=cardSlotPos.get(i);
             temp.getCardSlotSprite().draw(batch);
@@ -316,7 +317,7 @@ public class CardHandler {
     }
 
     //method that empties the selectedCards array, that is used when an turn is over
-    protected void nullyFy(){
+    public void nullyFy(){
         for(int i=0; i<selectedCards.length-cardSlotLock; i++){
             selectedCards[i]=null;
         }

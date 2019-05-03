@@ -1,7 +1,9 @@
-package inf112.skeleton.app;
+package BoardElements;
 
+import BoardElements.BeltElement;
 import Grid.Direction;
 
+import inf112.skeleton.app.IRobot;
 import map.GameMap;
 
 public class ExpressBelt extends BeltElement {

@@ -1,7 +1,9 @@
 package inf112.skeleton.app;
 
+import Cards.Cards;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import Cards.CardHandler;
 
 public class Button implements IButton {
 

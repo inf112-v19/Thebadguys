@@ -1,5 +1,9 @@
 package inf112.skeleton.app;
 
+import BoardElements.Belt;
+import BoardElements.ExpressBelt;
+import BoardElements.Spin;
+import Cards.Cards;
 import Grid.IGrid;
 import Grid.MyGrid;
 import Server.Client;
@@ -7,7 +11,6 @@ import Server.Server;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,9 +23,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import map.GameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import Cards.CardHandler;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package inf112.skeleton.app;
+package Cards;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 

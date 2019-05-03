@@ -9,6 +9,10 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
 import map.MapTile;
+import Cards.*;
+import BoardElements.ExpressBelt;
+import BoardElements.Belt;
+import BoardElements.*;
 
 public class AIRobot implements IRobot{
     private int id;
