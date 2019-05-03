@@ -146,7 +146,7 @@ public class TestBot implements IRobot {
         else if (this.getDirection() == Direction.SOUTH){
             this.dir = Direction.WEST;
         }
-        this.sprite.rotate(-90);
+        //this.sprite.rotate(-90);
     }
 
     public void rotate_left() {
@@ -162,7 +162,7 @@ public class TestBot implements IRobot {
         else if (this.getDirection() == Direction.EAST){
             this.dir = Direction.NORTH;
         }
-        this.sprite.rotate(90);
+        //this.sprite.rotate(90);
     }
 
     public void moveForward(int amount){

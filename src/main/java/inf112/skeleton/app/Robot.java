@@ -336,14 +336,6 @@ public class Robot  implements IRobot{
         }
     }
 
-
-
-
-
-
-
-
-
     public void robotFireLasers(AIRobot[] robot) {
         for (int i = 0; i < robot.length; i++) {
             if (this.getDirection() == Direction.NORTH) {
@@ -450,7 +442,6 @@ public class Robot  implements IRobot{
                     tempX1--;
                 }
             }
-
         }
     }
 

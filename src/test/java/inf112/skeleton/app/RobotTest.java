@@ -1,13 +1,8 @@
 package inf112.skeleton.app;
 
 import Grid.Direction;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import org.junit.Test;
-
 import java.util.Random;
-
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 
@@ -159,13 +154,78 @@ public class RobotTest {
         assertEquals(robot.getDamage(), 0);
         assertEquals(robot.getLives(), 3);
 
-        for(int i = 2; i > 0; i--){
-            robot.setDamage(0);
-            randInt = random.nextInt(7);
-            for(int j = 0; j < randInt + 10; j++){
-                robot.takeDamage();
-            }
-            assertEquals(robot.getLives(), 2);
+        robot.setDamage(0);
+        randInt = random.nextInt(7);
+        for(int j = 0; j < randInt + 10; j++){
+            robot.takeDamage();
+        }
+        assertEquals(robot.getLives(), 2);
+    }
+
+    @Test
+    public void damageLivesTest3(){
+        startpos = new int[]{Math.round(posX), Math.round(posY)};
+        robot = new TestBot(startpos);
+
+        assertEquals(robot.getDamage(), 0);
+        assertEquals(robot.getLives(), 3);
+
+        robot.setDamage(0);
+        randInt = random.nextInt(7);
+        for(int j = 0; j < randInt + 18; j++){
+            robot.takeDamage();
+        }
+        assertEquals(robot.getLives(), 1);
+    }
+
+    @Test
+    public void robotSpinRightTest(){
+        startpos = new int[]{Math.round(posX), Math.round(posY)};
+        robot = new TestBot(startpos);
+
+        assertEquals(robot.getDirection(), Direction.NORTH);
+
+        randInt = random.nextInt(100);
+        for(int j = 0; j < randInt; j++){
+            robot.rotate_right();
+        }
+        if(randInt%4 == 0){
+            assertEquals(robot.getDirection(), Direction.NORTH);
+        }
+        else if(randInt%4 == 1){
+            assertEquals(robot.getDirection(), Direction.EAST);
+        }
+        else if(randInt%4 == 2){
+            assertEquals(robot.getDirection(), Direction.SOUTH);
+        }
+        else if(randInt%4 == 3){
+            assertEquals(robot.getDirection(), Direction.WEST);
         }
     }
+
+    @Test
+    public void robotSpinLeftTest(){
+        startpos = new int[]{Math.round(posX), Math.round(posY)};
+        robot = new TestBot(startpos);
+
+        assertEquals(robot.getDirection(), Direction.NORTH);
+
+        randInt = random.nextInt(100);
+        for(int j = 0; j < randInt; j++){
+            robot.rotate_left();
+        }
+        if(randInt%4 == 0){
+            assertEquals(robot.getDirection(), Direction.NORTH);
+        }
+        else if(randInt%4 == 1){
+            assertEquals(robot.getDirection(), Direction.WEST);
+        }
+        else if(randInt%4 == 2){
+            assertEquals(robot.getDirection(), Direction.SOUTH);
+        }
+        else if(randInt%4 == 3){
+            assertEquals(robot.getDirection(), Direction.EAST);
+        }
+    }
+
 }

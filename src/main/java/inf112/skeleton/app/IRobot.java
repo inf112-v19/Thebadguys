@@ -50,4 +50,9 @@ public interface IRobot {
     void setCheckpoint(int x, int y);
 
     void setDirection(Direction dir);
+
+    void rotate_right();
+
+    void rotate_left();
+
 }
