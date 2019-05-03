@@ -3,12 +3,10 @@ package inf112.skeleton.app;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-//import com.sun.istack.internal.Nullable;
 import map.IGameMap;
 
 import java.util.ArrayList;
@@ -18,9 +16,6 @@ public class CardHandler {
     private SpriteBatch batch;
     private Sprite cardSprite10;
     private BitmapFont font;
-    private Button powerdownButton;
-    private Button endTurnButton;
-
     private ArrayList<CardSlots> cardSlotPos;
     private ArrayList<Sprite> randomSpriteList;
     private ArrayList<Sprite> spritePos;
@@ -29,7 +24,6 @@ public class CardHandler {
     private Cards[] selectedCards;
     private Cards clickedCard;
     private Cards listCard;
-    //private Cards CardButton;
     private CardSlots temp;
     private int counter;
 
@@ -80,28 +74,6 @@ public class CardHandler {
             clickedCard = new Cards(10000, 10000, "clickedCard", 0, cardSprite10);
         }
     }
-
-    /*
-    public void letGo(int screenX, int screenY, Cards endTurnBtn){
-        isInside=false;
-        String sendCards = "";
-        if (!mainMenu.getMainRunning()){
-            //if (insideCard(screenX, screenY, powerDownBtn)){
-            //    robot.setPowerdown(true);
-            //}
-            if(insideCard(screenX, screenY, endTurnBtn)){
-                if (!RoboRallyDemo.getSinglePlayerMode()) {
-                    for(int i = 0; i < 5; i++) {
-                        if (selectedCards[i] != null) {
-                            sendCards += selectedCards[i].getName() + "~" + selectedCards[i].getPriority() + "~";
-                        }
-                    }
-                    String string = "/r/"+RoboRallyDemo.getID()+ sendCards + "/e/";
-                    System.out.println(sendCards);
-                    RoboRallyDemo.getClient().getBackendClient().send(string.getBytes());
-                }
-                isDone=true;
-            }*/
 
     public void click(int button, int screenX, int screenY){
         counter=0;
@@ -340,10 +312,6 @@ public class CardHandler {
         }
     }
 
-    public int getCardSlotLock(){
-        return cardSlotLock;
-    }
-
     public Cards[] getSelectedCards(){
         return selectedCards;
     }
@@ -354,10 +322,6 @@ public class CardHandler {
 
     public void setNotFirst(boolean notFirst) {
         this.notFirst = notFirst;
-    }
-
-    public boolean getNotFirst(){
-        return notFirst;
     }
 
     public void setisDone(boolean isDone){
@@ -372,16 +336,12 @@ public class CardHandler {
             return true;
         }
     }
-    public boolean newTurn(){
-        return isDone;
-    }
 
     public void drawLockedList(){
         for(Sprite sprite:lockedList){
             sprite.draw(batch);
         }
     }
-    public int getCardDelt(){return cardDelt;}
 
     public void setCardDelt(int cardDelt) {this.cardDelt = cardDelt;}
 

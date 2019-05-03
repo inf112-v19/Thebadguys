@@ -469,10 +469,4 @@ public enum CardValues implements Serializable {
     public String getName(){
         return name;
     }
-
-    public static CardValues getRandomCard(){
-        Random random = new Random();
-        return CardValues.values()[random.nextInt(CardValues.values().length)];
-    }
-
 }

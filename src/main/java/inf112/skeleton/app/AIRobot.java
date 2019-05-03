@@ -67,16 +67,6 @@ public class AIRobot{
         }
     }
 
-    public AIRobot(Sprite sprite){
-        this.sprite = sprite;
-    }
-
-    public AIRobot(int[] checkpoint) {
-        this.checkpoint = checkpoint;
-        this.posX = checkpoint[0];
-        this.posY = checkpoint[1];
-    }
-
     public AIRobot(Sprite sprite, int[] checkpoint, int id){
         this.sprite=sprite;
         this.checkpoint = checkpoint;
@@ -121,14 +111,6 @@ public class AIRobot{
         return this.damage;
     }
 
-    public int getX1(){
-        return this.x0;
-    }
-
-    public int getY1(){
-        return this.y0;
-    }
-
     public int getSpriteX() {
         return this.x0 + (this.posX * (this.tilePixelWidth / 6));
     }
@@ -146,24 +128,12 @@ public class AIRobot{
         this.checkpoint[1] = y;
     }
 
-    public void setFlagsPassed(int flagsPassed){
-        this.flagsPassed = flagsPassed;
-    }
-
     public void setPosX(int newX) {
         this.posX = newX;
     }
 
     public void setPosY(int newY) {
         this.posY = newY;
-    }
-
-    public void setDamage(int newDamage) {
-        this.damage = newDamage;
-    }
-
-    public void setLives(int newLives) {
-        this.lives = newLives;
     }
 
     public void rotate_right() {

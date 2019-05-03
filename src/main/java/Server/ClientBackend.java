@@ -1,10 +1,6 @@
 package Server;
 
-import com.jcraft.jogg.Packet;
-import inf112.skeleton.app.Cards;
-
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.*;
 
 public class ClientBackend {
@@ -24,14 +20,6 @@ public class ClientBackend {
 
     public String getName() {
         return name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public int getPort() {
-        return port;
     }
 
     public String setName(String newName){

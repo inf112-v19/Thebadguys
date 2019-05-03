@@ -3,12 +3,11 @@ package inf112.skeleton.app;
 import Grid.Direction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import map.GameMap;
 import map.MapTile;
-import inf112.skeleton.app.ExpressBelt;
+
 
 public class Robot  implements IRobot{
     private CardHandler cardHandler;
@@ -94,14 +93,6 @@ public class Robot  implements IRobot{
         return this.damage;
     }
 
-    public int getX0() {
-        return this.x0;
-    }
-
-    public int getY0() {
-        return this.y0;
-    }
-
     public int getSpriteX() {
         return this.x0 + (this.posX * (this.tilePixelWidth / 6));
     }
@@ -126,9 +117,6 @@ public class Robot  implements IRobot{
         return this.tilePixelHeight;
     }
 
-    public void setTurn(int turn) {
-        this.turn = turn;
-    }
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
@@ -156,10 +144,6 @@ public class Robot  implements IRobot{
 
     public void setDamage(int newDamage) {
         this.damage = newDamage;
-    }
-
-    public void setLives(int newLives) {
-        this.lives = newLives;
     }
 
     public void rotate_right() {
@@ -300,22 +284,6 @@ public class Robot  implements IRobot{
         } else {
             return 1;
         }
-    }
-
-    public int checkConveyer(Direction dir) {
-        if (dir == Direction.NORTH && this.posY + 1 == 12) {
-            return -1;
-        } else if (dir == Direction.EAST && this.posX + 1 == 12) {
-            return -1;
-        } else if (dir == Direction.SOUTH && this.posY - 1 == -1) {
-            return -1;
-        } else if (dir == Direction.WEST && this.posX - 1 == -1) {
-            return -1;
-        } else if (gameMap.convWallNearby(dir, this.posX, this.posY)) {
-            return 0;
-        } else {
-            return 1;
-        } // add check for a second robot on the same conveyer target, if so move them both to original possition
     }
 
     public void canMove(int loops, int amount) {

@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server implements Runnable{
-
-    private static boolean start = false;
-
     private DatagramSocket socket;
     private int port;
     private Thread run, manage, send, receive;
@@ -18,7 +15,6 @@ public class Server implements Runnable{
     private List<ServerClient> clients = new ArrayList<ServerClient>();
     private List<Integer> clientResponse = new ArrayList<Integer>();
 
-    private int[][] positions;
     private boolean[] ready = {false, false, false, false, false, false, false, false};
     private String[][] clientCards = new String[8][10];
     private String moves;
@@ -236,13 +232,6 @@ public class Server implements Runnable{
             }
         }
         return true;
-    }
-
-    public boolean getReadyClient(int i) {
-        if (ready[i]) {
-            return true;
-        }
-        return false;
     }
 
     public void roundStart() {

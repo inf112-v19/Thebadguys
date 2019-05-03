@@ -66,8 +66,4 @@ public class Cards implements ICard, Serializable {
 
     //makes it possible to change the sprite of a Card
     public void setCardSprite(Sprite sprite){this.cardSprite=sprite;}
-
-    public void setCardName(String name){this.name=name;}
-
-    public void setPriority(int priority){this.priority=priority;}
 }

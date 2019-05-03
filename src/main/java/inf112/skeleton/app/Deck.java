@@ -12,6 +12,4 @@ public class Deck implements IDeck{
     public ArrayList<Cards> getDeckList(){
         return DeckList;
     }
-
-
 }

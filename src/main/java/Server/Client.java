@@ -2,30 +2,7 @@ package Server;
 
 import inf112.skeleton.app.RoboRallyDemo;
 import inf112.skeleton.app.mainMenu;
-
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Arrays;
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.DefaultCaret;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 
 public class Client extends JFrame implements Runnable {
     private static final long serialVersionUID = 1L;
@@ -40,7 +17,7 @@ public class Client extends JFrame implements Runnable {
     private int clientCount;
     public boolean started = false;
 
-    private boolean running = false;
+    private boolean running;
 
     public Client(String name, String address, int port) {
         client = new ClientBackend(name, address, port);
@@ -48,19 +25,14 @@ public class Client extends JFrame implements Runnable {
         if (!connect) {
             System.err.println("Connection failed!");
         }
-        //createWindow();
         String connection = "/c/" + name + "/e/";
         client.send(connection.getBytes());
         System.out.println("Attempting a connection to " + address + ":" + port + ", user: " + client.getName());
-        //users = new OnlineUsers();
         running = true;
         run = new Thread(this, "Running");
         run.start();
     }
 
-    public int getID() {
-        return client.getID();
-    }
 
     public void run() {
         listen();
@@ -168,10 +140,6 @@ public class Client extends JFrame implements Runnable {
 
     public int[] getOrder() {
         return order;
-    }
-
-    public void setRunning(boolean running) {
-        this.running = running;
     }
 
     public boolean getStarted() {

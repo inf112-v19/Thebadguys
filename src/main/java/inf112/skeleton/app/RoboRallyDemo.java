@@ -7,7 +7,6 @@ import Server.Server;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,14 +19,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import map.GameMap;
 import map.MapTile;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-//import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
-
 public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private static TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
@@ -40,26 +33,17 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     private Button endTurnButton;
     private Button powerdownButton;
     private static Robot robot;
-    private AIRobot AIrobot;
     private FitViewport viewPort;
     private static CardHandler cardHandler;
     private Cards statBoard0;
-    private Cards card;
-
     private static Cards selectedCards[];
-
     private boolean firstRund = true;
     private mainMenu mainMenu;
-
-    private boolean firstround=true;
-
     private ArrayList<Sprite> statBoardList = new ArrayList<>();
 
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
-    private Sprite AIsprite;
-    private float posX, posY;
     private BitmapFont font;
     private Sprite statBoardSprite;
     private static GameMap map;
@@ -171,8 +155,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             }
         }
 
-        //create the card that Is clicked
-        Texture cardTexture = new Texture(Gdx.files.internal("Models/AlleBevegelseKortUtenPrioritet/genericCard.png"));
         if (singlePlayerMode) {
             cardHandler = new CardHandler(batch, robot, map);
         } else if (!singlePlayerMode) {
@@ -218,7 +200,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     @Override
     public void dispose() {
         batch.dispose();
-//        texture.dispose();
     }
 
     //rendering of the map and all the sprites
@@ -239,7 +220,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             camera.update();
             tiledMapRenderer.setView(camera);
             tiledMapRenderer.render();
-            //Cards selectedCards[] = cardHandler.getSelectedCards();
             batch.begin();
             if (singlePlayerMode) {
                 for (int i = 0; i < AIs.length; i++){
@@ -272,7 +252,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 //draw Cards
                 cardHandler.drawCards();
             }
-            //statBoard0.getCardSprite().draw(batch);
 
             drawStats();
 
@@ -393,11 +372,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             cardHandler.letGo(screenX, screenY);
         }
         return false;
-    }
-
-    public boolean insideCard(float screenX, float screenY, Cards card) {
-        float NewscreenY = Gdx.graphics.getHeight() - screenY;
-        return (screenX > card.getCardSprite().getX()) && (screenX < (card.getCardSprite().getX() + card.getCardSprite().getWidth())) && (NewscreenY > card.getCardSprite().getY()) && (NewscreenY < (card.getCardSprite().getY() + card.getCardSprite().getHeight()));
     }
 
     @Override
@@ -555,10 +529,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         }
     }
 
-
-    public static int getClientCount() {return clientCount;}
-
-
     //creation og the stat-board
     public void statBoardCreation ( float x, float y){
         float v=y;
@@ -574,7 +544,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 Texture statTexture0 = new Texture(Gdx.files.internal("Models/actualstatboard.PNG"));
                 statBoardSprite = new Sprite(statTexture0);
                 statBoardSprite.setPosition(x, v);
-                //statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
                 statBoardList.add(statBoardSprite);
             }
         }else{
@@ -583,7 +552,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 Texture statTexture0 = new Texture(Gdx.files.internal("Models/actualstatboard.PNG"));
                 statBoardSprite = new Sprite(statTexture0);
                 statBoardSprite.setPosition(x, v);
-                //statBoard0 = new Cards(x, y, "statBoard", 0, statBoardSprite);
                 statBoardList.add(statBoardSprite);
             }
         }
@@ -654,20 +622,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             font.draw(batch, colors[i] + ":", statBoard0.getCardSprite().getX() + 10, statBoard0.getCardSprite().getY() + statBoard0.getCardSprite().getHeight() - 30 - i * 25);
         }
     }
-
-
-    //support metode
-    public void printSelectedCards() {
-        selectedCards = cardHandler.getSelectedCards();
-        for (int i = 0; i < selectedCards.length; i++) {
-            if (selectedCards[i] != null) {
-                System.out.println("Card in cardslot" + i + " " + selectedCards[i].getName());
-            }
-        }
-    }
-
-
-
 
     public void doTurn () {
         if (singlePlayerMode) {
