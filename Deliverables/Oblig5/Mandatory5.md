@@ -76,6 +76,7 @@ We have implented a single-player mode where you can play against 3 other AIRobo
 
 
 Part 3: Code
+
 To run the program you need to open your preferred IDE, and access the main class. From here you select "run". This feature varies from IDE to IDE, but in IntelliJ you can do this by pressing the green arrow in the top right corner of the window, or by selecting Run -> Run... -> Main.
 
 The tests we made should be run by accessing the test classes on your preferred IDE, and select the IDE's way of running the test. For example in IntelliJ IDEA you run the test by clicking the green arrow to the left of the test name, or right-clicking on the function, and selecting "run %function_name". If you move of the map to die, there is still a bug where you can instantly loose the game by staying of the map.
