@@ -348,7 +348,6 @@ public class AIRobot{
                 break;
         }
         if(gameMap.isSpinLeft(this.posX, this.posY)){
-            System.out.println("SPIN!");
             this.rotate_left();
         }
         if (gameMap.isSpinRight(this.posX, this.posY)) {
@@ -426,7 +425,6 @@ public class AIRobot{
             this.damage += 1;
             cardHandler = RoboRallyDemo.getCardHandler();
             cardHandler.lockDown();
-            System.out.println(this.damage);
         }
         else {
             this.died();

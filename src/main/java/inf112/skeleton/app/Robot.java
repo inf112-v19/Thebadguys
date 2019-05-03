@@ -281,7 +281,6 @@ public class Robot  implements IRobot{
             this.damage += 1;
             cardHandler = RoboRallyDemo.getCardHandler();
             cardHandler.lockDown();
-            System.out.println(this.damage);
         } else {
             this.died();
         }

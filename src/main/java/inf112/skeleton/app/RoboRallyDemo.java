@@ -671,15 +671,13 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
     public void doTurn () {
         if (singlePlayerMode) {
-            if (robot.getExecPowerdown() && turn == 0) {
+            if (robot != null &&robot.getExecPowerdown() && turn == 0) {
                 robot.doPowerdown();
             }
         }
         if (!singlePlayerMode) {
-            for (int i = 0; i < clientCount; i++) {
-                if (robots[i].getExecPowerdown() && turn == 0) {
-                    robots[i].doPowerdown();
-                }
+            if (robots[getID()] != null && robots[getID()].getExecPowerdown() && turn == 0) {
+                robots[i].doPowerdown();
             }
         }
 
@@ -725,7 +723,6 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                 }
                 cardHandler.setCardSprites();
 
-                System.out.println("\n");
                 if (!singlePlayerMode ) {
                     for(int i = 0; i < clientCount; i++) {
                         ready[i] = false;
@@ -739,15 +736,16 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
             if (tick % 40 == 0) {
                 if (singlePlayerMode) {
                     if (robot != null && robot.getAlive()) {
-                        printSelectedCards();
                         robot.move(selectedCards[turn].getName());
                         mapElements(singlePlayerMode);
                     }
                     for (int i = 0; i < AIs.length; i++) {
                         if (AIs[i] != null && AIs[i].getAlive()) {
                             AIs[i].doTurn(turn);
-                            AIs[i].robotFireLasers(AIs);
-                            if (robot != null) {
+                            if (AIs[i] != null) {
+                                AIs[i].robotFireLasers(AIs);
+                            }
+                            if (robot != null && AIs[i] != null) {
                                 AIs[i].robotFireLasers(robot);
                             }
                         }
@@ -761,7 +759,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                             AIs[i].getSprite().draw(batch);
                         }
                     }
-                    if (robot.getInitPowerdown() && turn == 5) {
+                    if (robot != null && robot.getInitPowerdown() && turn == 5) {
                         robot.setExecPowerdown(true);
                     }
 
@@ -776,7 +774,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
                     turn++;
 
                     for (int i = 0; i < clientCount; i++) {
-                        if (turn == 5 && robots[i].getInitPowerdown()) {
+                        if (turn == 5 && robots[i] != null && robots[i].getInitPowerdown()) {
                             robots[i].setExecPowerdown(true);
                         }
                         if (robots[i] != null) {
@@ -789,7 +787,7 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
     }
 
     private void mapElements(boolean singlePlayerMode) {
-        if(singlePlayerMode) {
+        if(singlePlayerMode && robot != null) {
             ExpressBelt.doExpressBelt(robot);
             Belt.doBelt(robot);
             Spin.doSpin(robot);
