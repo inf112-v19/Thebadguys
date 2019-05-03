@@ -211,7 +211,7 @@ public class Server implements Runnable{
         }
         else {
             message = "Client " + c.name + "(" + c.getID() + ")" + c.address.toString() + ":" + c.port + " timed out.";
-            String disc = "/d/" + c.getID() + "/e/";
+            String disc = "/d/" + c.getID()+ clientCount() + "/e/";
             sendToAllButMe(disc, c.getID());
         }
         System.out.println(message);
@@ -256,9 +256,11 @@ public class Server implements Runnable{
                 tempPrio[j] = priorities[j][i];
             }
             for(int l = 0; l < tempPrio.length; l++) {
-                int maxIndex = indexOfMax(tempPrio);
-                moveOrder += Integer.toString(maxIndex) + "#";
-                tempPrio[maxIndex] = 0;
+                if (clients.get(l) != null) {
+                    int maxIndex = indexOfMax(tempPrio);
+                    moveOrder += Integer.toString(maxIndex) + "#";
+                    tempPrio[maxIndex] = -1;
+                }
             }
         }
         moves = "";

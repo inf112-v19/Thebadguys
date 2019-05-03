@@ -111,6 +111,10 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
         return colors[id];
     }
 
+    public static void setClientCount(int count) {
+        clientCount = count;
+    }
+
     public  void createv2(){
         batch = new SpriteBatch();
         tiledMap = new TmxMapLoader().load("Models/roborallymap.tmx");
@@ -719,9 +723,18 @@ public class RoboRallyDemo implements ApplicationListener, InputProcessor {
 
                 }
                 else if (!singlePlayerMode) {
+                    int currentOrderdMove;
                     for (int j = 0; j < clientCount; j++) {
-                        if (robots[order[turn + j]] != null && robots[order[turn + j]].getAlive()) {
-                            robots[order[turn + j]].move(moves[order[turn + j]][turn]);
+                        if(turn==0){
+                            currentOrderdMove = order[j];
+                        }   else {
+                            currentOrderdMove = order[clientCount*turn +j];
+                        }
+
+                        if (robots[currentOrderdMove] != null && robots[currentOrderdMove].getAlive()) {
+                            robots[currentOrderdMove].move(moves[currentOrderdMove][turn]);
+                            System.out.println(currentOrderdMove);
+                            System.out.println(moves[currentOrderdMove][turn]);
                         }
                     }
                     mapElements(singlePlayerMode);
