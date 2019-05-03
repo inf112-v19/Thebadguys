@@ -101,16 +101,35 @@ public class RobotTest {
 
         assertEquals(robot.getDamage(), 0);
 
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 2; i++){
             robot.setDamage(0);
             //randInt = random.nextInt(9) + 10;
-            randInt = 10;
-            for(int j = 0; j < randInt; j++){
+            randInt = random.nextInt(7);
+            for(int j = 0; j < randInt + 10; j++){
                 robot.takeDamage();
             }
-            assertEquals(robot.getDamage(), 2);
+            assertEquals(robot.getDamage(), randInt + 2);
         }
     }
+
+    @Test
+    public void damageTest3(){
+        startpos = new int[]{Math.round(posX), Math.round(posY)};
+        robot = new TestBot(startpos);
+
+        assertEquals(robot.getDamage(), 0);
+
+        for(int i = 0; i < 1; i++){
+            robot.setDamage(0);
+            //randInt = random.nextInt(9) + 10;
+            randInt = random.nextInt(7);
+            for(int j = 0; j < randInt + 18; j++){
+                robot.takeDamage();
+            }
+            assertEquals(robot.getDamage(), randInt + 2);
+        }
+    }
+
 
     @Test
     public void damageLivesTest(){
@@ -127,6 +146,26 @@ public class RobotTest {
             for(int j = 0; j < randInt; j++){
                 robot.takeDamage();
             }
+            assertEquals(robot.getLives(), 3);
+        }
+    }
+
+    @Test
+    public void damageLivesTest2(){
+
+        startpos = new int[]{Math.round(posX), Math.round(posY)};
+        robot = new TestBot(startpos);
+
+        assertEquals(robot.getDamage(), 0);
+        assertEquals(robot.getLives(), 3);
+
+        for(int i = 2; i > 0; i--){
+            robot.setDamage(0);
+            randInt = random.nextInt(7);
+            for(int j = 0; j < randInt + 10; j++){
+                robot.takeDamage();
+            }
+            assertEquals(robot.getLives(), 2);
         }
     }
 }
