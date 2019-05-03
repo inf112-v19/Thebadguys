@@ -185,21 +185,24 @@ public class RobotTest {
 
         assertEquals(robot.getDirection(), Direction.NORTH);
 
-        randInt = random.nextInt(100);
-        for(int j = 0; j < randInt; j++){
-            robot.rotate_right();
-        }
-        if(randInt%4 == 0){
-            assertEquals(robot.getDirection(), Direction.NORTH);
-        }
-        else if(randInt%4 == 1){
-            assertEquals(robot.getDirection(), Direction.EAST);
-        }
-        else if(randInt%4 == 2){
-            assertEquals(robot.getDirection(), Direction.SOUTH);
-        }
-        else if(randInt%4 == 3){
-            assertEquals(robot.getDirection(), Direction.WEST);
+        for (int i = 0; i < 100; i++){
+            robot.setDirection(Direction.NORTH);
+            randInt = random.nextInt(100);
+            for(int j = 0; j < randInt; j++){
+                robot.rotate_right();
+            }
+            if(randInt%4 == 0){
+                assertEquals(robot.getDirection(), Direction.NORTH);
+            }
+            else if(randInt%4 == 1){
+                assertEquals(robot.getDirection(), Direction.EAST);
+            }
+            else if(randInt%4 == 2){
+                assertEquals(robot.getDirection(), Direction.SOUTH);
+            }
+            else if(randInt%4 == 3){
+                assertEquals(robot.getDirection(), Direction.WEST);
+            }
         }
     }
 
@@ -210,21 +213,24 @@ public class RobotTest {
 
         assertEquals(robot.getDirection(), Direction.NORTH);
 
-        randInt = random.nextInt(100);
-        for(int j = 0; j < randInt; j++){
-            robot.rotate_left();
-        }
-        if(randInt%4 == 0){
-            assertEquals(robot.getDirection(), Direction.NORTH);
-        }
-        else if(randInt%4 == 1){
-            assertEquals(robot.getDirection(), Direction.WEST);
-        }
-        else if(randInt%4 == 2){
-            assertEquals(robot.getDirection(), Direction.SOUTH);
-        }
-        else if(randInt%4 == 3){
-            assertEquals(robot.getDirection(), Direction.EAST);
+        for(int i = 0; i < 50; i++){
+            robot.setDirection(Direction.NORTH);
+            randInt = random.nextInt(100);
+            for(int j = 0; j < randInt; j++){
+                robot.rotate_left();
+            }
+            if(randInt%4 == 0){
+                assertEquals(robot.getDirection(), Direction.NORTH);
+            }
+            else if(randInt%4 == 1){
+                assertEquals(robot.getDirection(), Direction.WEST);
+            }
+            else if(randInt%4 == 2){
+                assertEquals(robot.getDirection(), Direction.SOUTH);
+            }
+            else if(randInt%4 == 3){
+                assertEquals(robot.getDirection(), Direction.EAST);
+            }
         }
     }
 

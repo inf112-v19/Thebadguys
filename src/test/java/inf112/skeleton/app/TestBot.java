@@ -182,10 +182,10 @@ public class TestBot implements IRobot {
         else {
             System.out.println("Something went terribly wrong");
         }
-        if (gameMap.isHole(this.posX, this.posY)) {
+        /*if (gameMap.isHole(this.posX, this.posY)) {
             System.out.println("You fell into a hole!");
             this.died();
-        }
+        }*/
     }
 
     public void move(String move) { // gets the command from a card and figures out which command to execute

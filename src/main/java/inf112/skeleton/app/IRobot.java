@@ -31,6 +31,8 @@ public interface IRobot {
 
     void canMove(int loops, int amount);
 
+    void moveForward(int amount);
+
     void setPosX(int newX);
 
     void setPosY(int newY);
