@@ -8,19 +8,19 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
-  package inf112.skeleton.app {
+  package BoardElements {
     class Belt {
     }
   }
   
 
-  package inf112.skeleton.app {
+  package BoardElements {
     abstract class BeltElement {
     }
   }
   
 
-  package inf112.skeleton.app {
+  package BoardElements {
     abstract class BoardElement {
     }
   }
@@ -32,7 +32,7 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
-  package inf112.skeleton.app {
+  package Cards {
     class CardHandler {
     }
   }
@@ -44,7 +44,7 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
-  package inf112.skeleton.app {
+  package Cards {
     class CardSlots {
     }
   }
@@ -56,13 +56,13 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
-  package inf112.skeleton.app {
+  package Cards {
     enum CardValues {
     }
   }
   
 
-  package inf112.skeleton.app {
+  package Cards {
     class Cards {
     }
   }
@@ -86,7 +86,7 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
-  package inf112.skeleton.app {
+  package Cards {
     class Deck {
     }
   }
@@ -110,7 +110,7 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
-  package inf112.skeleton.app {
+  package BoardElements {
     class ExpressBelt {
     }
   }
@@ -152,7 +152,7 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
-  package inf112.skeleton.app {
+  package Cards {
     interface ICard {
     }
   }
@@ -164,13 +164,13 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
-  package inf112.skeleton.app {
+  package Cards {
     interface ICardSlot {
     }
   }
   
 
-  package inf112.skeleton.app {
+  package Cards {
     interface IDeck {
     }
   }
@@ -326,7 +326,7 @@ title __MVN-APP's Class Diagram__\n
   }
   
 
-  package inf112.skeleton.app {
+  package BoardElements {
     class Spin {
     }
   }
@@ -361,9 +361,9 @@ title __MVN-APP's Class Diagram__\n
   CardSlots -up-|> ICardSlot
   CardValues -up-|> Serializable
   Cards -up-|> ICard
-  Cards o-- Cards : Dummycard0
-  Cards -up-|> ICard
   Cards -up-|> Serializable
+  Cards -up-|> ICard
+  Cards o-- Cards : Dummycard0
   Client -up-|> Runnable
   Client -up-|> JFrame
   Client o-- ClientBackend : client
@@ -382,8 +382,6 @@ title __MVN-APP's Class Diagram__\n
   RoboRallyDemo -up-|> InputProcessor
   RoboRallyDemo -up-|> ApplicationListener
   RoboRallyDemo -up-|> InputProcessor
-  RoboRallyDemo -up-|> ApplicationListener
-  RoboRallyDemo -up-|> InputProcessor
   RoboRallyDemo o-- Button : endTurnButton
   RoboRallyDemo o-- Button : powerdownButton
   RoboRallyDemo o-- AIRobot : AIrobot
@@ -392,6 +390,8 @@ title __MVN-APP's Class Diagram__\n
   RoboRallyDemo o-- mainMenu : mainMenu
   RoboRallyDemo o-- IGrid : grid
   RoboRallyDemo o-- Server : server
+  RoboRallyDemo -up-|> ApplicationListener
+  RoboRallyDemo -up-|> InputProcessor
   Robot -up-|> IRobot
   Robot o-- CardHandler : cardHandler
   Robot o-- Direction : dir

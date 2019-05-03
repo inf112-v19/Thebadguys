@@ -67,34 +67,6 @@ title __APP's Class Diagram__\n
   
 
   package inf112.skeleton.app {
-    class Belt {
-        + Belt()
-        {static} + doBelt()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
-    abstract class BeltElement {
-        + BeltElement()
-        {static} + checkConveyor()
-        {static} + canMoveConveyor()
-        {static} + moveConveyor()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
-    abstract class BoardElement {
-        {static} # map : GameMap
-        + BoardElement()
-        {static} + rotate_right()
-        {static} + rotate_left()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
     class Button {
         - posX : int
         - posY : int
@@ -111,158 +83,8 @@ title __APP's Class Diagram__\n
   
 
   package inf112.skeleton.app {
-    class CardHandler {
-        - batch : SpriteBatch
-        - cardSprite10 : Sprite
-        - font : BitmapFont
-        - cardSlotPos : ArrayList<CardSlots>
-        - randomSpriteList : ArrayList<Sprite>
-        - spritePos : ArrayList<Sprite>
-        - selectedCards : Cards[]
-        - counter : int
-        - isDone : boolean
-        - notFirst : boolean
-        - isClicked : boolean
-        - isInside : boolean
-        - cardDelt : int
-        - cardSlotLock : int
-        - lockedList : ArrayList<Sprite>
-        - pri : int
-        - name : String
-        - x : int
-        + CardHandler()
-        + dragged()
-        + letGo()
-        + click()
-        + crushBug()
-        + powerdownCards()
-        # getCardCenterX()
-        # getCardCenterY()
-        # getCardSlotCenterX()
-        # getCardSlotCenterY()
-        # insideCardSlot()
-        + insideCard()
-        # setCardSprites()
-        + adjustCardLocation()
-        - spriteToPri()
-        - spriteToName()
-        # createInitialDecklist()
-        - updateDeckList()
-        + extraxtLockedCards()
-        # drawCards()
-        # createCardSlots()
-        # drawCardSlots()
-        - getRandomSprite()
-        - rng()
-        - addSprites()
-        # nullyFy()
-        + lockDown()
-        + getSelectedCards()
-        + getSpritePos()
-        + setNotFirst()
-        + setisDone()
-        + getisDone()
-        + drawLockedList()
-        + setCardDelt()
-        + setIsDone()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
-    class CardSlots {
-        - cardSlotSprite1 : Sprite
-        - posX : float
-        - posY : float
-        + CardSlots()
-        + CardSlots()
-        + getCardSlotSprite()
-        + getPosX()
-        + getPosY()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
-    enum CardValues {
-      - create cards
-      spr
-      priority
-      name
-    }
-  }
-  
-
-  package inf112.skeleton.app {
-    class Cards {
-        - cardSprite : Sprite
-        - defaultPosX : float
-        - defaultPosY : float
-        - posX : float
-        - posY : float
-        - name : String
-        - priority : int
-        + Cards()
-        + Cards()
-        + getName()
-        + getPriority()
-        + getCardSprite()
-        + getPosX()
-        + getPosY()
-        + getDefaultPosX()
-        + getDefaultPosY()
-        + setCardSprite()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
-    class Deck {
-        {static} - DeckList : ArrayList<Cards>
-        + Deck()
-        + getDeckList()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
-    class ExpressBelt {
-        + ExpressBelt()
-        {static} + doExpressBelt()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
     interface IButton {
         {abstract} + buttonClicked()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
-    interface ICard {
-        {abstract} + getCardSprite()
-        {abstract} + getPosX()
-        {abstract} + getPosY()
-        {abstract} + getDefaultPosX()
-        {abstract} + getDefaultPosY()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
-    interface ICardSlot {
-        {abstract} + getCardSlotSprite()
-        {abstract} + getPosX()
-        {abstract} + getPosY()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
-    interface IDeck {
-        {abstract} + getDeckList()
     }
   }
   
@@ -468,14 +290,6 @@ title __APP's Class Diagram__\n
   
 
   package inf112.skeleton.app {
-    class Spin {
-        ~ Spin()
-        {static} + doSpin()
-    }
-  }
-  
-
-  package inf112.skeleton.app {
     class mainMenu {
         {static} - mainRunning : boolean
         ~ batch : SpriteBatch
@@ -501,24 +315,9 @@ title __APP's Class Diagram__\n
   AIRobot o-- ExpressBelt : ebelt
   AIRobot o-- Belt : belt
   AIRobot o-- Spin : spin
-  Belt -up-|> BeltElement
-  BeltElement -up-|> BoardElement
   Button -up-|> IButton
   Button o-- CardHandler : cardHandler
   Button o-- Robot : robot
-  CardHandler o-- Deck : Deck
-  CardHandler o-- Deck : lockedDeck
-  CardHandler o-- Cards : clickedCard
-  CardHandler o-- Cards : listCard
-  CardHandler o-- CardSlots : temp
-  CardHandler o-- Robot : robot
-  CardHandler o-- IGameMap : map
-  CardSlots -up-|> ICardSlot
-  CardValues -up-|> Serializable
-  Cards -up-|> ICard
-  Cards -up-|> Serializable
-  Deck -up-|> IDeck
-  ExpressBelt -up-|> BeltElement
   RoboRallyDemo -up-|> ApplicationListener
   RoboRallyDemo -up-|> InputProcessor
   RoboRallyDemo o-- Button : endTurnButton
@@ -537,7 +336,6 @@ title __APP's Class Diagram__\n
   Robot o-- Belt : belt
   Robot o-- Spin : spin
   Robot o-- Direction : dirToBePushed
-  Spin -up-|> BoardElement
   mainMenu o-- Button : serverButton
   mainMenu o-- Button : clientButton
   mainMenu o-- Button : startButton
